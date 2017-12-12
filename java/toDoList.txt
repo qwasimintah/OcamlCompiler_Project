@@ -1,0 +1,11 @@
+1) Recognize variables
+
+Very basic allocation
+2a) Assign a register to each variable
+
+Basic allocation - Spill everything
+2b) Assign an index to each variable
+
+Linear Scan
+2c) Delimit first-use/last-use blocks for each variable
+3c) Order them by starting point
