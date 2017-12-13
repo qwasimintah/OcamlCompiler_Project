@@ -24,7 +24,7 @@ public static void showRegisters(HashMap<Register, Variable> registers) {
 }
 
 public static void main(String[] args) {
-        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(12);
+        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
         initRegisters(registers);
         showRegisters(registers);
         VInteger[] variables = new VInteger[10];
