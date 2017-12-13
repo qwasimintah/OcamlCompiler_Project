@@ -21,6 +21,11 @@ public class Main {
       height = expression.accept(v);
       System.out.println("using HeightVisitor: " + height);
 
+      /* For evaluation :
+      System.out.println("------ Evaluation ------");
+      System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
+      */
+
     } catch (Exception e) {
       e.printStackTrace();
     }
