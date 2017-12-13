@@ -1,4 +1,7 @@
-public class InstructionMULT extends Instruction {
+package instructions;
+import variables.*;
+
+public class InstructionMULT implements Instruction {
 Object x, y;
 public InstructionMULT(Variable x, Variable y) {
         this.x = x;

@@ -1,4 +1,7 @@
-public class InstructionASSIGN extends Instruction {
+package instructions;
+import variables.*;
+
+public class InstructionASSIGN implements Instruction {
 private Object x, y;
 
 InstructionASSIGN(Variable x, Variable y) {

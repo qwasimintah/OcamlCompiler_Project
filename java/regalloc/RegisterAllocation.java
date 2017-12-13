@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.Hashtable;
 import java.util.*;
+import instructions.*;
+import variables.*;
+import registers.*;
 
 public class RegisterAllocation {
 public static void initRegisters(HashMap<Register, Variable> registers) {
@@ -11,16 +14,12 @@ public static void initRegisters(HashMap<Register, Variable> registers) {
 }
 
 public static void showRegisters(HashMap<Register, Variable> registers) {
-        Set set = registers.entrySet();
-        Iterator i = set.iterator();
-
-        while(i.hasNext()) {
-                Map.Entry me = (Map.Entry)i.next();
-                Register reg = (Register)me.getKey();
+        for(Object key: registers.keySet()) {
+                Register reg = (Register) key;
                 System.out.print("r" + reg.getIndex() + ": ");
-                System.out.println(me.getValue());
+                System.out.println(registers.get(reg));
         }
-        System.out.println();
+        System.out.println("\n");
 }
 
 public static void main(String[] args) {

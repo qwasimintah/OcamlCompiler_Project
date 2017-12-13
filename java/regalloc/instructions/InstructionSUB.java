@@ -1,4 +1,7 @@
-public class InstructionSUB extends Instruction {
+package instructions;
+import variables.*;
+
+public class InstructionSUB implements Instruction {
 Object x, y;
 public InstructionSUB(Variable x, Variable y) {
         this.x = x;
