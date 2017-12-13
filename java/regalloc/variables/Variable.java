@@ -1,8 +1,11 @@
+package variables;
+
 import java.io.*;
 import java.util.Hashtable;
 import java.util.*;
+import registers.*;
 
-abstract class Variable {
+public abstract class Variable {
 private String name;
 private Register register;
 private HashMap registers;

@@ -1,3 +1,5 @@
+package registers;
+
 public class Register {
   private Integer index;
 
