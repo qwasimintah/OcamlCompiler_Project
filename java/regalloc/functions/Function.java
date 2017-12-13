@@ -30,6 +30,7 @@ public static void main(String[] args) {
         VInteger x = new VInteger("x", 1, null);
         List<Instruction> instructions = new ArrayList<Instruction>();
         Function f = new Function(null, instructions);
+        
         Instruction add = new InstructionADD(x, 2);
         f.putInstruction(add);
         Instruction sub = new InstructionSUB(1, 2);

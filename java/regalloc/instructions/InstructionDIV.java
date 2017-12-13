@@ -1,4 +1,7 @@
-public class InstructionDIV extends Instruction {
+package instructions;
+import variables.*;
+
+public class InstructionDIV implements Instruction {
 Object x, y;
 public InstructionDIV(Variable x, Variable y) {
         this.x = x;

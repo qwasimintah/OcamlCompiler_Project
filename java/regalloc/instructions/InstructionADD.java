@@ -1,6 +1,9 @@
+package instructions;
+import variables.*;
+
 import java.io.*;
 
-public class InstructionADD extends Instruction{
+public class InstructionADD implements Instruction {
 Object x, y;
 public InstructionADD(Variable x, Variable y) {
         this.x = x;
