@@ -1,6 +1,6 @@
 import java.util.*;
 
-class EvaluationVisitor implements  ObjVisitor<Integer> {
+class EvaluationVisitor implements ObjVisitor<Integer> {
   public Integer visit(Int e) {
     return e.i;
   }
