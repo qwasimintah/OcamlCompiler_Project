@@ -2,7 +2,7 @@ public class AlphaConversion implements ObjVisitor<void>{
   /**
   set of variables
   */
-  private static HashSet<String> epsilon;
+  private static HashSet<String> epsilon = new HashSet<String> ();
   /**
   number of variables
   */
@@ -87,10 +87,13 @@ public class AlphaConversion implements ObjVisitor<void>{
   public void visit(Put e){
   }
 
+  /**
+  function doing the alpha-conversion
+  */
   public void alpha(Exp e){
     if (e instanceof Var){
       if (!epsilon.add(e.Id.toString())){
-        int n = (int) (8*Math.random()) + 2;
+        int n = (int) (9*Math.random()) + 2;
         e.Id.id = random_name(n, e);
         number_of_variables++;
       }
@@ -98,7 +101,7 @@ public class AlphaConversion implements ObjVisitor<void>{
       alpha(e.e1);
       alpha(e.e2);
     } else if (e instanceof Let){
-      
+
     }
   }
 
