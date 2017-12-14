@@ -8,6 +8,13 @@
  *
  * @author DJAN DENNIS MINTAH
  */
+import java.util.*;
+import variables.*;
+import functions.*;
+import instructions.*;
+
+
+
 public class ArmGenerator {
 
     DataSection dataSection;
@@ -28,29 +35,105 @@ public class ArmGenerator {
     }
 
 
-   public void generate_code(List<Functions>  functions){
+    public void generate_code(List<Function>  functions){
+         //loop through all the available functions
+         for(Function fun : functions){
+             //List<Variables> var = fun.getArguments();
+ 	          List<Instruction> intr = fun.getInstructions();
+             //process all intructions of functions
 
-        //loop through all the available functions 
-        for(fun in functions){
-            List<Variables> var = fun.getArguments();
-	    List<Instructions> intr = fun.Instructions();
-            //process all intructions of functions
+       	    for (Instruction inst : intr){
 
-	    for (inst in intr){
+                 if(inst instanceof InstructionADD){
+                    generate_addition((InstructionADD) inst);
+                 }
+                 else if (inst instanceof InstructionSUB) {
+                    generate_sub((InstructionSUB) inst);
+                 }
 
+                 else if (inst instanceof InstructionASSIGN){
+                     generate_assign((InstructionASSIGN) inst);
 
-  		}
-
-            
-		
-          
-		
-        }
+                 }
 
 
+         		}
 
 
-   }
+         }
+
+    }
+
+
+
+    public  void generate_addition(InstructionADD instr){
+            Object op1= instr.operands.get(0);
+            Object op2= instr.operands.get(1);
+
+            if(op1 instanceof Integer && op2 instanceof Variable){
+                  arith_operation("ADD","r1" ,(int)op1, ((Variable)op2).getRegister().getName());
+            }
+            else if(op1 instanceof Variable && op2 instanceof Variable){
+                  arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister().getName());
+            }
+            else if(op1 instanceof Integer && op2 instanceof Integer){
+
+                arith_operation("ADD","r1" ,(int)op1, (int)(op2));
+            }
+            else if(op1 instanceof Variable && op2 instanceof Integer){
+
+              arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((int)op2));
+
+            }
+
+
+       }
+
+       public void generate_sub(InstructionSUB instr){
+
+               Object op1= instr.operands.get(0);
+               Object op2= instr.operands.get(1);
+
+               if(op1 instanceof Integer && op2 instanceof Variable){
+                     arith_operation("SUB","r1" ,(int)op1, ((Variable)op2).getRegister());
+               }
+               else if(op1 instanceof Variable && op2 instanceof Variable){
+                     arith_operation("SUB","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister());
+               }
+               else if(op1 instanceof Integer && op2 instanceof Integer){
+
+                   arith_operation("SUB","r1" ,(int)op1, (int)(op2));
+               }
+               else if(op1 instanceof Variable && op2 instanceof Integer){
+
+                 arith_operation("SUB","r1" ,((Variable)op1).getRegister(), ((int)op2));
+
+               }
+
+       }
+
+       public  void  generate_assign(InstructionASSIGN instr){
+
+               Object op1= instr.operands.get(0);
+               Object op2= instr.operands.get(1);
+
+               if(op1 instanceof Integer && op2 instanceof Variable){
+                     arith_operation("ADD","r1" ,(int)op1, ((Variable)op2).getRegister());
+               }
+               else if(op1 instanceof Variable && op2 instanceof Variable){
+                     arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister());
+               }
+               else if(op1 instanceof Integer && op2 instanceof Integer){
+
+                   arith_operation("ADD","r1" ,(int)op1, (int)(op2));
+               }
+               else if(op1 instanceof Variable && op2 instanceof Integer){
+
+                 arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((int)op2));
+
+               }
+       }
+
 
 
    /* Offset with imemediate value as offset*/
@@ -151,6 +234,23 @@ public class ArmGenerator {
         arm.arith_operation("SUB","r5",1, "r7");
         arm.arith_operation("ADD","r5","r6", 1);
         arm.assign("r5",256);
+
+        List<Instruction> instr = new ArrayList<Instruction>();
+        List<Function> funs= new ArrayList<Function>();
+        Function fundef= new Function(null, instr);
+        Integer x= new Integer(1);
+        Integer f = new Integer(2);
+        VInteger y = new VInteger("r1", f, null,fundef);
+        //fundef.putInstruction(new InstructionADD(x,y));
+
+
+
+
+        InstructionADD add = new InstructionADD(fundef, x, y);
+
+        fundef.addInstruction(add);
+        funs.add(fundef);
+        arm.generate_code(funs);
 
         StringBuilder result= arm.textSection.text;
 
