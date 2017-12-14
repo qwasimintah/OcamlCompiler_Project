@@ -38,7 +38,11 @@ public static void main(String[] args) {
         VInteger x = new VInteger("x", 1, null);
         List<Instruction> instructions = new ArrayList<Instruction>();
         Function f = new Function(null, instructions);
+<<<<<<< HEAD:java/regalloc/functions/Function.java
+        
+=======
 
+>>>>>>> 530ddfbef19fbecb2ee43190e14f9cac4d480b31:java/regalloc/functions/Function.java
         Instruction add = new InstructionADD(x, 2);
         f.putInstruction(add);
         Instruction sub = new InstructionSUB(1, 2);

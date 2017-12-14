@@ -4,7 +4,10 @@ import java.io.*;
 import java.util.Hashtable;
 import java.util.*;
 import registers.*;
+<<<<<<< HEAD:java/regalloc/variables/Variable.java
+=======
 import exceptions.*;
+>>>>>>> 530ddfbef19fbecb2ee43190e14f9cac4d480b31:java/regalloc/variables/Variable.java
 
 public abstract class Variable {
 private String name;
