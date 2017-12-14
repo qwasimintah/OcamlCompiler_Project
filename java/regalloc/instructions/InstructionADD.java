@@ -1,32 +1,44 @@
 package instructions;
-import variables.*;
 
 import java.io.*;
+import java.util.*;
+import variables.*;
 
 public class InstructionADD implements Instruction {
-Object x, y;
+public List<Object> operands = new ArrayList<Object>();
+
 public InstructionADD(Variable x, Variable y) {
-        this.x = x;
-        this.y = y;
+        try {
+          System.out.println(((VInteger)x).getValue());
+          System.out.println(y);
+        } catch (Exception e) {
+          System.out.println("nope");
+        }
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionADD(Integer x, Variable y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionADD(Variable x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionADD(Integer x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
+public List<Object> getOperands() {
+        return operands;
 }
 
 public void show() {
-        System.out.println("ADD " + x + " " + y);
+        System.out.println("ADD " + operands.get(0) + " " + operands.get(1));
 }
 
 public static void main(String[] args) {

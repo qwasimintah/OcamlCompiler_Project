@@ -1,29 +1,38 @@
 package instructions;
+
+import java.io.*;
+import java.util.*;
 import variables.*;
 
 public class InstructionMULT implements Instruction {
-Object x, y;
+public List<Object> operands;
+
 public InstructionMULT(Variable x, Variable y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionMULT(Integer x, Variable y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionMULT(Variable x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionMULT(Integer x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
+public List<Object> getOperands () {
+        return operands;
 }
 
 public void show() {
-        System.out.println("MULT " + x + " " + y);
+        System.out.println("MULT " + operands.get(0) + " " + operands.get(1));
 }
+
 }

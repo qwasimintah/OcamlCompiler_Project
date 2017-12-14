@@ -2,7 +2,7 @@ JAVAC=javac
 SRC=./
 DEST=./
 FILES=RegisterAllocation.java
-FLAGS=-Xlint
+FLAGS=-Xlint:-serial
 
 all: $(FILES)
 	$(JAVAC) -d $(DEST) $(FLAGS) $(SRC)$<

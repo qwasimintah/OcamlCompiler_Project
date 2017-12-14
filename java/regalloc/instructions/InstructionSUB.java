@@ -1,29 +1,38 @@
 package instructions;
+
+import java.io.*;
+import java.util.*;
 import variables.*;
 
 public class InstructionSUB implements Instruction {
-Object x, y;
+public List<Object> operands;
+
 public InstructionSUB(Variable x, Variable y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionSUB(Integer x, Variable y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionSUB(Variable x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
 }
 
 public InstructionSUB(Integer x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
+public List<Object> getOperands () {
+        return operands;
 }
 
 public void show() {
-        System.out.println("SUB " + x + " " + y);
+        System.out.println("SUB " + operands.get(0) + " " + operands.get(1));
 }
+
 }
