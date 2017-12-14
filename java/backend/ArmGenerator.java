@@ -12,6 +12,7 @@ import java.util.*;
 import variables.*;
 import functions.*;
 import instructions.*;
+import registers.*;
 
 
 
@@ -71,18 +72,18 @@ public class ArmGenerator {
             Object op2= instr.operands.get(1);
 
             if(op1 instanceof Integer && op2 instanceof Variable){
-                  arith_operation("ADD","r1" ,(int)op1, ((Variable)op2).getRegister().getName());
+                  arith_operation("ADD","r0" ,(int)op1, ((Variable)op2).getRegister().getName());
             }
             else if(op1 instanceof Variable && op2 instanceof Variable){
-                  arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister().getName());
+                  arith_operation("ADD","r0" ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
             }
             else if(op1 instanceof Integer && op2 instanceof Integer){
 
-                arith_operation("ADD","r1" ,(int)op1, (int)(op2));
+                arith_operation("ADD","r0" ,(int)op1, (int)(op2));
             }
             else if(op1 instanceof Variable && op2 instanceof Integer){
 
-              arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((int)op2));
+              arith_operation("ADD","r0" ,((Variable)op1).getRegister().getName(), ((int)op2));
 
             }
 
@@ -95,18 +96,18 @@ public class ArmGenerator {
                Object op2= instr.operands.get(1);
 
                if(op1 instanceof Integer && op2 instanceof Variable){
-                     arith_operation("SUB","r1" ,(int)op1, ((Variable)op2).getRegister());
+                     arith_operation("SUB","r0" ,(int)op1, ((Variable)op2).getRegister().getName());
                }
                else if(op1 instanceof Variable && op2 instanceof Variable){
-                     arith_operation("SUB","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister());
+                     arith_operation("SUB","r0" ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
                }
                else if(op1 instanceof Integer && op2 instanceof Integer){
 
-                   arith_operation("SUB","r1" ,(int)op1, (int)(op2));
+                   arith_operation("SUB","r0" ,(int)op1, (int)(op2));
                }
                else if(op1 instanceof Variable && op2 instanceof Integer){
 
-                 arith_operation("SUB","r1" ,((Variable)op1).getRegister(), ((int)op2));
+                 arith_operation("SUB","r0" ,((Variable)op1).getRegister().getName(), ((int)op2));
 
                }
 
@@ -117,19 +118,14 @@ public class ArmGenerator {
                Object op1= instr.operands.get(0);
                Object op2= instr.operands.get(1);
 
-               if(op1 instanceof Integer && op2 instanceof Variable){
-                     arith_operation("ADD","r1" ,(int)op1, ((Variable)op2).getRegister());
-               }
-               else if(op1 instanceof Variable && op2 instanceof Variable){
-                     arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((Variable)op2).getRegister());
-               }
-               else if(op1 instanceof Integer && op2 instanceof Integer){
 
-                   arith_operation("ADD","r1" ,(int)op1, (int)(op2));
+               if(op1 instanceof Variable && op2 instanceof Variable){
+                     assign(((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
                }
+
                else if(op1 instanceof Variable && op2 instanceof Integer){
 
-                 arith_operation("ADD","r1" ,((Variable)op1).getRegister(), ((int)op2));
+                 assign(((Variable)op1).getRegister().getName(), ((int)op2));
 
                }
        }
@@ -235,12 +231,19 @@ public class ArmGenerator {
         arm.arith_operation("ADD","r5","r6", 1);
         arm.assign("r5",256);
 
+
+
         List<Instruction> instr = new ArrayList<Instruction>();
         List<Function> funs= new ArrayList<Function>();
         Function fundef= new Function(null, instr);
         Integer x= new Integer(1);
         Integer f = new Integer(2);
+
         VInteger y = new VInteger("r1", f, null,fundef);
+        initRegisters();
+        y.allocRegister();
+
+
         //fundef.putInstruction(new InstructionADD(x,y));
 
 
