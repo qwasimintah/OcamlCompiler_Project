@@ -5,7 +5,7 @@ import functions.*;
 import java.util.*;
 
 public class InstructionASSIGN implements Instruction {
-public List<Object> operands;
+public List<Object> operands=new ArrayList<Object>();
 
 public InstructionASSIGN(Function func, Variable x, Variable y) {
         this.operands.add(x);
@@ -18,6 +18,7 @@ public InstructionASSIGN(Function func, Variable x, Integer y) {
 }
 
 public InstructionASSIGN(Function func, Variable x, Instruction inst) {
+	System.out.println("here");
         this.operands.add(x);
         this.operands.add(inst);
 }
