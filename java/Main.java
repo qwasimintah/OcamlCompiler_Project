@@ -50,6 +50,13 @@ public class Main {
         System.out.println("");
       }
 
+      /* For AlphaConversion :
+      System.out.println("------ AlphaConversion ------");
+      Exp expression_converted = expression.accept(new AlphaConversion());
+      System.out.println("Ceci est le résultat : ");
+      expression_converted.accept(new PrintVisitor());
+      System.out.print("\n");*/
+
     } catch (Exception e) {
       e.printStackTrace();
     }

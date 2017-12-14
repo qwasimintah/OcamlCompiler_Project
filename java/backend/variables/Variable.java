@@ -13,7 +13,6 @@ private Register register;
 private HashMap<Register, Variable> registers;
 private Integer offset;
 private Function function;
-private static Integer spillOffset = 0;
 
 public Variable(String name, HashMap<Register, Variable> registers, Function func) {
         this.name = name;
@@ -38,7 +37,8 @@ public void allocRegister() throws NoAvailableRegister {
 }
 
 public void spill() {
-        spillOffset = spillOffset + 4;
+        Integer spillOffset = this.function.getOffset();
+        this.function.setOffset(spillOffset + 4);
         this.setOffset(spillOffset);
 }
 
@@ -60,6 +60,16 @@ public void setOffset(Integer i) {
 
 public Integer getOffset() {
         return offset;
+}
+
+public void getSaveState() {
+        if (this.getRegister() != null) {
+                System.out.println("Variable stored in register" + this.getRegister().getName());
+        } else if (this.getOffset() != null) {
+                System.out.println("Variable stored in memory at [fp + " + this.getOffset() + "]");
+        } else {
+                System.out.println("Variable not saved !");
+        }
 }
 
 public void kill() {
