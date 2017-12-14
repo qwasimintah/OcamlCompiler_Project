@@ -5,17 +5,20 @@ import java.util.Hashtable;
 import java.util.*;
 import registers.*;
 import exceptions.*;
+import functions.*;
 
 public abstract class Variable {
 private String name;
 private Register register;
 private HashMap<Register, Variable> registers;
 private Integer offset;
+private Function function;
 private static Integer spillOffset = 0;
 
-public Variable(String name, HashMap<Register, Variable> registers) {
+public Variable(String name, HashMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
+        this.function = func;
 }
 
 public String getName() {

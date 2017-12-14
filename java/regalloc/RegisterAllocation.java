@@ -75,6 +75,7 @@ public static void main(String[] args) {
         for (Integer i = 0; i < 10; i++) {
                 VInteger x = new VInteger("x" + i.toString(), 10, registers);
                 InstructionADD inst = new InstructionADD(fun, x, x);
+                System.out.println(inst.operands.get(0).getName());
                 fun.addInstruction(inst);
         }
         VBA(fun);

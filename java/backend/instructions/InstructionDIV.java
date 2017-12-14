@@ -1,6 +1,8 @@
 package instructions;
+
 import variables.*;
 import functions.*;
+import java.util.*;
 
 public class InstructionDIV implements Instruction {
 public List<Object> operands;

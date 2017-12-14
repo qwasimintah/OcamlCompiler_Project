@@ -6,10 +6,10 @@ import instructions.*;
 
 public class Function {
 private List<Instruction> instructions;
-private List<Object> arguments;
+private List<Variable> arguments;
 private Integer spillOffset = 0;
 
-public Function(List<Object> arguments, List<Instruction> instructions) {
+public Function(List<Variable> arguments, List<Instruction> instructions) {
         this.instructions = instructions;
         this.arguments = arguments;
 }
@@ -26,7 +26,7 @@ public Iterator<Instruction> iterator() {
         return instructions.iterator();
 }
 
-public List<Object> getArguments() {
+public List<Variable> getArguments() {
         return arguments;
 }
 

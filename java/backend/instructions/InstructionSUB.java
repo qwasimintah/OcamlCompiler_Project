@@ -1,9 +1,11 @@
 package instructions;
+
 import variables.*;
 import functions.*;
+import java.util.*;
 
 public class InstructionSUB implements Instruction {
-public List<Object> operands;
+public List<Object> operands = new ArrayList<Object>();
 
 public InstructionSUB(Function func, Variable x, Variable y) {
         this.operands.add(x);

@@ -1,6 +1,8 @@
 package instructions;
+
 import variables.*;
 import functions.*;
+import java.util.*;
 
 public class InstructionASSIGN implements Instruction {
 public List<Object> operands;

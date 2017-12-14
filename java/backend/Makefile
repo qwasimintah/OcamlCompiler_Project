@@ -1,7 +1,7 @@
 JAVAC=javac
 SRC=./
 DEST=./
-FILES=RegisterAllocation.java
+FILES=RegisterAllocation.java ArmGenerator.java
 FLAGS=-Xlint:-serial
 
 all: $(FILES)
