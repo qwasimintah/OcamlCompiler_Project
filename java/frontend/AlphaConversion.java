@@ -1,132 +1,119 @@
 import java.util.HashSet;
 
-public class AlphaConversion implements ObjVisitor<Integer>{
+public class AlphaConversion implements ObjVisitor<Exp>{
   /**
   set of variables
   */
   private static HashSet<String> epsilon = new HashSet<String> ();
 
-  public Integer visit(Add e){
-    alpha(e);
-    return 0;
+  public Exp visit(Add e){
+    Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
+    return new_add;
   }
 
-  public Integer visit(Sub e){
-    alpha(e);
-    return 0;
+  public Exp visit(Sub e){
+    Sub new_sub = new Sub(e.e1.accept(this), e.e2.accept(this));
+    return new_sub;
   }
 
-  public Integer visit(Let e){
-    alpha(e);
-    return 0;
+  public Exp visit(Let e){
+    Var new_var = new Var(e.id.gen());
+    epsilon.add(new_var.id.toString());
+    Let new_let = new Let(new_var.id, e.t, e.e1.accept(this), e.e2.accept(this));
+    return new_let;
   }
 
-  public Integer visit(Var e){
-    alpha(e);
-    return 0;
-  }
-
-  public Integer visit(Int e){
-    return 0;
-  }
-
-  public Integer visit(Unit e){
-    return 0;
-  }
-
-  public Integer visit(Bool e){
-    return 0;
-  }
-
-  public Integer visit(Float e){
-    return 0;
-  }
-
-  public Integer visit(Not e){
-    return 0;
-  }
-
-  public Integer visit(Neg e){
-    return 0;
-  }
-
-  public Integer visit(FNeg e){
-    return 0;
-  }
-
-  public Integer visit(FAdd e){
-    return 0;
-  }
-
-  public Integer visit(FSub e){
-    return 0;
-  }
-
-  public Integer visit(FMul e){
-    return 0;
-  }
-
-  public Integer visit(FDiv e){
-    return 0;
-  }
-
-  public Integer visit(Eq e){
-    return 0;
-  }
-
-  public Integer visit(LE e){
-    return 0;
-  }
-
-  public Integer visit(If e){
-    return 0;
-  }
-
-  public Integer visit(LetRec e){
-    return 0;
-  }
-
-  public Integer visit(App e){
-    return 0;
-  }
-
-  public Integer visit(Tuple e){
-    return 0;
-  }
-
-  public Integer visit(LetTuple e){
-    return 0;
-  }
-
-  public Integer visit(Array e){
-    return 0;
-  }
-
-  public Integer visit(Get e){
-    return 0;
-  }
-
-  public Integer visit(Put e){
-    return 0;
-  }
-
-  /**
-  function doing the alpha-conversion
-  */
-  public void alpha(Exp e){
-    if (e instanceof Var){
-      if (!epsilon.add(e.id.toString())){
-        e.id = e.id.gen();
-        epsilon.add(e.id.toString());
-      }
-    } else if (e instanceof Add || e instanceof Sub){
-      alpha(e.e1);
-      alpha(e.e2);
-    } else if (e instanceof Let){
-        e.id = e.id.gen();
-        alpha(e.e1);
-        epsilon.add(e.id.toString());
-        alpha(e.e2);
+  public Exp visit(Var e){
+    if (!epsilon.add(e.id.toString())){
+      Var new_var = new Var(e.id.gen());
+      epsilon.add(new_var.id.toString());
+      return new_var;
+    } else {
+      return e;
     }
+  }
+
+  public Exp visit(Int e){
+    return e;
+  }
+
+  public Exp visit(Unit e){
+    return e;
+  }
+
+  public Exp visit(Bool e){
+    return e;
+  }
+
+  public Exp visit(Float e){
+    return e;
+  }
+
+  public Exp visit(Not e){
+    return e;
+  }
+
+  public Exp visit(Neg e){
+    return e;
+  }
+
+  public Exp visit(FNeg e){
+    return e;
+  }
+
+  public Exp visit(FAdd e){
+    return e;
+  }
+
+  public Exp visit(FSub e){
+    return e;
+  }
+
+  public Exp visit(FMul e){
+    return e;
+  }
+
+  public Exp visit(FDiv e){
+    return e;
+  }
+
+  public Exp visit(Eq e){
+    return e;
+  }
+
+  public Exp visit(LE e){
+    return e;
+  }
+
+  public Exp visit(If e){
+    return e;
+  }
+
+  public Exp visit(LetRec e){
+    return e;
+  }
+
+  public Exp visit(App e){
+    return e;
+  }
+
+  public Exp visit(Tuple e){
+    return e;
+  }
+
+  public Exp visit(LetTuple e){
+    return e;
+  }
+
+  public Exp visit(Array e){
+    return e;
+  }
+
+  public Exp visit(Get e){
+    return e;
+  }
+
+  public Exp visit(Put e){
+    return e;
   }
 }
