@@ -244,18 +244,21 @@ public class ArmGenerator {
 
                       if(op2 instanceof InstructionADD){
 
-                        generate_addition((InstructionADD) op2, reg);
+                        generate_addition((InstructionADD) op2);
+                        assign(reg, "r0" );
 
                       }
                       else if(op2 instanceof InstructionSUB){
 
-                        generate_sub((InstructionSUB) op2, reg);
+                        generate_sub((InstructionSUB) op2);
+                        assign(reg, "r0");
 
                       }
 
                       else if(op2 instanceof InstructionMULT){
 
-                        generate_mult((InstructionMULT) op2, reg);
+                        generate_mult((InstructionMULT) op2);
+                        assign(reg, "r0");
 
                       }
 
@@ -295,7 +298,7 @@ public class ArmGenerator {
 
    public void assign(String dest, String src){
 
-      textSection.text.append("\tLDR ").append(dest).append(", ").append(src).append("\n");
+      textSection.text.append("\tMOV ").append(dest).append(", ").append(src).append("\n");
 
    }
 
@@ -303,7 +306,7 @@ public class ArmGenerator {
 
    private void assign(String dest, int src ){
 
-        textSection.text.append("\tLDR ").append(dest).append(", =").append(src).append("\n");
+        textSection.text.append("\tLDR ").append(dest).append(", #").append(src).append("\n");
    }
 
 
@@ -382,7 +385,7 @@ public class ArmGenerator {
         HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
 
         RegisterUtils.initRegisters(registers);
-        RegisterUtils.showRegisters(registers);
+       // RegisterUtils.showRegisters(registers);
 
 
         VInteger y = new VInteger("y", f, registers,fundef);
@@ -394,18 +397,22 @@ public class ArmGenerator {
         
         }
         
-        RegisterUtils.showRegisters(registers);
+       // RegisterUtils.showRegisters(registers);
 
         //fundef.putInstruction(new InstructionADD(x,y));
 
 
+        
 
+        InstructionASSIGN q = new InstructionASSIGN(fundef, y, 1);
+        InstructionASSIGN p = new InstructionASSIGN(fundef, w, 2);
+        InstructionADD add = new InstructionADD(fundef, y, w);
+       // add.show();
+        InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
+       // ass.show();
 
-        InstructionADD add = new InstructionADD(fundef, w, y);
-        add.show();
-        InstructionASSIGN ass = new InstructionASSIGN(fundef, y, x);
-        ass.show();
-
+        fundef.addInstruction(q);
+        fundef.addInstruction(p);
         fundef.addInstruction(add);
         fundef.addInstruction(ass);
         funs.add(fundef);
