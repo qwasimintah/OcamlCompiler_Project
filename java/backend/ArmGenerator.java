@@ -31,7 +31,23 @@ public class ArmGenerator {
    public void generate_code(List<Functions>  functions){
 
         //loop through all the available functions 
-        for()
+        for(fun in functions){
+            List<Variables> var = fun.getArguments();
+	    List<Instructions> intr = fun.Instructions();
+            //process all intructions of functions
+
+	    for (inst in intr){
+
+
+  		}
+
+            
+		
+          
+		
+        }
+
+
 
 
    }

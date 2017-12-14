@@ -1,14 +1,18 @@
+package functions;
+
 import java.util.*;
+import variables.*;
+import instructions.*;
 
 public class Function {
 private List<Instruction> instructions;
-private List<Variable> arguments;
-public Function(List arguments, List instructions) {
+private List<Object> arguments;
+public Function(List<Object> arguments, List<Instruction> instructions) {
         this.instructions = instructions;
         this.arguments = arguments;
 }
 
-public List getInstructions() {
+public List<Instruction> getInstructions() {
         return instructions;
 }
 
@@ -16,8 +20,12 @@ public void putInstruction(Instruction instruction) {
         instructions.add(instruction);
 }
 
-public Iterator<Instruction> interator() {
+public Iterator<Instruction> iterator() {
         return instructions.iterator();
+}
+
+public List<Object> getArguments() {
+        return arguments;
 }
 
 public void show() {
@@ -30,7 +38,11 @@ public static void main(String[] args) {
         VInteger x = new VInteger("x", 1, null);
         List<Instruction> instructions = new ArrayList<Instruction>();
         Function f = new Function(null, instructions);
+<<<<<<< HEAD:java/regalloc/functions/Function.java
         
+=======
+
+>>>>>>> 530ddfbef19fbecb2ee43190e14f9cac4d480b31:java/regalloc/functions/Function.java
         Instruction add = new InstructionADD(x, 2);
         f.putInstruction(add);
         Instruction sub = new InstructionSUB(1, 2);
