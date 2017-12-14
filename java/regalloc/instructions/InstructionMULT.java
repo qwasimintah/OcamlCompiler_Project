@@ -3,26 +3,27 @@ package instructions;
 import java.io.*;
 import java.util.*;
 import variables.*;
+import functions.*;
 
 public class InstructionMULT implements Instruction {
 public List<Object> operands;
 
-public InstructionMULT(Variable x, Variable y) {
+public InstructionMULT(Function func, Variable x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionMULT(Integer x, Variable y) {
+public InstructionMULT(Function func, Integer x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionMULT(Variable x, Integer y) {
+public InstructionMULT(Function func, Variable x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionMULT(Integer x, Integer y) {
+public InstructionMULT(Function func, Integer x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
 }

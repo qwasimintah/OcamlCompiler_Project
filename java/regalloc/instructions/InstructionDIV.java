@@ -3,26 +3,27 @@ package instructions;
 import java.io.*;
 import java.util.*;
 import variables.*;
+import functions.*;
 
 public class InstructionDIV implements Instruction {
 public List<Object> operands;
 
-public InstructionDIV(Variable x, Variable y) {
+public InstructionDIV(Function func, Variable x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionDIV(Integer x, Variable y) {
+public InstructionDIV(Function func, Integer x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionDIV(Variable x, Integer y) {
+public InstructionDIV(Function func, Variable x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionDIV(Integer x, Integer y) {
+public InstructionDIV(Function func, Integer x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
 }

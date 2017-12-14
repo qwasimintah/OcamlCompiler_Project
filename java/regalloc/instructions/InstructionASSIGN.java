@@ -2,18 +2,24 @@ package instructions;
 
 import java.util.*;
 import variables.*;
+import functions.*;
 
 public class InstructionASSIGN implements Instruction {
 public List<Object> operands;
 
-public InstructionASSIGN(Variable x, Variable y) {
+public InstructionASSIGN(Function func, Variable x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
 }
 
-public InstructionASSIGN(Variable x, Integer y) {
+public InstructionASSIGN(Function func, Variable x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
+}
+
+public InstructionASSIGN(Function func, Variable x, Instruction inst) {
+        this.operands.add(x);
+        this.operands.add(inst);
 }
 
 public List<Object> getOperands () {

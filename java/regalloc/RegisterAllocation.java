@@ -22,7 +22,11 @@ public static void showRegisters() {
         for(Object key: registers.keySet()) {
                 Register reg = (Register) key;
                 System.out.print("r" + reg.getIndex() + ": ");
-                System.out.println(registers.get(reg));
+                try {
+                  System.out.println(registers.get(reg).getName());
+                } catch (NullPointerException e) {
+                  System.out.println("empty");
+                }
         }
         System.out.println("\n");
 }
@@ -58,22 +62,23 @@ public static void VBA(Function fun) {
                         }
                         catch (NoAvailableRegister e) {
                                 System.out.println(e.getMessage());
+                                showRegisters();
                                 return;
                         }
                 }
         }
+        showRegisters();
 }
 
 public static void main(String[] args) {
         initRegisters();
         showRegisters();
-        List<Instruction> instructions = new ArrayList<Instruction>();
+        Function fun = new Function(new ArrayList(), new ArrayList());
         for (Integer i = 0; i < 10; i++) {
-                VInteger x = new VInteger("x", 10, registers);
-                InstructionADD inst = new InstructionADD(x, x);
-                instructions.add(inst);
+                VInteger x = new VInteger("x" + i.toString(), 10, registers);
+                InstructionADD inst = new InstructionADD(fun, x, x);
+                fun.addInstruction(inst);
         }
-        Function fun = new Function(new ArrayList(), instructions);
         VBA(fun);
 }
 }
