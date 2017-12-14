@@ -1,6 +1,4 @@
 package instructions;
-
-import java.util.*;
 import variables.*;
 import functions.*;
 
@@ -28,12 +26,5 @@ public List<Object> getOperands () {
 
 public void show() {
         System.out.println(operands.get(0) + " := " + operands.get(1));
-}
-
-public static void main(String[] args) {
-        VInteger x = new VInteger("x", 10, null);
-        VInteger y = new VInteger("y", 1, null);
-        InstructionASSIGN i = new InstructionASSIGN(x, 10);
-        i.show();
 }
 }

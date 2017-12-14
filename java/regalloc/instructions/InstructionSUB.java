@@ -1,7 +1,4 @@
 package instructions;
-
-import java.io.*;
-import java.util.*;
 import variables.*;
 import functions.*;
 
@@ -35,5 +32,4 @@ public List<Object> getOperands () {
 public void show() {
         System.out.println("SUB " + operands.get(0) + " " + operands.get(1));
 }
-
 }

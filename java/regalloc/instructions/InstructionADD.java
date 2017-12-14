@@ -1,4 +1,5 @@
 package instructions;
+import variables.*;
 
 import java.io.*;
 import java.util.*;
