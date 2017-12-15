@@ -35,6 +35,9 @@ public class ArmGenerator {
         textSection.text.append("\t.text\n");
         textSection.text.append("\t.global _start\n");
         textSection.text.append("_start:\n");
+        textSection.text.append("\tBL _main\n");
+        textSection.text.append("_main:\n");
+        //main_prologue();
 
     }
 
@@ -42,8 +45,9 @@ public class ArmGenerator {
     public void generate_code(List<Function>  functions){
          //loop through all the available functions
          for(Function fun : functions){
-             //List<Variables> var = fun.getArguments();
- 	          List<Instruction> intr = fun.getInstructions();
+             List<Variables> arguments = fun.getArguments();
+ 	           List<Instruction> intr = fun.getInstructions();
+             //HashMap<Variables> locals = fun.getVariables();
              //process all intructions of functions
 
        	    for (Instruction inst : intr){
@@ -127,7 +131,7 @@ public class ArmGenerator {
       public  void generate_mult(InstructionMULT instr, String rd){
                 Object op1= instr.operands.get(0);
                 Object op2= instr.operands.get(1);
-                
+
                 if(op1 instanceof Integer && op2 instanceof Variable){
                       arith_operation("MUL",rd ,(int)op1, ((Variable)op2).getRegister().getName());
                 }
@@ -340,7 +344,6 @@ public class ArmGenerator {
    */
 
    public void arith_operation(String mnemonic, String dest, int operand1, String operand2){
-
         textSection.text.append("\t").append(mnemonic).append(" ").append(dest).append(", #")
                         .append(operand1).append(", ").append(operand2).append("\n");
    }
@@ -359,7 +362,27 @@ public class ArmGenerator {
 
 
 
+  public void main_prologue(){
 
+      textSection.text.append("\t@MAIN PROLOGUE\n");
+      textSection.text.append("\tSUB sp, #4\n");
+      textSection.text.append("\tLDR lr, [sp]\n");
+  }
+
+  public void main_epilogue(){
+
+      textSection.text.append("\t @MAIN EPILOGUE\n");
+      textSection.text.append("\tADD sp, #4\n");
+
+  }
+
+  public void function_prologue(int size){
+
+  }
+
+  public void function_epilogue(){
+
+  }
 
 
    public static void main(String[] args){
@@ -380,8 +403,6 @@ public class ArmGenerator {
         Integer x= new Integer(1);
         Integer f = new Integer(2);
 
-
-
         HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
 
         RegisterUtils.initRegisters(registers);
@@ -394,15 +415,8 @@ public class ArmGenerator {
           y.allocRegister();
           w.allocRegister();
         }catch (NoAvailableRegister e) {
-        
+
         }
-        
-       // RegisterUtils.showRegisters(registers);
-
-        //fundef.putInstruction(new InstructionADD(x,y));
-
-
-        
 
         InstructionASSIGN q = new InstructionASSIGN(fundef, y, 1);
         InstructionASSIGN p = new InstructionASSIGN(fundef, w, 2);
