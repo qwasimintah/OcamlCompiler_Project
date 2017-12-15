@@ -91,14 +91,14 @@ public static void SpillEverything(Function fun) {
 public static void main(String[] args) {
         RegisterUtils.initRegisters(registers);
         RegisterUtils.showRegisters(registers);
-        Function fun = new Function(new ArrayList(), new ArrayList());
-        for (Integer i = 0; i < 9; i++) {
+        //Function fun = new Function(new ArrayList(), new ArrayList());
+        /*for (Integer i = 0; i < 9; i++) {
                 VInteger x = new VInteger("x" + i.toString(), 10, registers, fun);
                 InstructionSUB inst = new InstructionSUB(fun, x, x);
                 fun.addInstruction(inst);
         }
         SpillEverything(fun);
-        fun.showVariablesState();
+        fun.showVariablesState();*/
         // VInteger x = new VInteger("x", 10, registers, fun);
         // InstructionSUB i1 = new InstructionSUB(fun, 3, 1);
         // InstructionASSIGN ass = new InstructionASSIGN(fun, x, i1);
