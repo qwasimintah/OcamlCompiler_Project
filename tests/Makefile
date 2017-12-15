@@ -9,8 +9,14 @@ test:
 generate:
 	@$(SCRIPTFOLDER)generate.sh
 
+generate:
+	@$(SCRIPTFOLDER)back_generate.sh
+
 diff:
 	@$(SCRIPTFOLDER)test_diff.sh
+
+back_diff:
+	@$(SCRIPTFOLDER)back_test_diff.sh
 
 test_test:
 	@$(SCRIPTFOLDER)test_test.sh
