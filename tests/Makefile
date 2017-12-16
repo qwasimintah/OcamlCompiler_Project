@@ -9,7 +9,7 @@ test:
 generate:
 	@$(SCRIPTFOLDER)generate.sh
 
-generate:
+back_generate:
 	@$(SCRIPTFOLDER)back_generate.sh
 
 diff:
