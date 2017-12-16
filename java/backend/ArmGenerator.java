@@ -47,23 +47,29 @@ public class ArmGenerator {
     }
 
 
+
+
     public void generate_code(List<Function>  functions){
          //loop through all the available functions
          for(Function fun : functions){
              List<Variable> arguments = fun.getArguments();
  	           List<Instruction> intr = fun.getInstructions();
-             //HashMap<Variable> locals = fun.getVariables();
+             HashSet<Variable> locals = fun.getVariables();
              //process all intructions of functions
+            int size= locals.size();
+            
 
             String fname = fun.getName();
 
             if(fname.equals("main")){
                 generate_function_label(fname);
+                pushing_local_variables(locals,size);
                 //main_prologue();
             }
             else{
 
                 generate_function_label(fname);
+                pushing_local_variables(locals,size);
                 int argument_size= arguments.size();
                 //function_prologue(argument_size);
 
@@ -101,7 +107,8 @@ public class ArmGenerator {
               }
 
 
-              // epilogue
+              //popping local variables;
+              pop_locals(size);
 
               if(fname.equals("main")){
 
@@ -119,6 +126,38 @@ public class ArmGenerator {
 
 
 
+    public void pushing_local_variables(HashSet<Variable> locals ,int size){
+
+          int num_of_args = size;
+          System.out.println(num_of_args);
+
+          if (num_of_args>1){
+            int off=1;
+            for (int i =1; i<=num_of_args; i++){
+
+                for (Variable l : locals){
+                  if(l.getOffset()!=null && l.getOffset() == off*4 ){
+
+                     textSection.text.append("\tSUB sp, #4\n");
+                     assign("r0",((VInteger)l).getValue());
+                     textSection.text.append("\tSTR r0, [sp]\n");
+                     off++;
+                  }
+                }
+
+            }
+
+          }
+    }
+
+    public void pop_locals(int size){
+
+        if(size > 1){
+          textSection.text.append("\tADD sp, #").append(size).append("\n");
+        }
+    }
+
+
     public  void generate_addition(InstructionADD instr){
             Object op1= instr.operands.get(0);
             Object op2= instr.operands.get(1);
@@ -131,7 +170,7 @@ public class ArmGenerator {
                     operand1=((Variable)op1).getRegister().getName();
                   }
                   else{
-                    operand1="[fp ," + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
                   }
             }
 
@@ -141,7 +180,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ," + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
                   }
             }
 
@@ -172,11 +211,35 @@ public class ArmGenerator {
             Object op2= instr.operands.get(1);
             String rd="r0";
 
+            String operand1="";
+            String operand2="";
+
+            if(op1 instanceof Variable){
+                  if(((Variable)op1).getRegister()!=null){
+                    operand1=((Variable)op1).getRegister().getName();
+                  }
+                  else{
+                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                  }
+            }
+
+
+            if(op2 instanceof Variable){
+                  if(((Variable)op2).getRegister()!=null){
+                    operand2=((Variable)op2).getRegister().getName();
+                  }
+                  else{
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                  }
+            }
+
+
             if(op1 instanceof Integer && op2 instanceof Variable){
-                  arith_operation("MUL",rd ,(int)op1, ((Variable)op2).getRegister().getName());
+
+                  arith_operation("MUL",rd ,(int)op1, operand2);
             }
             else if(op1 instanceof Variable && op2 instanceof Variable){
-                  arith_operation("MUL",rd ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
+                  arith_operation("MUL",rd ,operand1, operand2);
             }
             else if(op1 instanceof Integer && op2 instanceof Integer){
 
@@ -184,61 +247,17 @@ public class ArmGenerator {
             }
             else if(op1 instanceof Variable && op2 instanceof Integer){
 
-              arith_operation("MUL",rd ,((Variable)op1).getRegister().getName(), ((int)op2));
+              arith_operation("MUL",rd ,operand1, ((int)op2));
 
             }
+
 
 
        }
 
-      public  void generate_mult(InstructionMULT instr, String rd){
-                Object op1= instr.operands.get(0);
-                Object op2= instr.operands.get(1);
-
-                if(op1 instanceof Integer && op2 instanceof Variable){
-                      arith_operation("MUL",rd ,(int)op1, ((Variable)op2).getRegister().getName());
-                }
-                else if(op1 instanceof Variable && op2 instanceof Variable){
-                      arith_operation("MUL",rd ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
-                }
-                else if(op1 instanceof Integer && op2 instanceof Integer){
-
-                    arith_operation("MUL",rd ,(int)op1, (int)(op2));
-                }
-                else if(op1 instanceof Variable && op2 instanceof Integer){
-
-                  arith_operation("MUL",rd ,((Variable)op1).getRegister().getName(), ((int)op2));
-
-                }
-
-
-           }
 
 
 
-       public  void generate_addition(InstructionADD instr, String rd){
-            Object op1= instr.operands.get(0);
-            Object op2= instr.operands.get(1);
-
-
-            if(op1 instanceof Integer && op2 instanceof Variable){
-                  arith_operation("ADD",rd ,(int)op1, ((Variable)op2).getRegister().getName());
-            }
-            else if(op1 instanceof Variable && op2 instanceof Variable){
-                  arith_operation("ADD",rd ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
-            }
-            else if(op1 instanceof Integer && op2 instanceof Integer){
-
-                arith_operation("ADD",rd ,(int)op1, (int)(op2));
-            }
-            else if(op1 instanceof Variable && op2 instanceof Integer){
-
-              arith_operation("ADD",rd ,((Variable)op1).getRegister().getName(), ((int)op2));
-
-            }
-
-
-       }
 
         public void generate_sub(InstructionSUB instr){
 
@@ -247,67 +266,92 @@ public class ArmGenerator {
 
                String rd="r0";
 
-               if(op1 instanceof Integer && op2 instanceof Variable){
-                     arith_operation("SUB",rd ,(int)op1, ((Variable)op2).getRegister().getName());
-               }
-               else if(op1 instanceof Variable && op2 instanceof Variable){
-                     arith_operation("SUB",rd ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
-               }
-               else if(op1 instanceof Integer && op2 instanceof Integer){
+               String operand1="";
+               String operand2="";
 
-                   arith_operation("SUB",rd ,(int)op1, (int)(op2));
+               if(op1 instanceof Variable){
+                      if(((Variable)op1).getRegister()!=null){
+                        operand1=((Variable)op1).getRegister().getName();
+                      }
+                      else{
+                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                      }
                }
-               else if(op1 instanceof Variable && op2 instanceof Integer){
 
-                 arith_operation("SUB",rd ,((Variable)op1).getRegister().getName(), ((int)op2));
 
-               }
+                if(op2 instanceof Variable){
+                      if(((Variable)op2).getRegister()!=null){
+                        operand2=((Variable)op2).getRegister().getName();
+                      }
+                      else{
+                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                      }
+                }
+
+
+                if(op1 instanceof Integer && op2 instanceof Variable){
+
+                      arith_operation("SUB",rd ,(int)op1, operand2);
+                }
+                else if(op1 instanceof Variable && op2 instanceof Variable){
+                      arith_operation("SUB",rd ,operand1, operand2);
+                }
+                else if(op1 instanceof Integer && op2 instanceof Integer){
+
+                    arith_operation("SUB",rd ,(int)op1, (int)(op2));
+                }
+                else if(op1 instanceof Variable && op2 instanceof Integer){
+
+                  arith_operation("SUB",rd ,operand1, ((int)op2));
+
+                }
+
+               
 
        }
 
-
-       public void generate_sub(InstructionSUB instr, String rd){
-
-               Object op1= instr.operands.get(0);
-               Object op2= instr.operands.get(1);
-
-               if(op1 instanceof Integer && op2 instanceof Variable){
-                     arith_operation("SUB",rd ,(int)op1, ((Variable)op2).getRegister().getName());
-               }
-               else if(op1 instanceof Variable && op2 instanceof Variable){
-                     arith_operation("SUB",rd ,((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
-               }
-               else if(op1 instanceof Integer && op2 instanceof Integer){
-
-                   arith_operation("SUB",rd ,(int)op1, (int)(op2));
-               }
-               else if(op1 instanceof Variable && op2 instanceof Integer){
-
-                 arith_operation("SUB",rd ,((Variable)op1).getRegister().getName(), ((int)op2));
-
-               }
-
-       }
 
        public  void  generate_assign(InstructionASSIGN instr){
 
                Object op1= instr.operands.get(0);
                Object op2= instr.operands.get(1);
 
+               String operand1="";
+               String operand2="";
+
+               if(op1 instanceof Variable){
+                      if(((Variable)op1).getRegister()!=null){
+                        operand1=((Variable)op1).getRegister().getName();
+                      }
+                      else{
+                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                      }
+               }
+
+
+                if(op2 instanceof Variable){
+                      if(((Variable)op2).getRegister()!=null){
+                        operand2=((Variable)op2).getRegister().getName();
+                      }
+                      else{
+                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                      }
+                }
+
 
                if(op1 instanceof Variable && op2 instanceof Variable){
-                     assign(((Variable)op1).getRegister().getName(), ((Variable)op2).getRegister().getName());
+                     assign(operand1, operand2);
                }
 
                else if(op1 instanceof Variable && op2 instanceof Integer){
 
-                 assign(((Variable)op1).getRegister().getName(), ((int)op2));
+                 assign(operand1, ((int)op2));
 
                }
 
                else if(op1 instanceof Variable && op2 instanceof Instruction){
 
-                      String reg= ((Variable) op1).getRegister().getName();
+                      String reg= operand1;
 
                       if(op2 instanceof InstructionADD){
 
@@ -483,6 +527,7 @@ public class ArmGenerator {
         Integer f = new Integer(2);
 
         HashMap<Register, Variable> registers = new HashMap<Register, Variable>(1);
+        HashSet<Variable> locals = new HashSet<Variable>();
 
         RegisterUtils.initRegisters(registers);
        //
@@ -492,12 +537,19 @@ public class ArmGenerator {
 
         VInteger y = new VInteger("y", f, registers,fundef);
         VInteger w = new VInteger("w", f, registers,fundef);
+
+        locals.add(y);
+        locals.add(w);
+
+        fundef.setVariables(locals);
+
         try{
           y.allocRegister();
           w.allocRegister();
         }catch (NoAvailableRegister e) {
 
         }
+        //System.out.println(w.getOffset());
         RegisterUtils.showRegisters(registers);
         InstructionASSIGN q = new InstructionASSIGN(fundef, y, 5);
         InstructionASSIGN p = new InstructionASSIGN(fundef, w, 9);
@@ -505,7 +557,7 @@ public class ArmGenerator {
         InstructionSUB sub = new InstructionSUB(fundef, w, y);
         InstructionMULT mul = new InstructionMULT(fundef, w, y);
        // add.show();
-        //InstructionASSIGN ass = new InstructionASSIGN(fundef, y, w);
+       //InstructionASSIGN ass = new InstructionASSIGN(fundef, y, w);
        // ass.show();
 
         fundef.addInstruction(q);
