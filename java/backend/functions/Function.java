@@ -5,12 +5,15 @@ import variables.*;
 import instructions.*;
 
 public class Function {
+
+private String name;
 private List<Instruction> instructions;
 private List<Variable> arguments;
 private Integer spillOffset = 0;
 private HashSet<Variable> variables = new HashSet<Variable>();
 
-public Function(List<Variable> arguments, List<Instruction> instructions) {
+public Function(String name, List<Variable> arguments, List<Instruction> instructions) {
+        this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
 }
@@ -18,6 +21,12 @@ public Function(List<Variable> arguments, List<Instruction> instructions) {
 public List<Instruction> getInstructions() {
         return instructions;
 }
+
+public String getName(){
+
+        return name;
+}
+  
 
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);

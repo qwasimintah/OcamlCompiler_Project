@@ -9,5 +9,7 @@ all: $(FILES)
 
 RegisterAllocation.java:
 
+ArmGenerator.java:
+
 clean:
 	rm -rf **/*.class
