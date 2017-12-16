@@ -25,6 +25,7 @@ public class ArmGenerator {
     public TextSection textSection;
     private int HEAP_SIZE=1024*4; // Heap size in bytes
     private HashMap<String, Integer> fun_arg_locations;
+    private int available_reg=1;
 
 
     public ArmGenerator(){
@@ -133,7 +134,7 @@ public class ArmGenerator {
 
           if (num_of_args>1){
             int off=1;
-            for (int i =1; i<=num_of_args; i++){
+            for (int i =available_reg; i<=num_of_args; i++){
 
                 for (Variable l : locals){
                   if(l.getOffset()!=null && l.getOffset() == off*4 ){
@@ -153,7 +154,7 @@ public class ArmGenerator {
     public void pop_locals(int size){
 
         if(size > 1){
-          textSection.text.append("\tADD sp, #").append(size).append("\n");
+          textSection.text.append("\tADD sp, #").append((size-available_reg)*4).append("\n");
         }
     }
 
@@ -170,7 +171,10 @@ public class ArmGenerator {
                     operand1=((Variable)op1).getRegister().getName();
                   }
                   else{
+
                     operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                    operand1="r0";
                   }
             }
 
@@ -181,6 +185,9 @@ public class ArmGenerator {
                   }
                   else{
                     operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                    operand2="r1";
+
                   }
             }
 
@@ -219,7 +226,10 @@ public class ArmGenerator {
                     operand1=((Variable)op1).getRegister().getName();
                   }
                   else{
+
                     operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                    operand1="r0";
                   }
             }
 
@@ -230,8 +240,12 @@ public class ArmGenerator {
                   }
                   else{
                     operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                    operand2="r1";
+
                   }
             }
+
 
 
             if(op1 instanceof Integer && op2 instanceof Variable){
@@ -269,14 +283,17 @@ public class ArmGenerator {
                String operand1="";
                String operand2="";
 
-               if(op1 instanceof Variable){
+                if(op1 instanceof Variable){
                       if(((Variable)op1).getRegister()!=null){
                         operand1=((Variable)op1).getRegister().getName();
                       }
                       else{
+
                         operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                        operand1="r0";
                       }
-               }
+                }
 
 
                 if(op2 instanceof Variable){
@@ -285,6 +302,9 @@ public class ArmGenerator {
                       }
                       else{
                         operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                        operand2="r1";
+
                       }
                 }
 
@@ -319,24 +339,31 @@ public class ArmGenerator {
                String operand1="";
                String operand2="";
 
-               if(op1 instanceof Variable){
-                      if(((Variable)op1).getRegister()!=null){
-                        operand1=((Variable)op1).getRegister().getName();
-                      }
-                      else{
-                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
-                      }
-               }
+            if(op1 instanceof Variable){
+                  if(((Variable)op1).getRegister()!=null){
+                    operand1=((Variable)op1).getRegister().getName();
+                  }
+                  else{
+
+                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                    operand1="r0";
+                  }
+            }
 
 
-                if(op2 instanceof Variable){
-                      if(((Variable)op2).getRegister()!=null){
-                        operand2=((Variable)op2).getRegister().getName();
-                      }
-                      else{
-                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
-                      }
-                }
+            if(op2 instanceof Variable){
+                  if(((Variable)op2).getRegister()!=null){
+                    operand2=((Variable)op2).getRegister().getName();
+                  }
+                  else{
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                    operand2="r1";
+
+                  }
+            }
+
 
 
                if(op1 instanceof Variable && op2 instanceof Variable){
@@ -562,7 +589,7 @@ public class ArmGenerator {
 
         fundef.addInstruction(q);
         fundef.addInstruction(p);
-        fundef.addInstruction(mul);
+        fundef.addInstruction(add);
         //fundef.addInstruction(sub);
         //fundef.addInstruction(ass);
         funs.add(fundef);
