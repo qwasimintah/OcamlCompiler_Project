@@ -23,7 +23,13 @@ public InstructionASSIGN(Function func, Variable x, Instruction inst) {
 }
 
 public List<Object> getOperands () {
-        return operands;
+        List<Object> op = new ArrayList<Object>();
+        op.add(operands.get(0));
+        if (operands.get(1) instanceof Instruction) {
+                op.add(((Instruction)(operands.get(1))).getOperands(0));
+                op.add(((Instruction)(operands.get(1))).getOperands(1));
+        }
+        return op;
 }
 
 public void show() {

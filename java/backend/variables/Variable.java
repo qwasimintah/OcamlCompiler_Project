@@ -6,6 +6,7 @@ import java.util.*;
 import registers.*;
 import exceptions.*;
 import functions.*;
+import intervals.*;
 
 public abstract class Variable {
 private String name;
@@ -13,11 +14,13 @@ private Register register;
 private HashMap<Register, Variable> registers;
 private Integer offset;
 private Function function;
+private Interval interval;
 
 public Variable(String name, HashMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
         this.function = func;
+        this.interval = new Interval(this);
 }
 
 public String getName() {
@@ -70,6 +73,10 @@ public void getSaveState() {
         } else {
                 System.out.println("Variable not saved !");
         }
+}
+
+public Interval getInterval() {
+        return this.interval;
 }
 
 public void kill() {
