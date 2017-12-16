@@ -1,0 +1,5 @@
+------ AST ------
+(let x = 1 in (let x = 2 in x))
+------ Height of the AST ------
+using Height.computeHeight: 2
+using HeightVisitor: 2
