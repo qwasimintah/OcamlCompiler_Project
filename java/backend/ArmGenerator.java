@@ -64,15 +64,18 @@ public class ArmGenerator {
 
             if(fname.equals("main")){
                 generate_function_label(fname);
-                pushing_local_variables(locals,size);
-                //main_prologue();
+          
+                main_prologue();
+                reserve_space(size);
             }
             else{
 
                 generate_function_label(fname);
-                pushing_local_variables(locals,size);
+                function_prologue(size);
+                reserve_space(size);
+                //pushing_local_variables(locals,size);
                 int argument_size= arguments.size();
-                //function_prologue(argument_size);
+                //
 
                 // calculate offset of function argument_size
                 if(argument_size > 0){
@@ -113,10 +116,10 @@ public class ArmGenerator {
 
               if(fname.equals("main")){
 
-                  //main_epilogue();
+                  main_epilogue();
               }
               else{
-                  //function_epilogue();
+                  function_epilogue();
               }
 
               output_terminal();
@@ -127,7 +130,7 @@ public class ArmGenerator {
 
 
 
-    public void pushing_local_variables(HashSet<Variable> locals ,int size){
+    public void pushing_local_params(HashSet<Variable> locals ,int size){
 
           int num_of_args = size;
           System.out.println(num_of_args);
@@ -150,6 +153,14 @@ public class ArmGenerator {
 
           }
     }
+
+
+    public void reserve_space(int size){
+
+      if(size > available_reg){
+       textSection.text.append("\tSUB sp, #").append((size-available_reg)*4).append("\n");
+    }
+  }
 
     public void pop_locals(int size){
 
@@ -337,6 +348,7 @@ public class ArmGenerator {
                Object op2= instr.operands.get(1);
 
                String operand1="";
+               String offset1="";
                String operand2="";
 
             if(op1 instanceof Variable){
@@ -345,8 +357,8 @@ public class ArmGenerator {
                   }
                   else{
 
-                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
-                    textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                    offset1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    //textSection.text.append("\tSTR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
             }
@@ -368,11 +380,17 @@ public class ArmGenerator {
 
                if(op1 instanceof Variable && op2 instanceof Variable){
                      assign(operand1, operand2);
+                     if(offset1!=""){
+                      textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
+                     }
                }
 
                else if(op1 instanceof Variable && op2 instanceof Integer){
 
-                 assign(operand1, ((int)op2));
+                    assign(operand1, ((int)op2));
+                    if(offset1!=""){
+                      textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
+                     }
 
                }
 
