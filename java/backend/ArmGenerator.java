@@ -58,13 +58,13 @@ public class ArmGenerator {
              HashSet<Variable> locals = fun.getVariables();
              //process all intructions of functions
             int size= locals.size();
-            
+
 
             String fname = fun.getName();
 
             if(fname.equals("main")){
                 generate_function_label(fname);
-          
+
                 main_prologue();
                 reserve_space(size);
             }
@@ -337,7 +337,7 @@ public class ArmGenerator {
 
                 }
 
-               
+
 
        }
 
@@ -540,7 +540,7 @@ public class ArmGenerator {
     textSection.text.append("\t@FUNCTION PROLOGUE");
     textSection.text.append("\tSUB sp, #4\n");
     textSection.text.append("\tSTR lr, [sp]\n");
-    textSection.text.append("\tSTMFD  sp!, {r4 - r11}\n");   
+    textSection.text.append("\tSTMFD  sp!, {r4 - r11}\n");
     textSection.text.append("\tSUB sp, #4\n");
     textSection.text.append("\tSTR fp, [sp]\n");
     textSection.text.append("\tMOV fp, sp\n");
@@ -575,7 +575,7 @@ public class ArmGenerator {
 
       // TODO: check if call is to predefined function (in this case print)
 
-      
+
 
 
 
@@ -588,12 +588,19 @@ public class ArmGenerator {
 
 
         List<Instruction> instr = new ArrayList<Instruction>();
+        List<Instruction> add_instr = new ArrayList<Instruction>();
+
+        //global structure
         List<Function> funs= new ArrayList<Function>();
+
+        //functions
         Function fundef= new Function("main", null, instr);
+        Function fadd = new Function("add", null, add_instr);
+
+        //variables
         Integer x= new Integer(1);
         Integer f = new Integer(2);
-
-        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(1);
         HashSet<Variable> locals = new HashSet<Variable>();
 
         RegisterUtils.initRegisters(registers);
@@ -609,6 +616,7 @@ public class ArmGenerator {
         locals.add(w);
 
         fundef.setVariables(locals);
+        fadd.setVariables(locals);
 
         try{
           y.allocRegister();
@@ -629,11 +637,17 @@ public class ArmGenerator {
 
         fundef.addInstruction(q);
         fundef.addInstruction(p);
-        fundef.addInstruction(mul);
+        fundef.addInstruction(sub);
+
+        fadd.addInstruction(q);
+        fadd.addInstruction(p);
+        fadd.addInstruction(add);
+
+
         //fundef.addInstruction(sub);
         //fundef.addInstruction(mul);
         funs.add(fundef);
-
+        funs.add(fadd);
         arm.generate_code(funs);
 
         StringBuilder result= arm.textSection.text;
