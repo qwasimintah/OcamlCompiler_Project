@@ -74,18 +74,20 @@ public class ArmGenerator {
                 function_prologue(size);
                 reserve_space(size);
                 //pushing_local_variables(locals,size);
-                int argument_size= arguments.size();
-                //
 
-                // calculate offset of function argument_size
-                if(argument_size > 0){
-                    int i=1;
-                    for(Variable arg : arguments){
-                      int offset =4 * i;
-                      fun_arg_locations.put(arg.getName(), offset);
-                      i++;
+                if(arguments != null){
+                    int argument_size= arguments.size();
+
+                    // calculate offset of function(only need when params are more than four)
+                    if(argument_size > 4){
+                        int i=1;
+                        for(Variable arg : arguments){
+                          int offset =4 * i;
+                          fun_arg_locations.put(arg.getName(), offset);
+                          i++;
+                        }
                     }
-                }
+              }
             }
 
 
@@ -105,6 +107,10 @@ public class ArmGenerator {
                      generate_assign((InstructionASSIGN) inst);
 
                  }
+                 else if (inst instanceof InstructionCALL){
+                     generate_function_call((InstructionCALL) inst);
+
+                 }
                  else{
                       System.out.println("Instruction Not Supported\n");
                  }
@@ -117,12 +123,13 @@ public class ArmGenerator {
               if(fname.equals("main")){
 
                   main_epilogue();
+                  output_terminal();
               }
               else{
                   function_epilogue();
               }
 
-              output_terminal();
+
 
          }
 
@@ -526,32 +533,33 @@ public class ArmGenerator {
 
   public void main_epilogue(){
 
-      textSection.text.append("\t @MAIN EPILOGUE\n");
+      textSection.text.append("\n\t@MAIN EPILOGUE\n");
       textSection.text.append("\tADD sp, #4\n");
       textSection.text.append("\tMOV sp, fp\n");
       textSection.text.append("\tLDR fp, [sp]\n");
-      textSection.text.append("\tADD sp, #4\n");
+      textSection.text.append("\tADD sp, #4\n\n");
 
   }
 
   public void function_prologue(int size){
 
 
-    textSection.text.append("\t@FUNCTION PROLOGUE");
+    textSection.text.append("\t@FUNCTION PROLOGUE\n");
     textSection.text.append("\tSUB sp, #4\n");
     textSection.text.append("\tSTR lr, [sp]\n");
     textSection.text.append("\tSTMFD  sp!, {r4 - r11}\n");
     textSection.text.append("\tSUB sp, #4\n");
     textSection.text.append("\tSTR fp, [sp]\n");
-    textSection.text.append("\tMOV fp, sp\n");
+    textSection.text.append("\tMOV fp, sp\n\n");
 
   }
 
   public void function_epilogue(){
 
+    textSection.text.append("\n\t@FUNCTION EPILOGUE\n");
     textSection.text.append("\tLDR lr, [sp]\n");
     textSection.text.append("\tADD sp, #4\n");
-    textSection.text.append("\tMOV pc, lr\n");
+    textSection.text.append("\tMOV pc, lr\n\n");
 
   }
 
@@ -569,16 +577,31 @@ public class ArmGenerator {
 
   }
 
+public String get_label(String name){
 
-  public void generate_function_call(Instruction intr){
+    return "_"+name;
+
+}
+
+  public void generate_function_call(InstructionCALL instr){
 
 
       // TODO: check if call is to predefined function (in this case print)
 
+        List<Variable> params = instr.getParams();
+        String return_reg = instr.getReturn();
+        String fname = get_label(instr.getName());
+        int num_params=params.size();
+       // set arguments for functions
 
 
+         for(int i=0; i<=num_params; i++){
 
+            assign("r"+i, (int)(params.get(i).getValue()));
 
+         }
+
+         textSection.text.append("\tBL ").append(fname).append("\n");
   }
 
 
@@ -624,6 +647,9 @@ public class ArmGenerator {
         }catch (NoAvailableRegister e) {
 
         }
+
+        List<Variable> params = new ArrayList<Variable>();
+
         //System.out.println(w.getOffset());
         RegisterUtils.showRegisters(registers);
         InstructionASSIGN q = new InstructionASSIGN(fundef, y, 5);
@@ -631,13 +657,16 @@ public class ArmGenerator {
         InstructionADD add = new InstructionADD(fundef, y, w);
         InstructionSUB sub = new InstructionSUB(fundef, w, y);
         InstructionMULT mul = new InstructionMULT(fundef, w, y);
+
+        InstructionCALL call = new InstructionCALL(params, "add");
        // add.show();
        InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
        // ass.show();
 
-        fundef.addInstruction(q);
-        fundef.addInstruction(p);
-        fundef.addInstruction(sub);
+        //fundef.addInstruction(q);
+        //fundef.addInstruction(p);
+        //fundef.addInstruction(sub);
+        fundef.addInstruction(call);
 
         fadd.addInstruction(q);
         fadd.addInstruction(p);
@@ -655,7 +684,7 @@ public class ArmGenerator {
         System.out.println(result);
 
 
-        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/add.s"))) {
+        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/add_test.s"))) {
 	               oS.write(result.toString().getBytes());
               } catch (IOException e) {
 	                e.printStackTrace();
