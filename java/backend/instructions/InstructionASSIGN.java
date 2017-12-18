@@ -26,8 +26,8 @@ public List<Object> getOperands () {
         List<Object> op = new ArrayList<Object>();
         op.add(operands.get(0));
         if (operands.get(1) instanceof Instruction) {
-                op.add(((Instruction)(operands.get(1))).getOperands(0));
-                op.add(((Instruction)(operands.get(1))).getOperands(1));
+                op.add(((Instruction)(operands.get(1))).getOperands().get(0));
+                op.add(((Instruction)(operands.get(1))).getOperands().get(1));
         }
         return op;
 }

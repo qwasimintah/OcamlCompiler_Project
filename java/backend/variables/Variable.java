@@ -67,11 +67,11 @@ public Integer getOffset() {
 
 public void getSaveState() {
         if (this.getRegister() != null) {
-                System.out.println("Variable stored in register" + this.getRegister().getName());
+                System.out.println("Variable " + this.getName() + " stored in register " + this.getRegister().getName());
         } else if (this.getOffset() != null) {
-                System.out.println("Variable stored in memory at [fp + " + this.getOffset() + "]");
+                System.out.println("Variable " + this.getName() + " stored in memory at [fp + " + this.getOffset() + "]");
         } else {
-                System.out.println("Variable not saved !");
+                System.out.println("Variable " + this.getName() + " not saved !");
         }
 }
 
