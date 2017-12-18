@@ -183,7 +183,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -195,7 +195,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
@@ -238,7 +238,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -250,7 +250,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
@@ -300,7 +300,7 @@ public class ArmGenerator {
                       }
                       else{
 
-                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                        operand1="[ , #" + ((Variable)op1).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                         operand1="r0";
                       }
@@ -312,7 +312,7 @@ public class ArmGenerator {
                         operand2=((Variable)op2).getRegister().getName();
                       }
                       else{
-                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                        operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                         operand2="r1";
 
@@ -357,7 +357,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    offset1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    offset1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
                     //textSection.text.append("\tSTR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -369,7 +369,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
