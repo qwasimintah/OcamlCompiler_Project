@@ -1,5 +1,5 @@
 ------ AST ------
-((1 + 2) + 3)
+(let x = (let y = e0 in e1) in e2)
 ------ Height of the AST ------
 using Height.computeHeight: 2
 using HeightVisitor: 2
