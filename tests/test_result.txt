@@ -1,36 +1,36 @@
--e 
+
 --------------------------------------------------------------------------
 
--e 	 	 	 [0;32m[ VALID PART ] [33m ->SYNTAX [0m 
+	 	 	 [0;32m[ VALID PART ] [33m ->SYNTAX [0m 
 
 testing parser on: tests/syntax/valid/simple_call.ml
--e [0;31m[ FAILED ][0m
--e 
+[0;32m[ PASSED ][0m
+
 --------------------------------------------------------------------------
 
--e 	 	 	 [0;31m[ INVALID  PART] [33m ->SYNTAX [0m 
+	 	 	 [0;31m[ INVALID  PART] [33m ->SYNTAX [0m 
 
 testing parser on: tests/syntax/invalid/no_closing_paren.ml
--e [0;32m[ PASSED ][0m
--e 
+[0;31m[ FAILED ][0m
+
 --------------------------------------------------------------------------
 
--e 	 	 	 [0;32m[ VALID PART ] [33m ->TYPECHECKING [0m 
+	 	 	 [0;32m[ VALID PART ] [33m ->TYPECHECKING [0m 
 
 testing parser on: tests/typechecking/valid/simple_call.ml
--e [0;31m[ FAILED ][0m
--e 
+[0;32m[ PASSED ][0m
+
 --------------------------------------------------------------------------
 
--e 	 	 	 [0;31m[ INVALID  PART] [33m ->TYPECHECKING [0m 
+	 	 	 [0;31m[ INVALID  PART] [33m ->TYPECHECKING [0m 
 
 testing parser on: tests/typechecking/invalid/call_bad_arg.ml
--e [0;32m[ PASSED ][0m
--e 
+[0;31m[ FAILED ][0m
+
 
 
 testing parser on: tests/typechecking/invalid/main_unit.ml
--e [0;32m[ PASSED ][0m
--e 
+[0;31m[ FAILED ][0m
+
 
 

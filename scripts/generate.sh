@@ -1,10 +1,10 @@
-#! /bin/sh
+#! /bin/bash
 cd "$(dirname "$0")"/.. || exit 1
 MINCAMLC=java/mincamlc
 
 
 input_files=`ls tests/input/`
-for testing_part in 'ast' 'knorm'
+for testing_part in 'ast' 'knorm' 'reduction'
   do
     echo -e "\n \033[33m \t \t \t $testing_part \033[0m \n"
     echo "generation in tests/$testing_part/output/"
