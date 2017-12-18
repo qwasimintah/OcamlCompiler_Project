@@ -183,7 +183,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    operand1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[fp, #" + ((Variable)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -195,7 +195,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
@@ -238,7 +238,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    operand1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -250,7 +250,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
@@ -300,7 +300,7 @@ public class ArmGenerator {
                       }
                       else{
 
-                        operand1="[ , #" + ((Variable)op1).getOffset().toString()+"]";
+                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                         operand1="r0";
                       }
@@ -312,7 +312,7 @@ public class ArmGenerator {
                         operand2=((Variable)op2).getRegister().getName();
                       }
                       else{
-                        operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                         operand2="r1";
 
@@ -357,7 +357,7 @@ public class ArmGenerator {
                   }
                   else{
 
-                    offset1="[sp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    offset1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
                     //textSection.text.append("\tSTR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
@@ -369,7 +369,7 @@ public class ArmGenerator {
                     operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[sp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
@@ -519,11 +519,17 @@ public class ArmGenerator {
       textSection.text.append("\t@MAIN PROLOGUE\n");
       textSection.text.append("\tSUB sp, #4\n");
       textSection.text.append("\tLDR lr, [sp]\n");
+      textSection.text.append("\tSUB sp, #4\n");
+      textSection.text.append("\tSTR fp, [sp]\n");
+      textSection.text.append("\tMOV fp, sp\n");
   }
 
   public void main_epilogue(){
 
       textSection.text.append("\t @MAIN EPILOGUE\n");
+      textSection.text.append("\tADD sp, #4\n");
+      textSection.text.append("\tMOV sp, fp\n");
+      textSection.text.append("\tLDR fp, [sp]\n");
       textSection.text.append("\tADD sp, #4\n");
 
   }
@@ -531,10 +537,21 @@ public class ArmGenerator {
   public void function_prologue(int size){
 
 
+    textSection.text.append("\t@FUNCTION PROLOGUE");
+    textSection.text.append("\tSUB sp, #4\n");
+    textSection.text.append("\tSTR lr, [sp]\n");
+    textSection.text.append("\tSTMFD  sp!, {r4 - r11}\n");   
+    textSection.text.append("\tSUB sp, #4\n");
+    textSection.text.append("\tSTR fp, [sp]\n");
+    textSection.text.append("\tMOV fp, sp\n");
 
   }
 
   public void function_epilogue(){
+
+    textSection.text.append("\tLDR lr, [sp]\n");
+    textSection.text.append("\tADD sp, #4\n");
+    textSection.text.append("\tMOV pc, lr\n");
 
   }
 
@@ -556,6 +573,11 @@ public class ArmGenerator {
   public void generate_function_call(Instruction intr){
 
 
+      // TODO: check if call is to predefined function (in this case print)
+
+      
+
+
 
   }
 
@@ -571,7 +593,7 @@ public class ArmGenerator {
         Integer x= new Integer(1);
         Integer f = new Integer(2);
 
-        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(1);
+        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
         HashSet<Variable> locals = new HashSet<Variable>();
 
         RegisterUtils.initRegisters(registers);
@@ -602,15 +624,16 @@ public class ArmGenerator {
         InstructionSUB sub = new InstructionSUB(fundef, w, y);
         InstructionMULT mul = new InstructionMULT(fundef, w, y);
        // add.show();
-       //InstructionASSIGN ass = new InstructionASSIGN(fundef, y, w);
+       InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
        // ass.show();
 
         fundef.addInstruction(q);
         fundef.addInstruction(p);
-        fundef.addInstruction(add);
+        fundef.addInstruction(mul);
         //fundef.addInstruction(sub);
-        //fundef.addInstruction(ass);
+        //fundef.addInstruction(mul);
         funs.add(fundef);
+
         arm.generate_code(funs);
 
         StringBuilder result= arm.textSection.text;
