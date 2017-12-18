@@ -50,7 +50,7 @@ public class Main {
         System.out.println("");
       }
 
-      /* For AlphaConversion :
+      /*//For AlphaConversion :
       System.out.println("------ AlphaConversion ------");
       Exp expression_converted = expression.accept(new AlphaConversion());
       System.out.println("Ceci est le résultat : ");
