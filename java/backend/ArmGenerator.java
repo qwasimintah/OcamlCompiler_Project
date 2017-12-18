@@ -72,7 +72,6 @@ public class ArmGenerator {
 
                 generate_function_label(fname);
                 function_prologue(size);
-                reserve_space(size);
                 //pushing_local_variables(locals,size);
 
                 if(arguments != null){
@@ -122,7 +121,8 @@ public class ArmGenerator {
 
               if(fname.equals("main")){
 
-                  main_epilogue();
+                  function_epilogue();
+                  //main_epilogue();
                   output_terminal();
               }
               else{
@@ -523,12 +523,18 @@ public class ArmGenerator {
 
   public void main_prologue(){
 
-      textSection.text.append("\t@MAIN PROLOGUE\n");
-      textSection.text.append("\tSUB sp, #4\n");
-      textSection.text.append("\tLDR lr, [sp]\n");
-      textSection.text.append("\tSUB sp, #4\n");
-      textSection.text.append("\tSTR fp, [sp]\n");
-      textSection.text.append("\tMOV fp, sp\n");
+      //textSection.text.append("\t@MAIN PROLOGUE\n");
+      //textSection.text.append("\tSUB sp, #4\n");
+      //textSection.text.append("\tLDR lr, [sp]\n");
+      //textSection.text.append("\tSUB sp, #4\n");
+      //textSection.text.append("\tSTR fp, [sp]\n");
+      //textSection.text.append("\tMOV fp, sp\n\n");
+
+          textSection.text.append("\t@MAIN PROLOGUE\n");
+          textSection.text.append("\tSTMFD sp!, {fp, lr}\n");
+          textSection.text.append("\tADD fp, sp, #4\n");
+
+
   }
 
   public void main_epilogue(){
@@ -543,23 +549,19 @@ public class ArmGenerator {
 
   public void function_prologue(int size){
 
-
     textSection.text.append("\t@FUNCTION PROLOGUE\n");
-    textSection.text.append("\tSUB sp, #4\n");
-    textSection.text.append("\tSTR lr, [sp]\n");
-    textSection.text.append("\tSTMFD  sp!, {r4 - r11}\n");
-    textSection.text.append("\tSUB sp, #4\n");
-    textSection.text.append("\tSTR fp, [sp]\n");
-    textSection.text.append("\tMOV fp, sp\n\n");
+    textSection.text.append("\tSTMFD sp!, {fp, lr}\n");
+    textSection.text.append("\tADD fp, sp, #4\n");
+    reserve_space(size);
 
   }
 
   public void function_epilogue(){
 
     textSection.text.append("\n\t@FUNCTION EPILOGUE\n");
-    textSection.text.append("\tLDR lr, [sp]\n");
-    textSection.text.append("\tADD sp, #4\n");
-    textSection.text.append("\tMOV pc, lr\n\n");
+    textSection.text.append("\tSUB sp, fp, #4\n");
+    textSection.text.append("\tLDMFD sp!, {fp, lr}\n");
+    textSection.text.append("\tBX lr\n\n");
 
   }
 
@@ -590,14 +592,15 @@ public String get_label(String name){
 
         List<Variable> params = instr.getParams();
         String return_reg = instr.getReturn();
-        String fname = get_label(instr.getName());
+        String fname = get_label(instr.getFname());
         int num_params=params.size();
        // set arguments for functions
 
 
-         for(int i=0; i<=num_params; i++){
+         for(int i=0; i<num_params; i++){
+           VInteger param = (VInteger)params.get(i);
 
-            assign("r"+i, (int)(params.get(i).getValue()));
+            assign("r"+ Integer.toString(i) , param.getValue());
 
          }
 
@@ -649,6 +652,8 @@ public String get_label(String name){
         }
 
         List<Variable> params = new ArrayList<Variable>();
+        params.add(y);
+        params.add(w);
 
         //System.out.println(w.getOffset());
         RegisterUtils.showRegisters(registers);
@@ -660,13 +665,13 @@ public String get_label(String name){
 
         InstructionCALL call = new InstructionCALL(params, "add");
        // add.show();
-       InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
+        InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
        // ass.show();
 
         //fundef.addInstruction(q);
         //fundef.addInstruction(p);
-        //fundef.addInstruction(sub);
-        fundef.addInstruction(call);
+        fundef.addInstruction(sub);
+        //fundef.addInstruction(call);
 
         fadd.addInstruction(q);
         fadd.addInstruction(p);
@@ -676,7 +681,7 @@ public String get_label(String name){
         //fundef.addInstruction(sub);
         //fundef.addInstruction(mul);
         funs.add(fundef);
-        funs.add(fadd);
+        //funs.add(fadd);
         arm.generate_code(funs);
 
         StringBuilder result= arm.textSection.text;
@@ -684,7 +689,7 @@ public String get_label(String name){
         System.out.println(result);
 
 
-        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/add_test.s"))) {
+        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/call_test.s"))) {
 	               oS.write(result.toString().getBytes());
               } catch (IOException e) {
 	                e.printStackTrace();

@@ -1,9 +1,12 @@
+package instructions;
+
+import variables.*;
+import java.util.*;
 
 
+public class InstructionCALL implements Instruction{
 
-public class InstructionCALL implements Instruction {
-
-    private List<Variables> params;
+    private List<Variable> params;
     private String return_reg;
     private String fname;
 
@@ -30,13 +33,22 @@ public class InstructionCALL implements Instruction {
           return params;
     }
 
+    public  List<Object> getOperands (){
+
+          return new ArrayList<Object>();
+    }
+
     public String getReturn(){
         return return_reg;
     }
 
-    public String getfname(){
+    public String getFname(){
 
        return fname;
+    }
+
+    public void show(){
+
     }
 
 }
