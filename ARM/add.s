@@ -9,8 +9,8 @@ _main:
 	SUB sp, #4
 	MOV r4, #5
 	MOV r0, #9
-	STR r0 , [fp , #4]
-	LDR r1 , [fp ,#4]
+	STR r0 , [sp , #4]
+	LDR r1 , [sp ,#4]
 	ADD r0, r4, r1
 	ADD sp, #4
 	 @MAIN EPILOGUE
