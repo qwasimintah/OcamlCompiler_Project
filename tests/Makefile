@@ -23,8 +23,5 @@ back_diff:
 test_test:
 	@$(SCRIPTFOLDER)test_test.sh
 
-yo:
-	@$(SCRIPTFOLDER)yo.sh
-
 clean:
-	@rm -f ./result/*
+	@rm */output/*
