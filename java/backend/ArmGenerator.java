@@ -649,9 +649,9 @@ public String get_label(String name){
 
         VInteger y = new VInteger("y", f, registers,fundef);
         VInteger w = new VInteger("w", f, registers,fundef);
-        VInteger a = new VInteger("a", f, registers,fundef);
+        VInteger a = new VInteger("a", x, registers,fundef);
         VInteger b = new VInteger("b", f, registers,fundef);
-        VInteger c = new VInteger("c", f, registers,fundef);
+        VInteger c = new VInteger("c", x, registers,fundef);
 
         locals.add(y);
         locals.add(w);
@@ -662,12 +662,16 @@ public String get_label(String name){
         try{
           y.allocRegister();
           w.allocRegister();
+          a.allocRegister();
+          b.allocRegister();
+          c.allocRegister();
+
         }catch (NoAvailableRegister e) {
 
         }
 
         List<Variable> params = new ArrayList<Variable>();
-        params.add(y);
+        params.add(c);
         //params.add(w);
 
         //System.out.println(w.getOffset());
@@ -688,13 +692,13 @@ public String get_label(String name){
         InstructionASSIGN ass = new InstructionASSIGN(fundef, c, sub);
        // ass.show();
         fundef.addInstruction(call);
-        //fundef.addInstruction(q);
-        //fundef.addInstruction(p);
-        //fundef.addInstruction(ai);
-        //fundef.addInstruction(bi);
+        fundef.addInstruction(q);
+        fundef.addInstruction(p);
+        fundef.addInstruction(ai);
+        fundef.addInstruction(bi);
         //fundef.addInstruction(ci);
         //fundef.addInstruction(sub);
-        
+
         //fundef.addInstruction(ass);
 
 
