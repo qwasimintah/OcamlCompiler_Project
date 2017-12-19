@@ -7,7 +7,7 @@ import variables.*;
 public class RegisterUtils {
 
 public static void initRegisters(HashMap<Register, Variable> registers) {
-        for (Integer i = 4; i < 13; i++) {
+        for (Integer i = 4; i < 12; i++) {
                 Register reg = new Register(i);
                 registers.put(reg, null);
         }
