@@ -25,7 +25,7 @@ public class ArmGenerator {
     public TextSection textSection;
     private int HEAP_SIZE=1024*4; // Heap size in bytes
     private HashMap<String, Integer> fun_arg_locations;
-    private int available_reg=1;
+    private int available_reg=9;
 
 
     public ArmGenerator(){
@@ -587,12 +587,24 @@ public String get_label(String name){
   public void generate_function_call(InstructionCALL instr){
 
 
-      // TODO: check if call is to predefined function (in this case print)
-
         List<Variable> params = instr.getParams();
         String return_reg = instr.getReturn();
         String fname = get_label(instr.getFname());
         int num_params=params.size();
+
+
+      // TODO: check if call is to predefined function (in this case print)
+
+        if(instr.getFname().equals("print_int")){
+          VInteger param = (VInteger)params.get(0);
+          assign("r0" , param.getValue());
+          textSection.text.append("\tBL min_caml_print_int\n");
+          textSection.text.append("\tBL min_caml_print_newline\n");
+          return;
+        }
+
+
+
        // set arguments for functions
 
 
@@ -622,6 +634,7 @@ public String get_label(String name){
         Function fundef= new Function("main", null, instr);
         Function fadd = new Function("add", null, add_instr);
 
+
         //variables
         Integer x= new Integer(1);
         Integer f = new Integer(2);
@@ -636,6 +649,9 @@ public String get_label(String name){
 
         VInteger y = new VInteger("y", f, registers,fundef);
         VInteger w = new VInteger("w", f, registers,fundef);
+        VInteger a = new VInteger("a", f, registers,fundef);
+        VInteger b = new VInteger("b", f, registers,fundef);
+        VInteger c = new VInteger("c", f, registers,fundef);
 
         locals.add(y);
         locals.add(w);
@@ -652,25 +668,35 @@ public String get_label(String name){
 
         List<Variable> params = new ArrayList<Variable>();
         params.add(y);
-        params.add(w);
+        //params.add(w);
 
         //System.out.println(w.getOffset());
         RegisterUtils.showRegisters(registers);
         InstructionASSIGN q = new InstructionASSIGN(fundef, y, 5);
         InstructionASSIGN p = new InstructionASSIGN(fundef, w, 9);
+        InstructionASSIGN ai = new InstructionASSIGN(fundef, a, 20);
+        InstructionASSIGN bi = new InstructionASSIGN(fundef, b, 40);
+        InstructionASSIGN ci = new InstructionASSIGN(fundef, c, 200);
+
+
         InstructionADD add = new InstructionADD(fundef, y, w);
-        InstructionSUB sub = new InstructionSUB(fundef, w, y);
-        InstructionMULT mul = new InstructionMULT(fundef, w, y);
+        InstructionSUB sub = new InstructionSUB(fundef, c, b);
+        InstructionMULT mul = new InstructionMULT(fundef, a, y);
 
-        InstructionCALL call = new InstructionCALL(params, "add");
+        InstructionCALL call = new InstructionCALL(params, "print_int");
        // add.show();
-        InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
+        InstructionASSIGN ass = new InstructionASSIGN(fundef, c, sub);
        // ass.show();
+        fundef.addInstruction(call);
+        //fundef.addInstruction(q);
+        //fundef.addInstruction(p);
+        //fundef.addInstruction(ai);
+        //fundef.addInstruction(bi);
+        //fundef.addInstruction(ci);
+        //fundef.addInstruction(sub);
+        
+        //fundef.addInstruction(ass);
 
-        fundef.addInstruction(q);
-        fundef.addInstruction(p);
-        fundef.addInstruction(sub);
-        //fundef.addInstruction(call);
 
         fadd.addInstruction(q);
         fadd.addInstruction(p);
@@ -680,6 +706,7 @@ public String get_label(String name){
         //fundef.addInstruction(sub);
         //fundef.addInstruction(mul);
         funs.add(fundef);
+        //
         //funs.add(fadd);
         arm.generate_code(funs);
 
