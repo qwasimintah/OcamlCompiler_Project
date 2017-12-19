@@ -35,6 +35,9 @@ public void allocRegister() throws NoAvailableRegister {
                         registers.put(reg, this);
                         return;
                 }
+                else{
+                        spill();
+                }
         }
         throw new NoAvailableRegister();
 }

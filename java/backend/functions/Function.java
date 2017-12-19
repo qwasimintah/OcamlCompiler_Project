@@ -9,7 +9,7 @@ public class Function {
 private String name;
 private List<Instruction> instructions;
 private List<Variable> arguments;
-private Integer spillOffset = 0;
+private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
 
 public Function(String name, List<Variable> arguments, List<Instruction> instructions) {
@@ -58,6 +58,15 @@ public Integer getOffset() {
 
 public void setOffset(Integer value) {
         spillOffset = value;
+}
+
+public HashSet<Variable> getVariables(){
+
+        return variables;
+}
+
+public void setVariables (HashSet<Variable> locals){
+        variables =locals;
 }
 
 public void show() {
