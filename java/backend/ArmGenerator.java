@@ -13,7 +13,6 @@ import variables.*;
 import functions.*;
 import instructions.*;
 import registers.*;
-import utils.*;
 import exceptions.*;
 import java.io.*;
 
@@ -468,7 +467,7 @@ public class ArmGenerator {
 
    private void assign(String dest, int src ){
 
-        textSection.text.append("\tMOV ").append(dest).append(", #").append(src).append("\n");
+        textSection.text.append("\tLDR ").append(dest).append(", =").append(src).append("\n");
    }
 
 
@@ -647,11 +646,11 @@ public String get_label(String name){
        //RegisterUtils.showRegisters(registers);
 
 
-        VInteger y = new VInteger("y", f, registers,fundef);
+        VInteger y = new VInteger("y", x, registers,fundef);
         VInteger w = new VInteger("w", f, registers,fundef);
-        VInteger a = new VInteger("a", x, registers,fundef);
-        VInteger b = new VInteger("b", f, registers,fundef);
-        VInteger c = new VInteger("c", x, registers,fundef);
+        VInteger a = new VInteger("a",20, registers,fundef);
+        VInteger b = new VInteger("b",40, registers,fundef);
+        VInteger c = new VInteger("c",512, registers,fundef);
 
         locals.add(y);
         locals.add(w);

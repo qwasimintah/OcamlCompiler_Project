@@ -10,13 +10,13 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	MOV r0, #1
+	LDR r0, =9000
 	BL min_caml_print_int
 	BL min_caml_print_newline
-	MOV r6, #5
-	MOV r9, #9
-	MOV r10, #20
-	MOV r8, #40
+	LDR r6, =5
+	LDR r9, =9
+	LDR r10, =20
+	LDR r8, =40
 
 	@MAIN EPILOGUE
 	ADD sp, #4
