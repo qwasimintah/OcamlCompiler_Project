@@ -43,7 +43,6 @@ public class ArmGenerator {
 
         //functions argument offsets;
         fun_arg_locations= new HashMap<String, Integer>();
-        //main_prologue();
 
     }
 
@@ -121,8 +120,8 @@ public class ArmGenerator {
 
               if(fname.equals("main")){
 
-                  function_epilogue();
-                  //main_epilogue();
+                  //function_epilogue();
+                  main_epilogue();
                   output_terminal();
               }
               else{
@@ -171,7 +170,7 @@ public class ArmGenerator {
 
     public void pop_locals(int size){
 
-        if(size > 1){
+        if(size > available_reg){
           textSection.text.append("\tADD sp, #").append((size-available_reg)*4).append("\n");
         }
     }
@@ -523,16 +522,16 @@ public class ArmGenerator {
 
   public void main_prologue(){
 
-      //textSection.text.append("\t@MAIN PROLOGUE\n");
-      //textSection.text.append("\tSUB sp, #4\n");
-      //textSection.text.append("\tLDR lr, [sp]\n");
-      //textSection.text.append("\tSUB sp, #4\n");
-      //textSection.text.append("\tSTR fp, [sp]\n");
-      //textSection.text.append("\tMOV fp, sp\n\n");
+      textSection.text.append("\t@MAIN PROLOGUE\n");
+      textSection.text.append("\tSUB sp, #4\n");
+      textSection.text.append("\tLDR lr, [sp]\n");
+      textSection.text.append("\tSUB sp, #4\n");
+      textSection.text.append("\tSTR fp, [sp]\n");
+      textSection.text.append("\tMOV fp, sp\n\n");
 
-          textSection.text.append("\t@MAIN PROLOGUE\n");
-          textSection.text.append("\tSTMFD sp!, {fp, lr}\n");
-          textSection.text.append("\tADD fp, sp, #4\n");
+          //textSection.text.append("\t@MAIN PROLOGUE\n");
+          //textSection.text.append("\tSTMFD sp!, {fp, lr}\n");
+          //textSection.text.append("\tADD fp, sp, #4\n");
 
 
   }
@@ -668,8 +667,8 @@ public String get_label(String name){
         InstructionASSIGN ass = new InstructionASSIGN(fundef, y, add);
        // ass.show();
 
-        //fundef.addInstruction(q);
-        //fundef.addInstruction(p);
+        fundef.addInstruction(q);
+        fundef.addInstruction(p);
         fundef.addInstruction(sub);
         //fundef.addInstruction(call);
 
