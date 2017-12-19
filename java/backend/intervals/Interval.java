@@ -2,18 +2,22 @@ package intervals;
 
 import variables.*;
 
-public class Interval {
+public class Interval implements Comparable {
 private Integer start;
 private Integer end;
 private Variable variable;
+
+public Interval(Variable variable) {
+        this.variable = variable;
+}
 
 public Interval(Variable variable, Integer start) {
         this.variable = variable;
         this.start = start;
 }
 
-public Interval(Variable variable) {
-        this.variable = variable;
+public Variable getVariable() {
+        return variable;
 }
 
 public Integer getStartingPoint() {
@@ -34,5 +38,11 @@ public void setEndingPoint(Integer end) {
 
 public String getDescription() {
         return "(" + start + ", " + end + ")";
+}
+
+@Override
+public int compareTo(Object other) {
+        Interval otherInt = (Interval) other;
+        return this.getStartingPoint().compareTo(otherInt.getStartingPoint());
 }
 }

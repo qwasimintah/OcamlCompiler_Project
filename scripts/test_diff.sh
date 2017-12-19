@@ -3,7 +3,7 @@ cd "$(dirname "$0")"/.. || exit 1
 
 if [ $# -eq 0 ]
   then
-    test_list="ast knorm"
+    test_list="ast knorm alpha_conversion reduction"
   else
     test_list=$1
 fi

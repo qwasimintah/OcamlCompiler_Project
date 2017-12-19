@@ -1,7 +1,7 @@
 JAVAC=javac
 SRC=./
 DEST=./
-FILES=KNormalization.java
+FILES=KNormalization.java ReductionNestedExpression.java
 FLAGS=-Xlint:-serial
 
 all: $(FILES)

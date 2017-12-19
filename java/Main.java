@@ -6,7 +6,7 @@ import frontend.*;
 public class Main {
   static public void main(String argv[]) {
     // À mettre dans une IHM
-    Boolean knorm_bool = false, ast_bool = false;
+    Boolean knorm_bool = false, ast_bool = false, alpha_conversion_bool = false, reduction_bool = false;
     for (String arg : argv){
         switch(arg){
           case "--ast":
@@ -15,6 +15,10 @@ public class Main {
           case "--knorm":
             knorm_bool = true;
             break;
+          case "--alpha_conversion":
+            alpha_conversion_bool = true;
+          case "--reduction":
+            reduction_bool = true;
           default:
             break;
         }
@@ -50,13 +54,21 @@ public class Main {
         System.out.println("");
       }
 
-      /* For AlphaConversion :
-      System.out.println("------ AlphaConversion ------");
-      Exp expression_converted = expression.accept(new AlphaConversion());
-      System.out.println("Ceci est le résultat : ");
-      expression_converted.accept(new PrintVisitor());
-      System.out.print("\n");*/
+      //For AlphaConversion :
+      if (alpha_conversion_bool){
+        System.out.println("------ AlphaConversion ------");
+        Exp expression_converted = expression.accept(new AlphaConversion());
+        expression_converted.accept(new PrintVisitor());
+        System.out.print("");
+      }
 
+      //for Reduction of Nested Let-Expressions
+      if (reduction_bool){
+        System.out.println("------ Reduction of Nested Let-Expressions ------");
+        Exp expression_reducted = expression.accept(new ReductionNestedExpression());
+        expression_reducted.accept(new PrintVisitor());
+        System.out.println("");
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

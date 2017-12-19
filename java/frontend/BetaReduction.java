@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 class BeteReduction implements ObjVisitor<Exp>{
   private static HashMap<String, String> associated = new HashMap<String, String> ();
 
