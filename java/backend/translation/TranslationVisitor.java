@@ -1,10 +1,20 @@
-import java.util.HashMap;
+package translation;
 
-class BeteReduction implements ObjVisitor<Exp>{
-private static HashMap<String, String> associated = new HashMap<String, String> ();
+import java.io.*;
+import java.util.Hashtable;
+import java.util.*;
+import registers.*;
+import exceptions.*;
+import functions.*;
+import instructions.*;
+// import exp.*;
+import variables.*;
 
-public Exp visit(Add e){
-        return e;
+public class TranslationVisitor implements ObjVisitor<Exp> {
+
+public InstructionADD visit(Add e) {
+        Exp x = e.e1.accept(this);
+        Exp y = e.e2.accept(this);
 }
 
 public Exp visit(Sub e){
@@ -12,8 +22,6 @@ public Exp visit(Sub e){
 }
 
 public Exp visit(Let e){
-        Var new_var = new Var(e.id.gen());
-        e.e1.accept(this);
         return e;
 }
 
@@ -104,4 +112,8 @@ public Exp visit(Get e){
 public Exp visit(Put e){
         return e;
 }
+
+// public static void main(String[] args) {
+//   System.out.println("caca");
+// }
 }
