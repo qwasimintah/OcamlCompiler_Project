@@ -92,31 +92,41 @@ public class AlphaConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(FAdd e){
-    return e;
+    FAdd new_fadd = new FAdd(e.e1.accept(this), e.e2.accept(this));
+    return new_fadd;
   }
 
   public Exp visit(FSub e){
-    return e;
+    FSub new_fsub = new FSub(e.e1.accept(this), e.e2.accept(this));
+    return new_fsub;
   }
 
   public Exp visit(FMul e){
-    return e;
+    FMult new_fmult = new FMult(e.e1.accept(this), e.e2.accept(this));
+    return new_fmult;
   }
 
   public Exp visit(FDiv e){
-    return e;
+    FDiv new_fdiv = new FDiv(e.e1.accept(this), e.e2.accept(this));
+    return new_fdiv;
   }
 
   public Exp visit(Eq e){
-    return e;
+    Eq new_eq = new Eq(e.e1.accept(this), e.e2.accept(this));
+    return new_eq;
   }
 
   public Exp visit(LE e){
-    return e;
+    LE new_le = new LE(e.e1.accept(this), e.e2.accept(this));
+    return new_le;
   }
 
   public Exp visit(If e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Exp new_e3 = e.e3.accept(this);
+    If new_if = new If(new_e1, new_e2, new_e3);
+    return new_if;
   }
 
   public Exp visit(LetRec e){

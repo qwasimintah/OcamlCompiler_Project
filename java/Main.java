@@ -59,8 +59,9 @@ public class Main {
       //For AlphaConversion :
       if (alpha_conversion_bool){
         System.out.println("------ AlphaConversion ------");
-        Exp expression_normalized = expression.accept(new KNormalization());
-        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+        //Exp expression_normalized = expression.accept(new KNormalization());
+        //Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+        Exp expression_converted = expression.accept(new AlphaConversion());
         expression_converted.accept(new PrintVisitor());
         System.out.println("");
       }
