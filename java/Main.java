@@ -17,8 +17,10 @@ public class Main {
             break;
           case "--alpha_conversion":
             alpha_conversion_bool = true;
+            break;
           case "--reduction":
             reduction_bool = true;
+            break;
           default:
             break;
         }
@@ -57,12 +59,13 @@ public class Main {
       //For AlphaConversion :
       if (alpha_conversion_bool){
         System.out.println("------ AlphaConversion ------");
-        Exp expression_converted = expression.accept(new AlphaConversion());
+        Exp expression_normalized = expression.accept(new KNormalization());
+        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
         expression_converted.accept(new PrintVisitor());
-        System.out.print("");
+        System.out.println("");
       }
 
-      //for Reduction of Nested Let-Expressions
+      //For Reduction of Nested Let-Expressions
       if (reduction_bool){
         System.out.println("------ Reduction of Nested Let-Expressions ------");
         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
