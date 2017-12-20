@@ -1,5 +1,4 @@
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 public class AlphaConversion implements ObjVisitor<Exp>{
   private static HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
@@ -130,6 +129,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(LetRec e){
+    Id new_id = e.id.gen();
     return e;
   }
 
@@ -138,7 +138,14 @@ public class AlphaConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Tuple e){
-    return e;
+    List<Exp> list_exp = e.es;
+    List<Exp> new_list = new LinkedList<Exp>();
+    for (Exp exp: list_exp){
+      Exp new_exp = exp.accept(this);
+      new_list.add(new_exp);
+    }
+    Tuple new_tuple = new Tuple(new_list);
+    return new_tuple;
   }
 
   public Exp visit(LetTuple e){
