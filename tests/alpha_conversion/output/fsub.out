@@ -1,2 +1,2 @@
 ------ AlphaConversion ------
-(let ?v0 = 3 in (?v0 + ?v0))
+(5,10 -. 2,20)
