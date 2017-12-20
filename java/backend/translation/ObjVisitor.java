@@ -1,8 +1,12 @@
-interface ObjVisitor<E> {
+package translation;
+
+// import exp.*;
+
+public interface ObjVisitor<E> {
     E visit(Unit e);
     E visit(Bool e);
     E visit(Int e);
-    E visit(Float e);
+    E visit(exp.Float e);
     E visit(Not e);
     E visit(Neg e);
     E visit(Add e);

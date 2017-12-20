@@ -6,10 +6,15 @@ import variables.*;
 
 public class RegisterUtils {
 
-public static void initRegisters(HashMap<Register, Variable> registers) {
+public static void initRegisters(HashMap<Register, Variable> registers, HashMap<Register, Variable> parametersRegisters) {
         for (Integer i = 4; i < 12; i++) {
                 Register reg = new Register(i);
                 registers.put(reg, null);
+        }
+        
+        for (Integer i = 0; i < 4; i++) {
+                Register reg = new Register(i);
+                parametersRegisters.put(reg, null);
         }
 }
 

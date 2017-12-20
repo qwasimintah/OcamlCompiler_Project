@@ -7,10 +7,12 @@ import registers.*;
 import functions.*;
 import exceptions.*;
 import intervals.*;
+import translation.*;
 
 public class RegisterAllocation {
 
-private static HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+  private static HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+  private static HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
 
 public static void VBA(Function fun) {
         for (Instruction inst : fun.getInstructions()) {
@@ -93,7 +95,7 @@ public static void LinearScan(Function fun) {
 }
 
 public static void main(String[] args) {
-        RegisterUtils.initRegisters(registers);
+        RegisterUtils.initRegisters(registers, parametersRegisters);
         RegisterUtils.showRegisters(registers);
         Function fun = new Function("main", new ArrayList(), new ArrayList());
         // VInteger x = new VInteger("x", 10, registers, fun);
@@ -139,6 +141,8 @@ public static void main(String[] args) {
         //  SpillEverything(fun);
         LinearScan(fun);
         fun.showVariablesState();
+
+        new TranslationVisitor();
         // VInteger x = new VInteger("x", 10, registers, fun);
         // InstructionSUB i1 = new InstructionSUB(fun, 3, 1);
         // InstructionASSIGN ass = new InstructionASSIGN(fun, x, i1);
