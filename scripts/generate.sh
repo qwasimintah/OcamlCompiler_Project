@@ -3,10 +3,15 @@
 cd "$(dirname "$0")"/.. || exit 1
 MINCAMLC=java/mincamlc
 
-# cd java
-# make clean 2> /dev/null 1> /dev/null
-# make 2> /dev/null 1> /dev/null
-# cd ..
+cd java
+make clean 2> /dev/null 1> /dev/null
+make 2> /dev/null 1> /dev/null
+if [ $? -ne 0 ]
+then
+  echo -e "\n\n\033[31m Failed to make the main programm in the java folder.\n\n \033[0m"
+  exit 1
+fi
+cd ..
 # clear
 
 if [ $# -eq 0 ]
@@ -19,7 +24,7 @@ fi
 input_files=`ls tests/input/`
 for testing_part in ${test_list}
   do
-    if [ -d "tests/"${testing_part} ]
+    if [ -d "tests/${testing_part}/output" ]
       then
       echo -e "\n \033[33m \t \t \t $testing_part \033[0m \n"
       echo "generation in tests/$testing_part/output/"

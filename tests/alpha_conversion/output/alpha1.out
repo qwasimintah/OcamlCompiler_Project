@@ -1,2 +1,0 @@
------- AlphaConversion ------
-(let ?v0 = (let ?v1 = (let ?v2 = 3 in ?v2) in (?v1 + 3)) in ?v0)
