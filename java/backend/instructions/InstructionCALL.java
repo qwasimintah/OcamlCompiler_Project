@@ -6,12 +6,13 @@ import java.util.*;
 
 public class InstructionCALL implements Instruction{
 
-    private List<Variable> params;
+    private List<Parameter> params;
     private String return_reg;
     private String fname;
+    private List<Object> operands = new ArrayList<Object>();
 
 
-    public InstructionCALL(List<Variable> params, String return_reg, String fname){
+    public InstructionCALL(List<Parameter> params, String return_reg, String fname){
 
         this.params = params;
         this.return_reg= return_reg;
@@ -19,7 +20,7 @@ public class InstructionCALL implements Instruction{
 
     }
 
-    public InstructionCALL(List<Variable> params, String fname){
+    public InstructionCALL(List<Parameter> params, String fname){
 
         this.params = params;
         this.return_reg="r0";
@@ -28,14 +29,15 @@ public class InstructionCALL implements Instruction{
     }
 
 
-    public  List<Variable> getParams (){
+    public  List<Parameter> getParams (){
 
           return params;
     }
 
     public  List<Object> getOperands (){
 
-          return new ArrayList<Object>();
+          operands.add(params.get(0));
+          return operands;
     }
 
     public String getReturn(){

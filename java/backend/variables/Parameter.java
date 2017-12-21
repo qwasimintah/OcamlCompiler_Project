@@ -1,14 +1,19 @@
 package variables;
+import registers.*;
+import java.util.Hashtable;
+import java.util.*;
+import functions.*;
 
 public class Parameter extends Variable {
-private String name;
-private Register register;
-private HashMap<Register, Variable> registers;
-private Integer offset;
-private Function function;
 
-public Parameter(String name, HashMap<Register, Variable> registers, Function func) {
-        super(name, registers, func);
-}
+private String reg;
 
+  public Parameter(String name, String reg,  HashMap registers, Function func) {
+          super(name, registers, func);
+          this.reg=reg;
+  }
+
+  public String getVReg() {
+          return reg;
+  }
 }

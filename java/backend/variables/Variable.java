@@ -21,13 +21,14 @@ public Variable(String name, HashMap<Register, Variable> registers, Function fun
         this.registers = registers;
         this.function = func;
         this.interval = new Interval(this);
+        allocRegister();
 }
 
 public String getName() {
         return name;
 }
 
-public void allocRegister() throws NoAvailableRegister {
+public void allocRegister() {
         for(Object key: registers.keySet()) {
                 if (registers.get(key) == null) {
                         Register reg = (Register) key;
@@ -35,11 +36,12 @@ public void allocRegister() throws NoAvailableRegister {
                         registers.put(reg, this);
                         return;
                 }
-                else{
+                /*else{
                         spill();
-                }
+                }*/
         }
-        throw new NoAvailableRegister();
+        spill();
+        //throw new NoAvailableRegister();
 }
 
 public void spill() {

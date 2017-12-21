@@ -10,13 +10,13 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r0, =9000
-	BL min_caml_print_int
-	BL min_caml_print_newline
-	LDR r6, =5
-	LDR r9, =9
-	LDR r10, =20
-	LDR r8, =40
+	MOV r6, r6
+	MOV r9, r9
+	STMFD sp!,{r4-r12}
+	LDR r3, =10
+	LDR r2, =11
+	BL __f
+	LDMFD sp!, {r4-r12}
 
 	@MAIN EPILOGUE
 	ADD sp, #4
@@ -26,3 +26,13 @@ _main:
 
 	MOV r7, #1
 	swi 0
+_add:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+

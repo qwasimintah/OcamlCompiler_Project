@@ -23,8 +23,9 @@ public class ArmGenerator {
     public DataSection dataSection;
     public TextSection textSection;
     private int HEAP_SIZE=1024*4; // Heap size in bytes
-    private HashMap<String, Integer> fun_arg_locations;
+    //private HashMap<String, Integer> fun_arg_locations;
     private int available_reg=9;
+    private int available_reg_param=2;
 
 
     public ArmGenerator(){
@@ -38,10 +39,6 @@ public class ArmGenerator {
         textSection.text.append("\t.global _start\n");
         textSection.text.append("_start:\n");
         textSection.text.append("\tBL _main\n");
-        //generate_function_label("main");
-
-        //functions argument offsets;
-        fun_arg_locations= new HashMap<String, Integer>();
 
     }
 
@@ -51,7 +48,7 @@ public class ArmGenerator {
     public void generate_code(List<Function>  functions){
          //loop through all the available functions
          for(Function fun : functions){
-             List<Variable> arguments = fun.getArguments();
+             List<Parameter> arguments = fun.getArguments();
  	           List<Instruction> intr = fun.getInstructions();
              HashSet<Variable> locals = fun.getVariables();
              //process all intructions of functions
@@ -70,21 +67,6 @@ public class ArmGenerator {
 
                 generate_function_label(fname);
                 function_prologue(size);
-                //pushing_local_variables(locals,size);
-
-                if(arguments != null){
-                    int argument_size= arguments.size();
-
-                    // calculate offset of function(only need when params are more than four)
-                    if(argument_size > 4){
-                        int i=1;
-                        for(Variable arg : arguments){
-                          int offset =4 * i;
-                          fun_arg_locations.put(arg.getName(), offset);
-                          i++;
-                        }
-                    }
-              }
             }
 
 
@@ -175,6 +157,21 @@ public class ArmGenerator {
     }
 
 
+    public void reserve_space_param(int size){
+
+      if(size > available_reg){
+       textSection.text.append("\tSUB sp, #").append((size-available_reg_param)*4).append("\n");
+    }
+  }
+
+    public void pop_params(int size){
+
+        if(size > available_reg){
+          textSection.text.append("\tADD sp, #").append((size-available_reg_param)*4).append("\n");
+        }
+    }
+
+
     public  void generate_addition(InstructionADD instr){
             Object op1= instr.operands.get(0);
             Object op2= instr.operands.get(1);
@@ -182,29 +179,56 @@ public class ArmGenerator {
             String operand1="";
             String operand2="";
 
-            if(op1 instanceof Variable){
-                  if(((Variable)op1).getRegister()!=null){
-                    operand1=((Variable)op1).getRegister().getName();
+            // if operand1 is an local integer variable
+            if(op1 instanceof VInteger){
+                  if(((VInteger)op1).getRegister()!=null){
+                    operand1=((VInteger)op1).getRegister().getName();
                   }
                   else{
 
-                    operand1="[fp, #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[fp, #" + ((VInteger)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
             }
+            // else if operand1 is a function parameter
+            else if(op1 instanceof Parameter){
+              if(((Parameter)op1).getRegister()!=null){
+                operand1=((Parameter)op1).getRegister().getName();
+              }
+              else{
+
+                operand1="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                operand1="r0";
+              }
+
+            }
 
 
-            if(op2 instanceof Variable){
-                  if(((Variable)op2).getRegister()!=null){
-                    operand2=((Variable)op2).getRegister().getName();
+            if(op2 instanceof VInteger){
+                  if(((VInteger)op2).getRegister()!=null){
+                    operand2=((VInteger)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
                   }
+            }
+
+            else if(op2 instanceof Parameter){
+              if(((Parameter)op2).getRegister()!=null){
+                operand2=((Parameter)op2).getRegister().getName();
+              }
+              else{
+
+                operand2="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , "). append(operand2).append("\n");
+                operand2="r0";
+              }
+
             }
 
 
@@ -212,6 +236,7 @@ public class ArmGenerator {
 
                   arith_operation("ADD",rd ,(int)op1, operand2);
             }
+
             else if(op1 instanceof Variable && op2 instanceof Variable){
                   arith_operation("ADD",rd ,operand1, operand2);
             }
@@ -237,31 +262,57 @@ public class ArmGenerator {
             String operand1="";
             String operand2="";
 
-            if(op1 instanceof Variable){
-                  if(((Variable)op1).getRegister()!=null){
-                    operand1=((Variable)op1).getRegister().getName();
+            // if operand1 is an local integer variable
+            if(op1 instanceof VInteger){
+                  if(((VInteger)op1).getRegister()!=null){
+                    operand1=((VInteger)op1).getRegister().getName();
                   }
                   else{
 
-                    operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    operand1="[fp, #" + ((VInteger)op1).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
             }
+            // else if operand1 is a function parameter
+            else if(op1 instanceof Parameter){
+              if(((Parameter)op1).getRegister()!=null){
+                operand1=((Parameter)op1).getRegister().getName();
+              }
+              else{
+
+                operand1="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                operand1="r0";
+              }
+
+            }
 
 
-            if(op2 instanceof Variable){
-                  if(((Variable)op2).getRegister()!=null){
-                    operand2=((Variable)op2).getRegister().getName();
+            if(op2 instanceof VInteger){
+                  if(((VInteger)op2).getRegister()!=null){
+                    operand2=((VInteger)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
                   }
             }
 
+            else if(op2 instanceof Parameter){
+              if(((Parameter)op2).getRegister()!=null){
+                operand2=((Parameter)op2).getRegister().getName();
+              }
+              else{
+
+                operand2="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , "). append(operand2).append("\n");
+                operand2="r0";
+              }
+
+            }
 
 
             if(op1 instanceof Integer && op2 instanceof Variable){
@@ -299,30 +350,58 @@ public class ArmGenerator {
                String operand1="";
                String operand2="";
 
-                if(op1 instanceof Variable){
-                      if(((Variable)op1).getRegister()!=null){
-                        operand1=((Variable)op1).getRegister().getName();
-                      }
-                      else{
+               // if operand1 is an local integer variable
+               if(op1 instanceof VInteger){
+                     if(((VInteger)op1).getRegister()!=null){
+                       operand1=((VInteger)op1).getRegister().getName();
+                     }
+                     else{
 
-                        operand1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
-                        operand1="r0";
-                      }
-                }
+                       operand1="[fp, #" + ((VInteger)op1).getOffset().toString()+"]";
+                       textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                       operand1="r0";
+                     }
+               }
+               // else if operand1 is a function parameter
+               else if(op1 instanceof Parameter){
+                 if(((Parameter)op1).getRegister()!=null){
+                   operand1=((Parameter)op1).getRegister().getName();
+                 }
+                 else{
+
+                   operand1="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                   textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                   operand1="r0";
+                 }
+
+               }
 
 
-                if(op2 instanceof Variable){
-                      if(((Variable)op2).getRegister()!=null){
-                        operand2=((Variable)op2).getRegister().getName();
-                      }
-                      else{
-                        operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
-                        operand2="r1";
+               if(op2 instanceof VInteger){
+                     if(((VInteger)op2).getRegister()!=null){
+                       operand2=((VInteger)op2).getRegister().getName();
+                     }
+                     else{
+                       operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
+                       textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                       operand2="r1";
 
-                      }
-                }
+                     }
+               }
+
+               else if(op2 instanceof Parameter){
+                 if(((Parameter)op2).getRegister()!=null){
+                   operand2=((Parameter)op2).getRegister().getName();
+                 }
+                 else{
+
+                   operand2="[fp, #" + ((Parameter)op1).getOffset().toString()+"]";
+                   textSection.text.append("\tLDR r0 , "). append(operand2).append("\n");
+                   operand2="r0";
+                 }
+
+               }
+
 
 
                 if(op1 instanceof Integer && op2 instanceof Variable){
@@ -356,41 +435,56 @@ public class ArmGenerator {
                String offset1="";
                String operand2="";
 
-            if(op1 instanceof Variable){
-                  if(((Variable)op1).getRegister()!=null){
-                    operand1=((Variable)op1).getRegister().getName();
+            if(op1 instanceof VInteger){
+                  if(((VInteger)op1).getRegister()!=null){
+                    operand1=((VInteger)op1).getRegister().getName();
                   }
                   else{
 
-                    offset1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    offset1="[fp , #" + ((VInteger)op1).getOffset().toString()+"]";
                     //textSection.text.append("\tSTR r0 , "). append(operand1).append("\n");
                     operand1="r0";
                   }
             }
 
 
-            if(op2 instanceof Variable){
-                  if(((Variable)op2).getRegister()!=null){
-                    operand2=((Variable)op2).getRegister().getName();
+            if(op2 instanceof VInteger){
+                  if(((VInteger)op2).getRegister()!=null){
+                    operand2=((VInteger)op2).getRegister().getName();
                   }
                   else{
-                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
                     textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
                     operand2="r1";
 
                   }
             }
 
+            else if(op2 instanceof Parameter){
+
+                    if(((Parameter)op2).getRegister()!=null){
+                      operand2=((Parameter)op2).getRegister().getName();
+                    }
+                    else{
+                      operand2="[fp ,#" + ((Parameter)op2).getOffset().toString()+"]";
+                      textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                      operand2="r1";
+
+                    }
 
 
-               if(op1 instanceof Variable && op2 instanceof Variable){
+            }
+
+
+
+               if(op1 instanceof VInteger && op2 instanceof Variable){
                      assign(operand1, operand2);
                      if(offset1!=""){
                       textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
                      }
                }
 
-               else if(op1 instanceof Variable && op2 instanceof Integer){
+               else if(op1 instanceof VInteger && op2 instanceof Integer){
 
                     assign(operand1, ((int)op2));
                     if(offset1!=""){
@@ -399,7 +493,7 @@ public class ArmGenerator {
 
                }
 
-               else if(op1 instanceof Variable && op2 instanceof Instruction){
+               else if(op1 instanceof VInteger && op2 instanceof Instruction){
 
                       String reg= operand1;
 
@@ -420,6 +514,13 @@ public class ArmGenerator {
 
                         generate_mult((InstructionMULT) op2);
                         assign(reg, "r0");
+
+                      }
+
+                      else if(op2 instanceof InstructionCALL){
+
+                        generate_function_call((InstructionCALL) op2);
+                        assign(reg, ((InstructionCALL)op2).getReturn());
 
                       }
 
@@ -518,6 +619,26 @@ public class ArmGenerator {
    }
 
 
+   public void stash_locals(){
+
+        textSection.text.append("\tSTMFD sp!,{r4-r12}\n");
+   }
+
+   public void restore_locals(){
+        textSection.text.append("\tLDMFD sp!, {r4-r12}\n");
+
+   }
+
+   public void stash_parameters(){
+      textSection.text.append("\tSTMFD sp!, {r0-r3}\n");
+   }
+
+   public void restore_parameters(){
+     textSection.text.append("\tLDMFD sp!, {r0-r3}\n");
+
+
+   }
+
 
   public void main_prologue(){
 
@@ -574,7 +695,6 @@ public class ArmGenerator {
 
       textSection.text.append("\tMOV r7, #1\n");
       textSection.text.append("\tswi 0\n");
-
   }
 
 public String get_label(String name){
@@ -586,41 +706,53 @@ public String get_label(String name){
   public void generate_function_call(InstructionCALL instr){
 
 
-        List<Variable> params = instr.getParams();
+        List<Parameter> params = instr.getParams();
         String return_reg = instr.getReturn();
         String fname = get_label(instr.getFname());
         int num_params=params.size();
 
-
-      // TODO: check if call is to predefined function (in this case print)
-
         if(instr.getFname().equals("print_int")){
-          VInteger param = (VInteger)params.get(0);
-          assign("r0" , param.getValue());
+          Parameter param = (Parameter)params.get(0);
+          assign("r0" , param.getVReg());
           textSection.text.append("\tBL min_caml_print_int\n");
           textSection.text.append("\tBL min_caml_print_newline\n");
           return;
         }
-
-
-
-       // set arguments for functions
-
-
+        stash_locals();
          for(int i=0; i<num_params; i++){
-           VInteger param = (VInteger)params.get(i);
+           Parameter param = (Parameter)params.get(i);
 
-            assign("r"+ Integer.toString(i) , param.getValue());
+            if(param.getRegister()!= null){
+              assign(param.getRegister().getName() , param.getVReg());
+            }
+          }
 
-         }
+          if(num_params >= available_reg_param){
+            //stash_parameters();stash
+            for(int i =2; i< num_params; i++){
+                //System.out.println("came here\n");
+                String value =((Parameter)params.get(i)).getVReg();
+                reserve_space_param(4);
+                textSection.text.append("\tSUB sp, #4\n");
+                assign("r0", value);
+                textSection.text.append("\tSTR r0, [sp]\n");
+              }
+        }
 
          textSection.text.append("\tBL ").append(fname).append("\n");
+
+         if(num_params >= available_reg_param){
+              //restore_parameters();
+
+         }
+         restore_locals();
+
   }
 
 
    public static void main(String[] args){
 
-        ArmGenerator  arm = new ArmGenerator();
+        /*ArmGenerator  arm = new ArmGenerator();
 
 
         List<Instruction> instr = new ArrayList<Instruction>();
@@ -637,20 +769,36 @@ public String get_label(String name){
         //variables
         Integer x= new Integer(1);
         Integer f = new Integer(2);
-        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(1);
+        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+        HashMap<Register, Variable> param_registers = new HashMap<Register, Variable>(4);
         HashSet<Variable> locals = new HashSet<Variable>();
 
-        RegisterUtils.initRegisters(registers);
+        RegisterUtils.initRegisters(registers, param_registers);
        //
 
        //RegisterUtils.showRegisters(registers);
 
 
-        VInteger y = new VInteger("y", x, registers,fundef);
-        VInteger w = new VInteger("w", f, registers,fundef);
+        VInteger y = new VInteger("y", 10, registers,fundef);
+        VInteger w = new VInteger("w", 11, registers,fundef);
         VInteger a = new VInteger("a",20, registers,fundef);
         VInteger b = new VInteger("b",40, registers,fundef);
-        VInteger c = new VInteger("c",512, registers,fundef);
+        VInteger y1 = new VInteger("y",60, registers,fundef);
+        VInteger w1 = new VInteger("w",80, registers,fundef);
+        VInteger a1 = new VInteger("a",100, registers,fundef);
+        VInteger b1 = new VInteger("b",110, registers,fundef);
+        VInteger y2 = new VInteger("y",120, registers,fundef);
+        VInteger w2 = new VInteger("w",130, registers,fundef);
+        VInteger a2 = new VInteger("a",140, registers,fundef);
+        VInteger b2 = new VInteger("b",150, registers,fundef);
+
+
+
+        Parameter c = new Parameter("c",1, param_registers,fundef);
+        Parameter d = new Parameter("d",2, param_registers,fundef);
+        Parameter r = new Parameter("r",512, param_registers,fundef);
+        Parameter t = new Parameter("t",512, param_registers,fundef);
+        Parameter g = new Parameter("g",512, param_registers,fundef);
 
         locals.add(y);
         locals.add(w);
@@ -658,23 +806,47 @@ public String get_label(String name){
         fundef.setVariables(locals);
         fadd.setVariables(locals);
 
-        try{
+        
           y.allocRegister();
           w.allocRegister();
           a.allocRegister();
           b.allocRegister();
+          y1.allocRegister();
+          w1.allocRegister();
+          a1.allocRegister();
+          b1.allocRegister();
+          y2.allocRegister();
+          w2.allocRegister();
+          a2.allocRegister();
+          b2.allocRegister();
+
+
+
           c.allocRegister();
+          d.allocRegister();
+          r.allocRegister();
+          t.allocRegister();
+          g.allocRegister();
 
-        }catch (NoAvailableRegister e) {
 
-        }
+        
 
-        List<Variable> params = new ArrayList<Variable>();
+        List<Parameter> params = new ArrayList<Parameter>();
         params.add(c);
+        params.add(d);
+        params.add(r);
+        //params.add(r);
+        //params.add(t);
+        //params.add(g);
         //params.add(w);
 
-        //System.out.println(w.getOffset());
+        y.getSaveState();
+        System.out.println(w.getOffset());
+        g.getSaveState();
+        System.out.println(g.getOffset());
         RegisterUtils.showRegisters(registers);
+        RegisterUtils.showRegisters(param_registers);
+
         InstructionASSIGN q = new InstructionASSIGN(fundef, y, 5);
         InstructionASSIGN p = new InstructionASSIGN(fundef, w, 9);
         InstructionASSIGN ai = new InstructionASSIGN(fundef, a, 20);
@@ -682,35 +854,39 @@ public String get_label(String name){
         InstructionASSIGN ci = new InstructionASSIGN(fundef, c, 200);
 
 
-        InstructionADD add = new InstructionADD(fundef, y, w);
+        InstructionADD add = new InstructionADD(fundef, c, d);
+        InstructionASSIGN fadd_ass= new InstructionASSIGN(fadd,b, r);
+
         InstructionSUB sub = new InstructionSUB(fundef, c, b);
         InstructionMULT mul = new InstructionMULT(fundef, a, y);
 
-        InstructionCALL call = new InstructionCALL(params, "print_int");
+        InstructionCALL call = new InstructionCALL(params, "add");
        // add.show();
         InstructionASSIGN ass = new InstructionASSIGN(fundef, c, sub);
        // ass.show();
-        fundef.addInstruction(call);
+        //fundef.addInstruction(call);
         fundef.addInstruction(q);
         fundef.addInstruction(p);
-        fundef.addInstruction(ai);
-        fundef.addInstruction(bi);
+        fundef.addInstruction(call);
+        //fundef.addInstruction(bi);
         //fundef.addInstruction(ci);
         //fundef.addInstruction(sub);
 
-        //fundef.addInstruction(ass);
+        //fundef.addInstruction(ass);stash
 
 
-        fadd.addInstruction(q);
-        fadd.addInstruction(p);
         fadd.addInstruction(add);
+        fadd.addInstruction(fadd_ass);
+        List<Parameter> para= new ArrayList<Parameter>();
+        para.add(new Parameter(b.getName(),b.getValue(), param_registers, fadd));
+        fadd.addInstruction(new InstructionCALL(para,"print_int"));
+        //fadd.addInstruction(add);
 
 
         //fundef.addInstruction(sub);
         //fundef.addInstruction(mul);
         funs.add(fundef);
-        //
-        //funs.add(fadd);
+        funs.add(fadd);
         arm.generate_code(funs);
 
         StringBuilder result= arm.textSection.text;
@@ -722,7 +898,7 @@ public String get_label(String name){
 	               oS.write(result.toString().getBytes());
               } catch (IOException e) {
 	                e.printStackTrace();
-        }
+        }*/
 
    }
 
