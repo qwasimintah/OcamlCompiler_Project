@@ -1,36 +1,17 @@
 import java_cup.runtime.*;
 import java.io.*;
 import java.util.*;
-import frontend.*;
 
 public class Main {
   static public void main(String argv[]) {
     // À mettre dans une IHM
-    Boolean knorm_bool = false, ast_bool = false, alpha_conversion_bool = false, reduction_bool = false;
-    for (String arg : argv){
-        switch(arg){
-          case "--ast":
-            ast_bool = true;
-            break;
-          case "--knorm":
-            knorm_bool = true;
-            break;
-          case "--alpha_conversion":
-            alpha_conversion_bool = true;
-            break;
-          case "--reduction":
-            reduction_bool = true;
-            break;
-          default:
-            break;
-        }
-    }
+    Ihm ihm = new Ihm(argv);
     try {
       Parser p = new Parser(new Lexer(new FileReader(argv[0])));
       Exp expression = (Exp) p.parse().value;
       assert (expression != null);
 
-      if (ast_bool){
+      if (ihm.ast){
           System.out.println("------ AST ------");
           expression.accept(new PrintVisitor());
           System.out.println();
@@ -49,7 +30,7 @@ public class Main {
       */
 
       // For KNormalization :
-      if (knorm_bool){
+      if (ihm.knorm){
         System.out.println("------ K-Normalization ------");
         Exp expression_normalized = expression.accept(new KNormalization());
         expression_normalized.accept(new PrintVisitor());
@@ -57,16 +38,17 @@ public class Main {
       }
 
       //For AlphaConversion :
-      if (alpha_conversion_bool){
+      if (ihm.alpha_conversion){
         System.out.println("------ AlphaConversion ------");
-        Exp expression_normalized = expression.accept(new KNormalization());
-        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+        //Exp expression_normalized = expression.accept(new KNormalization());
+        //Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+        Exp expression_converted = expression.accept(new AlphaConversion());
         expression_converted.accept(new PrintVisitor());
         System.out.println("");
       }
 
       //For Reduction of Nested Let-Expressions
-      if (reduction_bool){
+      if (ihm.reduction){
         System.out.println("------ Reduction of Nested Let-Expressions ------");
         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
         expression_reducted.accept(new PrintVisitor());
