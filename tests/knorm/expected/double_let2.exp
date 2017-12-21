@@ -1,0 +1,2 @@
+------ K-Normalization ------
+(let x = 3 in (let y = 4 in (let ?v0 = x in (let ?v1 = y in (?v0 + ?v1)))))

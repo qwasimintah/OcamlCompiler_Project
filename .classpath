@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="jflex/src/test/java/|jflex/src/main/java/|frontend/|jflex/examples/interpreter/|jflex/examples/simple-maven/src/test/java/|jflex/examples/simple-maven/src/main/java/|jflex/examples/standalone-maven/src/test/java/|backend/|jflex/examples/cup/|jflex/examples/java/" kind="src" path="java"/>
+	<classpathentry kind="src" path="java/backend"/>
+	<classpathentry kind="src" path="java/frontend"/>
+	<classpathentry kind="src" path="java/jflex/examples/cup"/>
+	<classpathentry kind="src" path="java/jflex/examples/interpreter"/>
+	<classpathentry kind="src" path="java/jflex/examples/java"/>
+	<classpathentry kind="src" path="java/jflex/examples/simple-maven/src/main/java"/>
+	<classpathentry kind="src" path="java/jflex/examples/simple-maven/src/test/java"/>
+	<classpathentry kind="src" path="java/jflex/examples/standalone-maven/src/test/java"/>
+	<classpathentry kind="src" path="java/jflex/src/main/java"/>
+	<classpathentry kind="src" path="java/jflex/src/test/java"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
