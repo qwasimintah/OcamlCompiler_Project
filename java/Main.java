@@ -54,6 +54,13 @@ public class Main {
         expression_reducted.accept(new PrintVisitor());
         System.out.println("");
       }
+
+      // if (ihm.arm){
+      //   System.out.println("@------ ARM ------");
+      //   Exp expression_reducted = expression.accept(new ReductionNestedExpression());
+      //   expression_reducted.accept(new PrintVisitor());
+      //   System.out.println("");
+      // }
     } catch (Exception e) {
       e.printStackTrace();
     }
