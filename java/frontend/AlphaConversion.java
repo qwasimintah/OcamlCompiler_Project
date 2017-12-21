@@ -139,15 +139,17 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     List<Id> new_args = new LinkedList();
     for (Id arg: let_rec.fd.args){
       Id new_arg = arg.gen();
-      Stack new_arg_stack = epsilon.get(arg.toString());
-      if (new_arg_stack == null){
-        new_arg_stack = new Stack();
+      Stack arg_stack = epsilon.get(arg.toString());
+      if (arg_stack == null){
+        arg_stack = new Stack();
       }
-      new_arg_stack.push(new_arg.toString());
+      arg_stack.push(new_arg.toString());
       new_args.add(new_arg);
     }
     sec_exp_let = true;
     Exp new_exp = let_rec.fd.e.accept(this);
+    System.out.println("new_exp :");
+    new_exp.accept(new PrintVisitor());
     FunDef new_fd = new FunDef(new_id, let_rec.fd.type, new_args, new_exp);
     while (!used_in_let.empty()) {
       String key = (String) used_in_let.pop();
@@ -164,14 +166,20 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     return new_let_rec;
   }
 
-  public Exp visit(App e){
-    return e;
+  public Exp visit(App app){
+    Exp new_exp = app.e.accept(this);
+    List<Exp> new_list = new LinkedList<Exp>();
+    for (Exp exp: app.es){
+      Exp exp_list = exp.accept(this);
+      new_list.add(exp_list);
+    }
+    App new_app = new App(new_exp, new_list);
+    return new_app;
   }
 
   public Exp visit(Tuple e){
-    List<Exp> list_exp = e.es;
     List<Exp> new_list = new LinkedList<Exp>();
-    for (Exp exp: list_exp){
+    for (Exp exp: e.es){
       Exp new_exp = exp.accept(this);
       new_list.add(new_exp);
     }
