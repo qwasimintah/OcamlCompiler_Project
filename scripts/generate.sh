@@ -10,7 +10,7 @@ for testing_part in 'ast' 'knorm'
     echo "generation in tests/$testing_part/output/"
     for file in $input_files
     do
-          echo -e "generating \033[0;36m ${file:5:-3}.out \033[0m"
+          echo -e "generating \033[0;36m  ${file:5:-3}.out \033[0m"
           $MINCAMLC tests/input/$file --$testing_part > tests/$testing_part/output/${file:5:-3}.out
     done
   done
