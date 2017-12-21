@@ -4,53 +4,49 @@ import variables.*;
 import java.util.*;
 
 
-public class InstructionCALL implements Instruction{
+public class InstructionCALL implements Instruction {
 
-    private List<Parameter> params;
-    private String return_reg;
-    private String fname;
-    private List<Object> operands = new ArrayList<Object>();
+private List<Parameter> params;
+private String return_reg;
+private String fname;
+private List<Object> operands = new ArrayList<Object>();
 
 
-    public InstructionCALL(List<Parameter> params, String return_reg, String fname){
-
+public InstructionCALL(List<Parameter> params, String return_reg, String fname){
         this.params = params;
-        this.return_reg= return_reg;
+        this.return_reg = return_reg;
         this.fname = fname;
+}
 
-    }
-
-    public InstructionCALL(List<Parameter> params, String fname){
-
+public InstructionCALL(List<Parameter> params, String fname){
         this.params = params;
-        this.return_reg="r0";
+        this.return_reg ="r0";
         this.fname= fname;
+}
 
-    }
 
+public List<Parameter> getParams (){
 
-    public  List<Parameter> getParams (){
+        return params;
+}
 
-          return params;
-    }
+public List<Object> getOperands (){
 
-    public  List<Object> getOperands (){
+        operands.add(params.get(0));
+        return operands;
+}
 
-          operands.add(params.get(0));
-          return operands;
-    }
-
-    public String getReturn(){
+public String getReturn(){
         return return_reg;
-    }
+}
 
-    public String getFname(){
+public String getFname(){
 
-       return fname;
-    }
+        return fname;
+}
 
-    public void show(){
+public void show(){
 
-    }
+}
 
 }

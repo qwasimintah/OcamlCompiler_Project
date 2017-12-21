@@ -7,113 +7,141 @@ import registers.*;
 import exceptions.*;
 import functions.*;
 import instructions.*;
-// import exp.*;
 import variables.*;
+import exp.*;
 
-public class TranslationVisitor implements ObjVisitor<Exp> {
+public class TranslationVisitor {
 
-public InstructionADD visit(Add e) {
-        Exp x = e.e1.accept(this);
-        Exp y = e.e2.accept(this);
+public Object visit(Exp e, Function func) {
+        if (e instanceof Add) {
+                return (InstructionADD) visit((Add)e, func);
+        }
+        else if (e instanceof Sub) {
+                return (InstructionSUB) visit((Sub)e, func);
+        }
+        else if (e instanceof Let) {
+                return (InstructionASSIGN) visit((Let)e, func);
+        }
+        else if (e instanceof Int) {
+                return (Integer) visit((Int)e, func);
+        }
+        else if (e instanceof Var) {
+                return (Variable) visit((Var)e, func);
+        }
+        return null;
 }
 
-public Exp visit(Sub e){
-        return e;
+public InstructionADD visit(Add e, Function func) {
+        return new InstructionADD(func, visit(e.e1, func), visit(e.e2, func));
 }
 
-public Exp visit(Let e){
-        return e;
+public InstructionSUB visit(Sub e, Function func){
+        return new InstructionSUB(func, visit(e.e1, func), visit(e.e2, func));
 }
 
-public Exp visit(Var e){
-        return e;
+public InstructionASSIGN visit(Let e, Function func){
+        return new InstructionASSIGN(func, visit(e.e1, func), visit(e.e2, func));
 }
 
-public Exp visit(Int e){
-        return e;
+public Variable visit(Var e, HashMap registers, Function func){
+        return new Variable(e.id.toString(), registers, func);
 }
 
-public Exp visit(Unit e){
-        return e;
+public Integer visit(Int e, Function func){
+        return e.i;
 }
 
-public Exp visit(Bool e){
-        return e;
+public Instruction visit(Unit e, Function func){
+        return null;
 }
 
-public Exp visit(Float e){
-        return e;
+public Instruction visit(exp.Bool e, Function func){
+        return null;
 }
 
-public Exp visit(Not e){
-        return e;
+public Instruction visit(exp.Float e, Function func){
+        return null;
 }
 
-public Exp visit(Neg e){
-        return e;
+public Instruction visit(Not e, Function func){
+        return null;
 }
 
-public Exp visit(FNeg e){
-        return e;
+public Instruction visit(Neg e, Function func){
+        return null;
 }
 
-public Exp visit(FAdd e){
-        return e;
+public Instruction visit(FNeg e, Function func){
+        return null;
 }
 
-public Exp visit(FSub e){
-        return e;
+public Instruction visit(FAdd e, Function func){
+        return null;
 }
 
-public Exp visit(FMul e){
-        return e;
+public Instruction visit(FSub e, Function func){
+        return null;
 }
 
-public Exp visit(FDiv e){
-        return e;
+public Instruction visit(FMul e, Function func){
+        return null;
 }
 
-public Exp visit(Eq e){
-        return e;
+public Instruction visit(FDiv e, Function func){
+        return null;
 }
 
-public Exp visit(LE e){
-        return e;
+public Instruction visit(Eq e, Function func){
+        return null;
 }
 
-public Exp visit(If e){
-        return e;
+public Instruction visit(LE e, Function func){
+        return null;
 }
 
-public Exp visit(LetRec e){
-        return e;
+public Instruction visit(If e, Function func){
+        return null;
 }
 
-public Exp visit(App e){
-        return e;
+public Instruction visit(LetRec e, Function func){
+        return null;
 }
 
-public Exp visit(Tuple e){
-        return e;
+public Instruction visit(App e, Function func){
+        List<Parameter> arguments = new ArrayList<Parameter>();
+        for (Exp o : e.es) {
+                arguments.add((Parameter) visit(o, func));
+        }
+        return new InstructionCALL(arguments, e.e.toString());
 }
 
-public Exp visit(LetTuple e){
-        return e;
+public Instruction visit(Tuple e, Function func){
+        return null;
 }
 
-public Exp visit(Array e){
-        return e;
+public Instruction visit(LetTuple e, Function func){
+        return null;
 }
 
-public Exp visit(Get e){
-        return e;
+public Instruction visit(Array e, Function func){
+        return null;
 }
 
-public Exp visit(Put e){
-        return e;
+public Instruction visit(Get e, Function func){
+        return null;
 }
 
-// public static void main(String[] args) {
-//   System.out.println("caca");
-// }
+public Instruction visit(Put e, Function func){
+        return null;
+}
+
+public void main(String[] args) {
+        Function fun = new Function("main", new ArrayList(), new ArrayList());
+        Int x = new Int(1);
+        Int y = new Int(2);
+        Add add = new Add(x, y);
+        InstructionADD Iadd = visit(add, fun);
+        Iadd.show();
+        System.out.println("caca");
+}
 }
