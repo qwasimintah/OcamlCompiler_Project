@@ -1,0 +1,5 @@
+------ AST ------
+(1 + 2)
+------ Height of the AST ------
+using Height.computeHeight: 1
+using HeightVisitor: 1
