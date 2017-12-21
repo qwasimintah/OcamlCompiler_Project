@@ -16,7 +16,7 @@ cd ..
 
 if [ $# -eq 0 ]
   then
-    test_list="ast knorm alpha_conversion reduction"
+    test_list="ast knorm alpha_conversion reduction arm"
   else
     test_list=$1
 fi
