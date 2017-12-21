@@ -6,7 +6,7 @@ import java.util.*;
 import translation.*;
 
 public abstract class Exp {
-    abstract void accept(Visitor v);
+    public abstract void accept(Visitor v);
 
-    abstract <E> E accept(ObjVisitor<E> v);
+    public abstract <E> E accept(ObjVisitor<E> v);
 }

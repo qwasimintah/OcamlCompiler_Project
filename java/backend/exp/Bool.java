@@ -3,17 +3,17 @@ package exp;
 import translation.*;
 
 public class Bool extends Exp {
-    final boolean b;
+    public final boolean b;
 
     public Bool(boolean b) {
         this.b = b;
     }
 
-    <E> E accept(ObjVisitor<E> v) {
+    public <E> E accept(ObjVisitor<E> v) {
         return v.visit(this);
     }
 
-    void accept(Visitor v) {
+    public void accept(Visitor v) {
         v.visit(this);
     }
 }

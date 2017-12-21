@@ -24,7 +24,7 @@ public static void VBA(Function fun) {
                                         var.allocRegister();
                                 }
                         }
-                        catch (NoAvailableRegister e) {
+                        catch (Exception e) {
                                 System.out.println(e.getMessage());
                                 RegisterUtils.showRegisters(registers);
                                 return;
@@ -83,7 +83,7 @@ public static void LinearScan(Function fun) {
                         if (interval.getStartingPoint() == j) {
                                 try {
                                         interval.getVariable().allocRegister();
-                                } catch (NoAvailableRegister e) {
+                                } catch (Exception e) {
                                         System.out.println(e.getMessage());
                                 }
                         }
@@ -140,10 +140,11 @@ public static void main(String[] args) {
 
 
         //  SpillEverything(fun);
-        LinearScan(fun);
-        fun.showVariablesState();
+        // LinearScan(fun);
+        // fun.showVariablesState();
 
-        new TranslationVisitor();
+        TranslationVisitor tv = new TranslationVisitor();
+        tv.main(new String[0]);
         // VInteger x = new VInteger("x", 10, registers, fun);
         // InstructionSUB i1 = new InstructionSUB(fun, 3, 1);
         // InstructionASSIGN ass = new InstructionASSIGN(fun, x, i1);

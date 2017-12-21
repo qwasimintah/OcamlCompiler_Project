@@ -1,10 +1,10 @@
 package translation;
 
-// import exp.*;
+import exp.*;
 
 public interface ObjVisitor<E> {
     E visit(Unit e);
-    E visit(Bool e);
+    E visit(exp.Bool e);
     E visit(Int e);
     E visit(exp.Float e);
     E visit(Not e);

@@ -27,6 +27,11 @@ public InstructionDIV(Function func, Integer x, Integer y) {
         this.operands.add(y);
 }
 
+public InstructionDIV(Function func, Object x, Object y) {
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
 public List<Object> getOperands () {
         return operands;
 }

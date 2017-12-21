@@ -8,7 +8,7 @@ import exceptions.*;
 import functions.*;
 import intervals.*;
 
-public abstract class Variable {
+public class Variable {
 private String name;
 private Register register;
 private HashMap<Register, Variable> registers;

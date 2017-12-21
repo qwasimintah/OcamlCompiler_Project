@@ -22,6 +22,11 @@ public InstructionASSIGN(Function func, Variable x, Instruction inst) {
         this.operands.add(inst);
 }
 
+public InstructionASSIGN(Function func, Object x, Object y) {
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
 public List<Object> getOperands () {
         List<Object> op = new ArrayList<Object>();
         op.add(operands.get(0));

@@ -11,10 +11,10 @@ public class Add extends Exp {
         this.e2 = e2;
     }
 
-    <E> E accept(ObjVisitor<E> v) {
+    public <E> E accept(ObjVisitor<E> v) {
         return v.visit(this);
     }
-    void accept(Visitor v) {
+    public void accept(Visitor v) {
         v.visit(this);
     }
 }
