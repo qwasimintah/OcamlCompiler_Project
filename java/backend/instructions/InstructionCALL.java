@@ -9,6 +9,7 @@ public class InstructionCALL implements Instruction{
     private List<Parameter> params;
     private String return_reg;
     private String fname;
+    private List<Object> operands = new ArrayList<Object>();
 
 
     public InstructionCALL(List<Parameter> params, String return_reg, String fname){
@@ -35,7 +36,8 @@ public class InstructionCALL implements Instruction{
 
     public  List<Object> getOperands (){
 
-          return new ArrayList<Object>();
+          operands.add(params.get(0));
+          return operands;
     }
 
     public String getReturn(){

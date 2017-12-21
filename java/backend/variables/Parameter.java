@@ -6,14 +6,14 @@ import functions.*;
 
 public class Parameter extends Variable {
 
-private Integer value;
+private String reg;
 
-  public Parameter(String name, Integer value,  HashMap registers, Function func) {
+  public Parameter(String name, String reg,  HashMap registers, Function func) {
           super(name, registers, func);
-          this.value=value;
+          this.reg=reg;
   }
 
-  public Integer getValue() {
-          return value;
+  public String getVReg() {
+          return reg;
   }
 }

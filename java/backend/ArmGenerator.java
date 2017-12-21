@@ -484,7 +484,7 @@ public class ArmGenerator {
                      }
                }
 
-               else if(op1 instanceof VInteger && op2 instanceof Variable){
+               else if(op1 instanceof VInteger && op2 instanceof Integer){
 
                     assign(operand1, ((int)op2));
                     if(offset1!=""){
@@ -514,6 +514,13 @@ public class ArmGenerator {
 
                         generate_mult((InstructionMULT) op2);
                         assign(reg, "r0");
+
+                      }
+
+                      else if(op2 instanceof InstructionCALL){
+
+                        generate_function_call((InstructionCALL) op2);
+                        assign(reg, ((InstructionCALL)op2).getReturn());
 
                       }
 
@@ -706,7 +713,7 @@ public String get_label(String name){
 
         if(instr.getFname().equals("print_int")){
           Parameter param = (Parameter)params.get(0);
-          assign("r0" , param.getValue());
+          assign("r0" , param.getVReg());
           textSection.text.append("\tBL min_caml_print_int\n");
           textSection.text.append("\tBL min_caml_print_newline\n");
           return;
@@ -716,18 +723,19 @@ public String get_label(String name){
            Parameter param = (Parameter)params.get(i);
 
             if(param.getRegister()!= null){
-              assign(param.getRegister().getName() , param.getValue());
+              assign(param.getRegister().getName() , param.getVReg());
             }
           }
 
           if(num_params >= available_reg_param){
             //stash_parameters();stash
-            for(int i =4; i< num_params-available_reg_param; i++){
-                int value =((Parameter)params.get(i)).getValue();
+            for(int i =2; i< num_params; i++){
+                //System.out.println("came here\n");
+                String value =((Parameter)params.get(i)).getVReg();
                 reserve_space_param(4);
-                textSection.text.append("\n\tSUB sp, #4");
+                textSection.text.append("\tSUB sp, #4\n");
                 assign("r0", value);
-                textSection.text.append("\n\tSTR r0, [sp]");
+                textSection.text.append("\tSTR r0, [sp]\n");
               }
         }
 
@@ -744,7 +752,7 @@ public String get_label(String name){
 
    public static void main(String[] args){
 
-        ArmGenerator  arm = new ArmGenerator();
+        /*ArmGenerator  arm = new ArmGenerator();
 
 
         List<Instruction> instr = new ArrayList<Instruction>();
@@ -798,7 +806,7 @@ public String get_label(String name){
         fundef.setVariables(locals);
         fadd.setVariables(locals);
 
-        try{
+        
           y.allocRegister();
           w.allocRegister();
           a.allocRegister();
@@ -821,9 +829,7 @@ public String get_label(String name){
           g.allocRegister();
 
 
-        }catch (NoAvailableRegister e) {
-
-        }
+        
 
         List<Parameter> params = new ArrayList<Parameter>();
         params.add(c);
@@ -892,7 +898,7 @@ public String get_label(String name){
 	               oS.write(result.toString().getBytes());
               } catch (IOException e) {
 	                e.printStackTrace();
-        }
+        }*/
 
    }
 

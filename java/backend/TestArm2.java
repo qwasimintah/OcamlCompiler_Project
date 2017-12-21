@@ -16,28 +16,31 @@ import registers.*;
 import exceptions.*;
 import java.io.*;
 
-/*
-"""
+/*"""
 
-let _f x y =
+ASML 
+
+let _f x y w =
   let z = add x y in
   let t = 2 in
-  sub t z
+  let q = sub t z in 
+  add w q
 
 let _ =
   let x = 0 in
   let y = 1 in
-  let z = call _f x y in
+  let w = 2 in 
+  let z = call _f x y w in
   call _min_caml_print_int z
 
+Expected Result= 3;
 
-Expected Result = 1;
 
 """
 
-*/
+/*/
 
-public class TestArm{
+public class TestArm2 {
 
 
    public static void main(String[] args){
@@ -76,11 +79,15 @@ public class TestArm{
         VInteger l = new VInteger("l", -1, registers,fundef);
         VInteger vx = new VInteger("x",0, registers,fundef);
         VInteger vy = new VInteger("y",1, registers,fundef);
+        VInteger vw = new VInteger("w",3, registers,fundef);
+        VInteger vq = new VInteger("q",3, registers,fundef);
 
 
         Parameter px = new Parameter(vx.getName(),vx.getRegister().getName(), param_registers, _f);
         Parameter py = new Parameter(vy.getName(),vy.getRegister().getName(), param_registers, _f);
         Parameter pz = new Parameter(l.getName(),l.getRegister().getName(), param_registers, fundef);
+        Parameter pw = new Parameter(vw.getName(),vw.getRegister().getName(), param_registers, _f);
+
 
         flocals.add(z);
         flocals.add(t);
@@ -95,6 +102,7 @@ public class TestArm{
         List<Parameter> params = new ArrayList<Parameter>();
         params.add(px);
         params.add(py);
+        params.add(pw);
 
 
         RegisterUtils.showRegisters(registers);
@@ -102,6 +110,7 @@ public class TestArm{
 
         InstructionASSIGN q = new InstructionASSIGN(fundef, vx, 0);
         InstructionASSIGN p = new InstructionASSIGN(fundef, vy, 1);
+        InstructionASSIGN wass = new InstructionASSIGN(fundef, vw, 2);
         InstructionCALL call_f = new InstructionCALL(params, "f");
         InstructionASSIGN lmain = new InstructionASSIGN(fundef, l, call_f);
         //InstructionCALL call_f = new InstructionCALL(params, "f");
@@ -116,10 +125,13 @@ public class TestArm{
         InstructionASSIGN vz = new InstructionASSIGN(_f, z, add_f);
         InstructionASSIGN vt = new InstructionASSIGN(_f, t, 2);
         InstructionSUB sub_f= new InstructionSUB(_f, t, z);
+        InstructionASSIGN qass = new InstructionASSIGN(_f, vq, sub_f);
+        InstructionADD add_q = new InstructionADD(_f, pw, vq);
 
         //fundef.addInstruction(call);
         fundef.addInstruction(q);
         fundef.addInstruction(p);
+        fundef.addInstruction(wass);
         fundef.addInstruction(lmain);
         fundef.addInstruction(call_min);
         //fundef.addInstruction(ci);
@@ -128,7 +140,8 @@ public class TestArm{
         //fundef.addInstruction(ass);stash
         _f.addInstruction(vz);
         _f.addInstruction(vt);
-        _f.addInstruction(sub_f);
+        _f.addInstruction(qass);
+        _f.addInstruction(add_q);
 
         //fadd.addInstruction(add);
         //fadd.addInstruction(fadd_ass);
@@ -149,7 +162,7 @@ public class TestArm{
         System.out.println(result);
 
 
-        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/arm_test.s"))) {
+        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/arm_test2.s"))) {
 	               oS.write(result.toString().getBytes());
               } catch (IOException e) {
 	                e.printStackTrace();
