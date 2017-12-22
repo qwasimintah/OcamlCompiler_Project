@@ -5,7 +5,7 @@ import functions.*;
 import java.util.*;
 
 public class InstructionDIV implements Instruction {
-public List<Object> operands;
+public List<Object> operands =new ArrayList<Object>();
 
 public InstructionDIV(Function func, Variable x, Variable y) {
         this.operands.add(x);
@@ -23,6 +23,11 @@ public InstructionDIV(Function func, Variable x, Integer y) {
 }
 
 public InstructionDIV(Function func, Integer x, Integer y) {
+        this.operands.add(x);
+        this.operands.add(y);
+}
+
+public InstructionDIV(Function func, Object x, Object y) {
         this.operands.add(x);
         this.operands.add(y);
 }

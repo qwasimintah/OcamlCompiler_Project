@@ -1,2 +1,6 @@
 ------ Reduction of Nested Let-Expressions ------
+<<<<<<< HEAD
+(let z = (4 + 1) in (let y = (z + 2) in (y + 3)))
+=======
 (let z = (4 + 1) in (let y = (z + 2) in (let x = (y + 3) in (let w = (2 - 1) in (x - w)))))
+>>>>>>> c5f09029b2684ebf7a7daaa3754e8f69c54b68d0

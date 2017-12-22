@@ -6,25 +6,29 @@ import java.util.*;
 import registers.*;
 import exceptions.*;
 import functions.*;
+import intervals.*;
 
-public abstract class Variable {
+public class Variable {
 private String name;
 private Register register;
 private HashMap<Register, Variable> registers;
 private Integer offset;
 private Function function;
+private Interval interval;
 
 public Variable(String name, HashMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
         this.function = func;
+        this.interval = new Interval(this);
+        allocRegister();
 }
 
 public String getName() {
         return name;
 }
 
-public void allocRegister() throws NoAvailableRegister {
+public void allocRegister() {
         for(Object key: registers.keySet()) {
                 if (registers.get(key) == null) {
                         Register reg = (Register) key;
@@ -32,8 +36,12 @@ public void allocRegister() throws NoAvailableRegister {
                         registers.put(reg, this);
                         return;
                 }
+                /*else{
+                        spill();
+                }*/
         }
-        throw new NoAvailableRegister();
+        spill();
+        //throw new NoAvailableRegister();
 }
 
 public void spill() {
@@ -64,12 +72,16 @@ public Integer getOffset() {
 
 public void getSaveState() {
         if (this.getRegister() != null) {
-                System.out.println("Variable stored in register" + this.getRegister().getName());
+                System.out.println("Variable " + this.getName() + " stored in register " + this.getRegister().getName());
         } else if (this.getOffset() != null) {
-                System.out.println("Variable stored in memory at [fp + " + this.getOffset() + "]");
+                System.out.println("Variable " + this.getName() + " stored in memory at [fp + " + this.getOffset() + "]");
         } else {
-                System.out.println("Variable not saved !");
+                System.out.println("Variable " + this.getName() + " not saved !");
         }
+}
+
+public Interval getInterval() {
+        return this.interval;
 }
 
 public void kill() {

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 cd "$(dirname "$0")"/.. || exit 1
 
 # TODO change this to point to your mincamlc executable if it's different, or add

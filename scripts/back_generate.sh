@@ -1,7 +1,6 @@
-#! /bin/sh
+#! /bin/bash
 cd "$(dirname "$0")"/.. || exit 1
 MINCAMLC=java/mincamlc
-
 
 input_files=`ls tests/input/`
 for testing_part in 'ast' 'knorm'
