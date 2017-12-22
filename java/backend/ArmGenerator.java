@@ -8,15 +8,15 @@
  *
  * @author DJAN DENNIS MINTAH
  */
+package backend;
+
 import java.util.*;
-import variables.*;
-import functions.*;
-import instructions.*;
-import registers.*;
-import exceptions.*;
 import java.io.*;
-
-
+import backend.variables.*;
+import backend.functions.*;
+import backend.instructions.*;
+import backend.registers.*;
+import backend.exceptions.*;
 
 public class ArmGenerator {
 
@@ -706,7 +706,7 @@ public String get_label(String name){
   public void generate_function_call(InstructionCALL instr){
 
 
-        List<Parameter> params = instr.getParams();
+        List<Object> params = instr.getParams();
         String return_reg = instr.getReturn();
         String fname = get_label(instr.getFname());
         int num_params=params.size();
@@ -806,7 +806,7 @@ public String get_label(String name){
         fundef.setVariables(locals);
         fadd.setVariables(locals);
 
-        
+
           y.allocRegister();
           w.allocRegister();
           a.allocRegister();
@@ -829,7 +829,7 @@ public String get_label(String name){
           g.allocRegister();
 
 
-        
+
 
         List<Parameter> params = new ArrayList<Parameter>();
         params.add(c);

@@ -1,6 +1,7 @@
 import java_cup.runtime.*;
 import java.io.*;
 import java.util.*;
+import backend.*;
 import backend.functions.*;
 import backend.translation.*;
 import exp.*;
