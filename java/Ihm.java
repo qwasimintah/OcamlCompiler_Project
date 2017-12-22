@@ -53,12 +53,9 @@ public class Ihm {
         case "--reduction":
           reduction = true;
           break;
-<<<<<<< HEAD
-=======
         case "--arm":
           arm = true;
           break;
->>>>>>> 8747dca1c229f4b52d0d11b709466197d8a183d1
         default:
         break;
       }
