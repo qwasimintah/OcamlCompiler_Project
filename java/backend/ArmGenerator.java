@@ -187,7 +187,7 @@ public class ArmGenerator {
                   else{
 
                     operand1="[fp, #" + ((VInteger)op1).getOffset().toString()+"]";
-                    textSection.text.append("\tLDR r0 , "). append(operand1).append("\n");
+                    textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
                     operand1="r0";
                   }
             }
