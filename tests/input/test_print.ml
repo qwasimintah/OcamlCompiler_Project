@@ -1,1 +1,3 @@
-let x = 1 in print_int x
+print_int 123;
+print_int (-456);
+print_int (789+0)

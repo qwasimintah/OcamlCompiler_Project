@@ -1,3 +1,4 @@
+
 interface ObjVisitor<E> {
     E visit(Unit e);
     E visit(Bool e);

@@ -1,2 +1,6 @@
 ------ AlphaConversion ------
+<<<<<<< HEAD
 (1, 2, (1,50 +. 4,00), (let x = (let y = 5 in (y + 2)) in (x - 3)))
+=======
+(1, 2, (5 +. 4), (let x = (let y = 5 in (y + 2)) in (x - 3)))
+>>>>>>> c5f09029b2684ebf7a7daaa3754e8f69c54b68d0

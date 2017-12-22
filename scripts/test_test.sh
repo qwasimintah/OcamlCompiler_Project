@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 echo -e "\n--------------------------------------------------------------------------\n"
 echo -e "\t \t \t \033[0;32m[ VALID PART ] \033[33m -> TEST\033[0m \n"
 for test_case in tests/test_test/valid/*.ex
