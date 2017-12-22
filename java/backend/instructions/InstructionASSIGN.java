@@ -22,19 +22,8 @@ public InstructionASSIGN(Function func, Variable x, Instruction inst) {
         this.operands.add(inst);
 }
 
-public InstructionASSIGN(Function func, Object x, Object y) {
-        this.operands.add(x);
-        this.operands.add(y);
-}
-
 public List<Object> getOperands () {
-        List<Object> op = new ArrayList<Object>();
-        op.add(operands.get(0));
-        if (operands.get(1) instanceof Instruction) {
-                op.add(((Instruction)(operands.get(1))).getOperands().get(0));
-                op.add(((Instruction)(operands.get(1))).getOperands().get(1));
-        }
-        return op;
+        return operands;
 }
 
 public void show() {

@@ -8,11 +8,11 @@ public class Function {
 
 private String name;
 private List<Instruction> instructions;
-private List<Parameter> arguments;
-private Integer spillOffset = 4;
+private List<Variable> arguments;
+private Integer spillOffset = 0;
 private HashSet<Variable> variables = new HashSet<Variable>();
 
-public Function(String name, List<Parameter> arguments, List<Instruction> instructions) {
+public Function(String name, List<Variable> arguments, List<Instruction> instructions) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
@@ -26,7 +26,7 @@ public String getName(){
 
         return name;
 }
-
+  
 
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
@@ -48,7 +48,7 @@ public Iterator<Instruction> iterator() {
         return instructions.iterator();
 }
 
-public List<Parameter> getArguments() {
+public List<Variable> getArguments() {
         return arguments;
 }
 
@@ -58,15 +58,6 @@ public Integer getOffset() {
 
 public void setOffset(Integer value) {
         spillOffset = value;
-}
-
-public HashSet<Variable> getVariables(){
-
-        return variables;
-}
-
-public void setVariables (HashSet<Variable> locals){
-        variables =locals;
 }
 
 public void show() {
