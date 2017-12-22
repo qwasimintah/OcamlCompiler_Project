@@ -3,12 +3,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Ihm {
-  String output_file;
-  Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm;
+String output_file;
+Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm, complete;
 
-  public Ihm(String options[]){
+public Ihm(String options[]){
         output_file = "";
-        given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = arm = false;
+        given_output =
+          typecheck_only =
+              parse_only =
+             output_asml =
+                     ast =
+                   knorm =
+        alpha_conversion =
+               reduction =
+                     arm =
+                complete = false;
+
         if (options.length == 0) {
                 print_help();
         }
@@ -56,6 +66,8 @@ public class Ihm {
                 case "--arm":
                         arm = true;
                         break;
+                case "--complete":
+                        complete = true;
                 default:
                         break;
                 }

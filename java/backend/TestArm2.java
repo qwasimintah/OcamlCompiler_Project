@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package backend;
 /**
  *
  * @author DJAN DENNIS MINTAH
@@ -18,18 +18,18 @@ import java.io.*;
 
 /*"""
 
-ASML 
+ASML
 
 let _f x y w =
   let z = add x y in
   let t = 2 in
-  let q = sub t z in 
+  let q = sub t z in
   add w q
 
 let _ =
   let x = 0 in
   let y = 1 in
-  let w = 2 in 
+  let w = 2 in
   let z = call _f x y w in
   call _min_caml_print_int z
 
