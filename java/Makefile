@@ -1,5 +1,5 @@
 
-SRC= Lexer.java Parser.java
+SRC= Lexer.java Parser.java Main.java
 
 all: ${SRC}
 	javac -sourcepath . -cp java-cup-11b-runtime.jar:. *.java

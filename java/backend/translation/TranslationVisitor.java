@@ -53,8 +53,8 @@ public void visit(Let e, Function func){
         visit(e.e2, func);
 }
 
-public Variable visit(Var e, HashMap registers, Function func){
-        return new Variable(e.id.toString(), registers, func);
+public Variable visit(Var e, Function func){
+        return new Variable(e.id.toString(), func.registers, func);
 }
 
 public Integer visit(Int e, Function func){
@@ -122,7 +122,7 @@ public void visit(App e, Function func){
         for (Exp o : e.es) {
                 arguments.add(visit(o, func));
         }
-        InstructionCALL inst = new InstructionCALL(arguments, "test");
+        InstructionCALL inst = new InstructionCALL(arguments, ((Var)e.e).id.toString());
         func.addInstruction(inst);
         // return inst;
 }
@@ -147,19 +147,19 @@ public Instruction visit(Put e, Function func){
         return null;
 }
 
-public void main(String[] args) {
-        Function fun = new Function("main", new ArrayList(), new ArrayList());
-        Int x = new Int(1);
-        Int y = new Int(2);
-        Add add = new Add(x, y);
-        Sub sub = new Sub(x, y);
-        Var print = new Var(new Id("print_int"));
-        List params = new ArrayList();
-        params.add(x);
-        App call = new App(print, params);
-        Let let1 = new Let(new Id("id1"), new TInt(), sub, call);
-        Let let2 = new Let(new Id("id2"), new TInt(), add, let1);
-        visit(let2, fun);
-        fun.show();
-}
+// public static void main(String[] args) {
+//         Function fun = new Function("main", new ArrayList(), new ArrayList());
+//         Int x = new Int(1);
+//         Int y = new Int(2);
+//         Add add = new Add(x, y);
+//         Sub sub = new Sub(x, y);
+//         Var print = new Var(new Id("print_int"));
+//         List params = new ArrayList();
+//         params.add(x);
+//         App call = new App(print, params);
+//         Let let1 = new Let(new Id("id1"), new TInt(), sub, call);
+//         Let let2 = new Let(new Id("id2"), new TInt(), add, let1);
+//         visit(let2, fun);
+//         fun.show();
+// }
 }
