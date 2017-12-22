@@ -3,3 +3,5 @@
 ------ Height of the AST ------
 using Height.computeHeight: 2
 using HeightVisitor: 2
+new_exp :
+(x + 1)

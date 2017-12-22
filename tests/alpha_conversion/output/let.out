@@ -1,2 +1,2 @@
 ------ AlphaConversion ------
-(let ?v0 = (1 + 2) in y)
+(let ?v2 = (1 + 2) in y)
