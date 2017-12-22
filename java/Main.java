@@ -56,7 +56,7 @@ static public void main(String argv[]) {
                 }
 
                 //For AlphaConversion :
-                Exp expression_converted = expression.accept(new AlphaConversion());
+                Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                 if (ihm.alpha_conversion) {
                         System.out.println("------ AlphaConversion ------");
                         //Exp expression_normalized = expression.accept(new KNormalization());
@@ -66,27 +66,36 @@ static public void main(String argv[]) {
                 }
 
                 // For Reduction of Nested Let-Expressions
-                Exp expression_reducted = expression.accept(new ReductionNestedExpression());
+                Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
                 if (ihm.reduction) {
                         System.out.println("------ Reduction of Nested Let-Expressions ------");
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
                 }
 
-                // if (true) {
-                //         System.out.println("------ Translation to Jerry ------");
-                //         TranslationVisitor tv = new TranslationVisitor();
-                //         Function func = new Function("main", new ArrayList(), new ArrayList());
-                //         tv.visit((Exp) expression, func);
-                //         System.out.println("");
-                // }
+                Function func = new Function("main", new ArrayList(), new ArrayList());
+                TranslationVisitor tv = new TranslationVisitor();
+                tv.visit((Exp) expression, func);
+                if (ihm.translation) {
+                        System.out.println("------ Translation to Jerry ------");
+                        func.show();
+                        System.out.println("");
+                }
 
-                // if (ihm.arm) {
-                //         System.out.println("@------ ARM ------");
-                //         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
-                //         expression_reducted.accept(new PrintVisitor());
-                //         System.out.println("");
-                // }
+                RegisterAllocation regalloc = new RegisterAllocation();
+                regalloc.LinearScan(func);
+                if (ihm.register) {
+                        System.out.println("------ Register Allocation ------");
+                        func.showVariablesState();
+                        System.out.println("");
+                }
+
+
+                if (ihm.arm) {
+                        System.out.println("------ ARM generation ------");
+                        System.out.println("Do the shit here");
+                        System.out.println("");
+                }
 
         } catch (Exception e) {
                 e.printStackTrace();
