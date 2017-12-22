@@ -89,6 +89,14 @@ static public void main(String argv[]) {
                 Exp expression_normalized = expression.accept(new KNormalization());
                 Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                 Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+                expression_normalized.accept(new PrintVisitor());
+                System.out.println("");
+
+                expression_converted.accept(new PrintVisitor());
+                System.out.println("");
+
+                expression_reducted.accept(new PrintVisitor());
+                System.out.println("");
               }
 
 
