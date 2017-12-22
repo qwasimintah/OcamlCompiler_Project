@@ -1,13 +1,14 @@
+package backend;
+
 import java.io.*;
-import java.util.Hashtable;
 import java.util.*;
-import instructions.*;
-import variables.*;
-import registers.*;
-import functions.*;
-import exceptions.*;
-import intervals.*;
-import translation.*;
+import backend.instructions.*;
+import backend.variables.*;
+import backend.registers.*;
+import backend.functions.*;
+import backend.exceptions.*;
+import backend.intervals.*;
+import backend.translation.*;
 
 public class RegisterAllocation {
 

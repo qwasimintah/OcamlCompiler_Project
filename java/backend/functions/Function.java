@@ -1,8 +1,8 @@
-package functions;
+package backend.functions;
 
 import java.util.*;
-import variables.*;
-import instructions.*;
+import backend.variables.*;
+import backend.instructions.*;
 
 public class Function {
 

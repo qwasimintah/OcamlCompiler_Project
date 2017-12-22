@@ -1,12 +1,11 @@
-package variables;
+package backend.variables;
 
 import java.io.*;
-import java.util.Hashtable;
 import java.util.*;
-import registers.*;
-import exceptions.*;
-import functions.*;
-import intervals.*;
+import backend.registers.*;
+import backend.exceptions.*;
+import backend.functions.*;
+import backend.intervals.*;
 
 public class Variable {
 private String name;
@@ -38,7 +37,7 @@ public void allocRegister() {
                 }
                 /*else{
                         spill();
-                }*/
+                   }*/
         }
         spill();
         //throw new NoAvailableRegister();

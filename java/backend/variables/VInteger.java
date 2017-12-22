@@ -1,9 +1,8 @@
-package variables;
+package backend.variables;
 
 import java.io.*;
-import java.util.Hashtable;
 import java.util.*;
-import functions.*;
+import backend.functions.*;
 
 public class VInteger extends Variable {
   private Integer value;

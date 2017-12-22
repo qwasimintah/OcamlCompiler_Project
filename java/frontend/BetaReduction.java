@@ -1,4 +1,8 @@
+package frontend;
+
 import java.util.HashMap;
+import exp.*;
+import ast.*;
 
 class BeteReduction implements ObjVisitor<Exp>{
 private static HashMap<String, String> associated = new HashMap<String, String> ();
@@ -29,11 +33,11 @@ public Exp visit(Unit e){
         return e;
 }
 
-public Exp visit(Bool e){
+public Exp visit(exp.Bool e){
         return e;
 }
 
-public Exp visit(Float e){
+public Exp visit(exp.Float e){
         return e;
 }
 

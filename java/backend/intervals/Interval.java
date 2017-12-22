@@ -1,6 +1,6 @@
-package intervals;
+package backend.intervals;
 
-import variables.*;
+import backend.variables.*;
 
 public class Interval implements Comparable {
 private Integer start;

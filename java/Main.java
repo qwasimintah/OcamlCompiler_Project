@@ -1,9 +1,17 @@
 import java_cup.runtime.*;
 import java.io.*;
 import java.util.*;
+import backend.functions.*;
+import backend.translation.*;
+import exp.*;
+import ast.*;
+import frontend.*;
 
 public class Main {
-  static public void main(String argv[]) {
+  public static void main(String argv[]) {
+    // temp :
+    Integer translation = 1;
+    Height height_computer = new Height();
     // À mettre dans une IHM
     Ihm ihm = new Ihm(argv);
     try {
@@ -17,7 +25,7 @@ public class Main {
           System.out.println();
 
           System.out.println("------ Height of the AST ------");
-          int height = Height.computeHeight(expression);
+          int height = height_computer.computeHeight(expression);
           System.out.println("using Height.computeHeight: " + height);
 
           ObjVisitor<Integer> v = new HeightVisitor();
@@ -52,6 +60,15 @@ public class Main {
         System.out.println("------ Reduction of Nested Let-Expressions ------");
         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
         expression_reducted.accept(new PrintVisitor());
+        System.out.println("");
+      }
+
+      //For translation to Jerry
+      if (translation == 1) {
+        System.out.println("------ Translation to Jerry ------");
+        TranslationVisitor tv = new TranslationVisitor();
+        Function func = new Function("main", new ArrayList(), new ArrayList());
+        tv.visit((Exp) expression, func);
         System.out.println("");
       }
     } catch (Exception e) {

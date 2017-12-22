@@ -1,8 +1,8 @@
-package variables;
-import registers.*;
-import java.util.Hashtable;
+package backend.variables;
+
+import backend.registers.*;
 import java.util.*;
-import functions.*;
+import backend.functions.*;
 
 public class Parameter extends Variable {
 

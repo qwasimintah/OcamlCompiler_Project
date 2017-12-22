@@ -1,26 +1,27 @@
-package translation;
+package backend.translation;
 
 import java.io.*;
-import java.util.Hashtable;
 import java.util.*;
-import registers.*;
-import exceptions.*;
-import functions.*;
-import instructions.*;
-import variables.*;
+import backend.registers.*;
+import backend.exceptions.*;
+import backend.functions.*;
+import backend.instructions.*;
+import backend.variables.*;
 import exp.*;
+import ast.*;
+import ast.type.*;
 
 public class TranslationVisitor {
 
 public Object visit(Exp e, Function func) {
         if (e instanceof Add) {
-                return (InstructionADD) visit((Add)e, func);
+                visit((Add)e, func);
         }
         else if (e instanceof Sub) {
-                return (InstructionSUB) visit((Sub)e, func);
+                visit((Sub)e, func);
         }
         else if (e instanceof Let) {
-                return (InstructionASSIGN) visit((Let)e, func);
+                visit((Let)e, func);
         }
         else if (e instanceof Int) {
                 return (Integer) visit((Int)e, func);
@@ -28,19 +29,28 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof Var) {
                 return (Variable) visit((Var)e, func);
         }
+        else if (e instanceof App) {
+                visit((App)e, func);
+        }
         return null;
 }
 
-public InstructionADD visit(Add e, Function func) {
-        return new InstructionADD(func, visit(e.e1, func), visit(e.e2, func));
+public void visit(Add e, Function func) {
+        InstructionADD inst = new InstructionADD(func, visit(e.e1, func), visit(e.e2, func));
+        func.addInstruction(inst);
+        // return inst;
 }
 
-public InstructionSUB visit(Sub e, Function func){
-        return new InstructionSUB(func, visit(e.e1, func), visit(e.e2, func));
+public void visit(Sub e, Function func){
+        InstructionSUB inst = new InstructionSUB(func, visit(e.e1, func), visit(e.e2, func));
+        func.addInstruction(inst);
+        // return inst;
 }
 
-public InstructionASSIGN visit(Let e, Function func){
-        return new InstructionASSIGN(func, visit(e.e1, func), visit(e.e2, func));
+public void visit(Let e, Function func){
+        // func.addInstruction((Instruction) visit(e.e1, func));
+        visit(e.e1, func);
+        visit(e.e2, func);
 }
 
 public Variable visit(Var e, HashMap registers, Function func){
@@ -107,12 +117,14 @@ public Instruction visit(LetRec e, Function func){
         return null;
 }
 
-public Instruction visit(App e, Function func){
-        List<Parameter> arguments = new ArrayList<Parameter>();
+public void visit(App e, Function func){
+        List<Object> arguments = new ArrayList<Object>();
         for (Exp o : e.es) {
-                arguments.add((Parameter) visit(o, func));
+                arguments.add(visit(o, func));
         }
-        return new InstructionCALL(arguments, e.e.toString());
+        InstructionCALL inst = new InstructionCALL(arguments, "test");
+        func.addInstruction(inst);
+        // return inst;
 }
 
 public Instruction visit(Tuple e, Function func){
@@ -140,8 +152,14 @@ public void main(String[] args) {
         Int x = new Int(1);
         Int y = new Int(2);
         Add add = new Add(x, y);
-        InstructionADD Iadd = visit(add, fun);
-        Iadd.show();
-        System.out.println("caca");
+        Sub sub = new Sub(x, y);
+        Var print = new Var(new Id("print_int"));
+        List params = new ArrayList();
+        params.add(x);
+        App call = new App(print, params);
+        Let let1 = new Let(new Id("id1"), new TInt(), sub, call);
+        Let let2 = new Let(new Id("id2"), new TInt(), add, let1);
+        visit(let2, fun);
+        fun.show();
 }
 }
