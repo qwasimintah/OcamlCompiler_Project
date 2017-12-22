@@ -18,4 +18,4 @@ test:
 	@ cd -
 
 clean:
-	rm -rf *.class *~ **/*.class
+	rm -rf *.class *~ **/*.class **/**/*.class
