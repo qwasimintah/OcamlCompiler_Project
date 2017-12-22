@@ -8,7 +8,7 @@ public class Ihm {
 
   public Ihm(String options[]){
         output_file = "";
-        given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = false;
+        given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = arm = false;
         if (options.length == 0) {
                 print_help();
         }
