@@ -6,6 +6,7 @@ public class Ihm {
 String output_file;
 Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm;
 
+<<<<<<< HEAD
 public Ihm(String options[]){
         output_file = "";
         given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = false;
@@ -61,6 +62,63 @@ public Ihm(String options[]){
                 }
         }
 }
+=======
+  public Ihm(String options[]){
+    output_file = "";
+    given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = false;
+    if (options.length == 0){
+      print_help();
+    }
+    for (int i = 0; i < options.length; i++)
+    {
+      switch(options[i]){
+        case "-o":
+          if (i < options.length - 1){
+            given_output = true;
+            output_file = options[i+1];
+          } else {
+            System.out.println("If you specify -o, you must also specified the name of the output file.");
+            System.exit(1);
+          }
+          break;
+        case "-h": // TO DO : Pour faire propre, il faudrait jeter une exception :p
+          print_help();
+        case "-v":
+          System.out.println("v (GNU coreutils) 1e-1000");
+          System.out.println("Copyright © 2017 Free Software Foundation, Inc.");
+          System.out.println("License GPLv3+ : GNU GPL version 3 ou ultérieure");
+          System.exit(0);
+          break;
+        case "-t":
+          typecheck_only = true;
+          break;
+        case "-p":
+          parse_only = true;
+          break;
+        case "-asml":
+          output_asml = true;
+          break;
+        case "--ast":
+          ast = true;
+          break;
+        case "--knorm":
+          knorm = true;
+          break;
+        case "--alpha_conversion":
+          alpha_conversion = true;
+          break;
+        case "--reduction":
+          reduction = true;
+          break;
+        case "--arm":
+          arm = true;
+          break;
+        default:
+        break;
+      }
+    }
+  }
+>>>>>>> 00bd904471b663099b6c3870a92310b7d39eb2d3
 
 private void print_help(){
         System.out.println("Help on the Mincalmc Programm of -LesConsPileurs-.");

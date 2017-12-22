@@ -1,0 +1,5 @@
+
+javac $(path/to/nameofTest).java
+java $(path/to/nameofTest)
+
+
