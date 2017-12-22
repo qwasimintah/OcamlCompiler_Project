@@ -125,7 +125,7 @@ class PrintVisitor implements Visitor {
     }
 
 
-    // print sequence of identifiers 
+    // print sequence of identifiers
     static <E> void printInfix(List<E> l, String op) {
         if (l.isEmpty()) {
             return;
@@ -209,5 +209,3 @@ class PrintVisitor implements Visitor {
         System.out.print(")");
     }
 }
-
-
