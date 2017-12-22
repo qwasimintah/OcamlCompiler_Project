@@ -3,10 +3,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Ihm {
-String output_file;
-Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm;
+  String output_file;
+  Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm;
 
-public Ihm(String options[]){
+  public Ihm(String options[]){
         output_file = "";
         given_output = typecheck_only = parse_only = output_asml = ast = knorm = alpha_conversion = reduction = false;
         if (options.length == 0) {
@@ -66,8 +66,8 @@ private void print_help(){
         System.out.println("Help on the Mincalmc Programm of -LesConsPileurs-.");
         System.out.println("mincalmc - compile ml into arm assembly language.");
         System.out.println("use : ./mincalmc input_file [OPTIONS]");
-        System.out.println("-o : output file");
-        System.out.println("-h : display of help (no need of input_file)");
+        System.out.println("-o : output file (created if doesn't exist, overwritted otherwise).");
+        System.out.println("-h : display of help (default if no argument)");
         System.out.println("-v : display of the current version (no need of input_file)");
         System.out.println("-t : type check only");
         System.out.println("-p : parse only");
@@ -79,6 +79,7 @@ private void print_help(){
                 {
                         System.out.println(fileIn.nextLine());
                 }
+                fileIn.close();
         } catch (FileNotFoundException e) {}
         System.exit(0);
 }

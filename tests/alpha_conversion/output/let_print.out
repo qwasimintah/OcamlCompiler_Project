@@ -1,2 +1,2 @@
 ------ AlphaConversion ------
-(let ?v0 = (let ?v1 = 1 in (?v1 + 5)) in (print_int (x + 12)))
+(let ?v0 = (let ?v1 = 1 in (?v1 + 5)) in (print_int (?v0 + 12)))

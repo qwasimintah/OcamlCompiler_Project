@@ -1,27 +1,6 @@
 
  [33m 	 	 	 ast [0m 
 
-testing parser on: [0;36m add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m add_sub.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m bad_add.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m double_let2.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m double_let.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m let_add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m let.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m let_print.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m let_rec.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m multiple_add.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m multiple_let.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m multiple_sub.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m print.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m sub_add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m sub.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m triple_let2.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m triple_let.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m tupple.out : [0;40m[31m FAILED [0m
-
- [33m 	 	 	 knorm [0m 
-
 testing parser on: [0;36m add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m add_sub.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m bad_add.out : [0;40m[0;32m PASSED [0m
@@ -32,18 +11,34 @@ testing parser on: [0;36m let.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_print.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_rec.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m multiple_add.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m multiple_let.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m multiple_let.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m multiple_sub.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m print.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m sub_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m sub.out : [0;40m[0;32m PASSED [0m
-<<<<<<< HEAD
-testing parser on: [0;36m triple_let2.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m triple_let.out : [0;40m[31m FAILED [0m
-=======
 testing parser on: [0;36m triple_let2.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m triple_let.out : [0;40m[0;32m PASSED [0m
->>>>>>> c5f09029b2684ebf7a7daaa3754e8f69c54b68d0
+testing parser on: [0;36m tupple.out : [0;40m[0;32m PASSED [0m
+
+ [33m 	 	 	 knorm [0m 
+
+testing parser on: [0;36m add.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m add_sub.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m bad_add.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m double_let2.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m double_let.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m let_add.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m let.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m let_print.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let_rec.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m multiple_add.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m multiple_let.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m multiple_sub.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m print.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m sub_add.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m sub.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m triple_let2.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m triple_let.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m tupple.out : [0;40m[31m FAILED [0m
 
  [33m 	 	 	 alpha_conversion [0m 
@@ -55,7 +50,7 @@ testing parser on: [0;36m double_let2.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m double_let.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m let_print.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let_print.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_rec.out : [0;40m[31m FAILED [0m
 testing parser on: [0;36m multiple_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m multiple_let.out : [0;40m[0;32m PASSED [0m
@@ -74,32 +69,38 @@ testing parser on: [0;36m add_sub.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m bad_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m double_let2.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m double_let.out : [0;40m[0;32m PASSED [0m
-<<<<<<< HEAD
-testing parser on: [0;36m fadd.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m fdiv.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m fsub.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m let_add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m let.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m multiple_add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m multiple_let.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m multiple_sub.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m sub_add.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m sub.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m triple_let2.out : [0;40m[31m FAILED [0m
-testing parser on: [0;36m triple_let.out : [0;40m[31m FAILED [0m
-=======
 testing parser on: [0;36m let_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_print.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m let_rec.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m multiple_add.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m multiple_let.out : [0;40m[0;32m PASSED [0m
+testing parser on: [0;36m multiple_let.out : [0;40m[31m FAILED [0m
 testing parser on: [0;36m multiple_sub.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m print.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m sub_add.out : [0;40m[0;32m PASSED [0m
 testing parser on: [0;36m sub.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m triple_let2.out : [0;40m[0;32m PASSED [0m
-testing parser on: [0;36m triple_let.out : [0;40m[0;32m PASSED [0m
->>>>>>> c5f09029b2684ebf7a7daaa3754e8f69c54b68d0
+testing parser on: [0;36m triple_let2.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m triple_let.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m tupple.out : [0;40m[31m FAILED [0m
+
+ [33m 	 	 	 arm [0m 
+
+testing parser on: [0;36m add.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m add_sub.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m bad_add.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m double_let2.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m double_let.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let_add.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let_print.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m let_rec.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m multiple_add.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m multiple_let.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m multiple_sub.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m print.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m sub_add.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m sub.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m triple_let2.out : [0;40m[31m FAILED [0m
+testing parser on: [0;36m triple_let.out : [0;40m[31m FAILED [0m
 testing parser on: [0;36m tupple.out : [0;40m[31m FAILED [0m
 

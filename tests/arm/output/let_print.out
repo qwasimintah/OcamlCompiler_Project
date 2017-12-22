@@ -1,0 +1,2 @@
+@------ ARM ------
+(let y = 1 in (let x = (y + 5) in (print_int (x + 12))))

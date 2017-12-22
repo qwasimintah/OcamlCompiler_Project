@@ -1,2 +1,3 @@
 ------ AlphaConversion ------
-(let rec f x = (x + 1) in x)
+new_exp :
+(x + 1)(let rec ?v0 ?v1 = (x + 1) in x)
