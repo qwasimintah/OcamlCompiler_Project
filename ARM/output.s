@@ -10,7 +10,7 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	ADD r0, #1, #2
+	ADD r0, , 
 
 	@MAIN EPILOGUE
 	ADD sp, #4
