@@ -7,6 +7,8 @@ import backend.translation.*;
 import exp.*;
 import ast.*;
 import frontend.*;
+import backend.variables.*;
+import backend.registers.*;
 
 public class Main {
 static public void main(String argv[]) {
@@ -71,13 +73,25 @@ static public void main(String argv[]) {
                 }
 
                 else if (ihm.arm) {
+                        Exp expression_reducted = expression.accept(new ReductionNestedExpression());
+                        System.out.println("------ ARM ------");
+                        System.out.println("Do the shit here");
+                        System.out.println("");
+                }
+
+                else {
                         Exp expression_normalized = expression.accept(new KNormalization());
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+                        expression_reducted.accept(new PrintVisitor());
+                        System.out.println("\n");
+
+                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
 
 
-
-                        Function func = new Function("main", new ArrayList(), new ArrayList());
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         System.out.println("------ Translation to Jerry ------");
@@ -87,7 +101,7 @@ static public void main(String argv[]) {
 
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.LinearScan(func);
+                        regalloc.VBA(func);
                         System.out.println("------ Register Allocation ------");
                         func.showVariablesState();
                         System.out.println("");
@@ -97,12 +111,8 @@ static public void main(String argv[]) {
                         System.out.println("------ ARM generation ------");
                         System.out.println("Do the shit here");
                         System.out.println("");
-                }
 
-                else {
-                        System.out.println("No matching option !");
                 }
-
 
         } catch (Exception e) {
                 e.printStackTrace();

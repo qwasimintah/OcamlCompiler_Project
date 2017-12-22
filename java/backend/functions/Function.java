@@ -3,6 +3,7 @@ package backend.functions;
 import java.util.*;
 import backend.variables.*;
 import backend.instructions.*;
+import backend.registers.*;
 
 public class Function {
 
@@ -11,11 +12,17 @@ private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
+public HashMap<Register, Variable> registers;
+public HashMap<Register, Variable> parametersRegisters;
 
-public Function(String name, List<Parameter> arguments, List<Instruction> instructions) {
+public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
+                HashMap<Register, Variable> registers,
+                HashMap<Register, Variable> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
+        this.registers = registers;
+        this.parametersRegisters = parametersRegisters;
 }
 
 public List<Instruction> getInstructions() {
