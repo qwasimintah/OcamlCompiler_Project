@@ -12,9 +12,13 @@ _main:
 
 	LDR r8, =0
 	LDR r4, =1
+	LDR r5, =2
 	STMFD sp!,{r4-r12}
 	MOV r3, r8
 	MOV r2, r4
+	SUB sp, #4
+	MOV r0, r5
+	STR r0, [sp]
 	BL _f
 	LDMFD sp!, {r4-r12}
 	MOV r10, r0
@@ -38,9 +42,13 @@ _f:
 	MOV r6, r0
 	LDR r9, =2
 	SUB r0, r9, r6
+	MOV r7, r0
+	LDR r0 , [fp, #4]
+	ADD r0, r0, r7
 
 	@FUNCTION EPILOGUE
 	SUB sp, fp, #4
 	LDMFD sp!, {fp, lr}
 	BX lr
+
 
