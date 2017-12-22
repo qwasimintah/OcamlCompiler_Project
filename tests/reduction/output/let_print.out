@@ -1,2 +1,2 @@
 ------ Reduction of Nested Let-Expressions ------
-(let y = 1 in (let x = (?v3 + 5) in (print_int (?v2 + 12))))
+(let y = 1 in (let x = (y + 5) in (print_int (x + 12))))
