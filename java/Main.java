@@ -85,7 +85,11 @@ static public void main(String argv[]) {
                 System.out.println("");
               }
 
-              else{}
+              else{
+                Exp expression_normalized = expression.accept(new KNormalization());
+                Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+              }
 
 
 
