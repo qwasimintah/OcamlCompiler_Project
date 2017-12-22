@@ -89,6 +89,22 @@ static public void main(String argv[]) {
                 Exp expression_normalized = expression.accept(new KNormalization());
                 Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                 Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+                TranslationVisitor tv = new TranslationVisitor();
+                Function func = new Function("main", new ArrayList(), new ArrayList());
+                      tv.visit((Exp) expression, func);
+
+                List<Function> flist = new ArrayList<Function>();
+                flist.add(func);
+                ArmGenerator arm = new ArmGenerator();
+                arm.generate_code(flist);
+                StringBuilder text = arm.textSection.text;
+                System.out.println(text);
+
+                try (FileOutputStream oS = new FileOutputStream(new File("../ARM/output.s"))) {
+                 oS.write(text.toString().getBytes());
+               } catch (IOException e) {
+                  e.printStackTrace();
+                }
               }
 
 
