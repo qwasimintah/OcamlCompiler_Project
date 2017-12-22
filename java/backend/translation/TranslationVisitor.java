@@ -122,7 +122,7 @@ public void visit(App e, Function func){
         for (Exp o : e.es) {
                 arguments.add(visit(o, func));
         }
-        InstructionCALL inst = new InstructionCALL(arguments, "test");
+        InstructionCALL inst = new InstructionCALL(arguments, ((Var)e.e).id.toString());
         func.addInstruction(inst);
         // return inst;
 }
