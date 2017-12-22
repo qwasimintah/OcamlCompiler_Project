@@ -1,2 +1,2 @@
 ------ Reduction of Nested Let-Expressions ------
-(let x = 3 in (x + x))
+(let x = 3 in (?v2 + ?v2))
