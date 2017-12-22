@@ -47,13 +47,20 @@ public class Main {
         System.out.println("");
       }
 
-      //For Reduction of Nested Let-Expressions
+      // For Reduction of Nested Let-Expressions
       if (ihm.reduction){
         System.out.println("------ Reduction of Nested Let-Expressions ------");
         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
         expression_reducted.accept(new PrintVisitor());
         System.out.println("");
       }
+
+      // if (ihm.arm){
+      //   System.out.println("@------ ARM ------");
+      //   Exp expression_reducted = expression.accept(new ReductionNestedExpression());
+      //   expression_reducted.accept(new PrintVisitor());
+      //   System.out.println("");
+      // }
     } catch (Exception e) {
       e.printStackTrace();
     }

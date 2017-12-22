@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 public class Ihm {
   String output_file;
-  Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction;
+  Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm;
 
   public Ihm(String options[]){
     output_file = "";
@@ -53,6 +53,12 @@ public class Ihm {
         case "--reduction":
           reduction = true;
           break;
+<<<<<<< HEAD
+=======
+        case "--arm":
+          arm = true;
+          break;
+>>>>>>> 8747dca1c229f4b52d0d11b709466197d8a183d1
         default:
         break;
       }
