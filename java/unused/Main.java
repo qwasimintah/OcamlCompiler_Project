@@ -72,40 +72,19 @@ static public void main(String argv[]) {
                         System.out.println("");
                 }
 
-                // if (true) {
-                //         System.out.println("------ Translation to Jerry ------");
-                //         TranslationVisitor tv = new TranslationVisitor();
-                //         Function func = new Function("main", new ArrayList(), new ArrayList());
-                //         tv.visit((Exp) expression, func);
-                //         System.out.println("");
-                // }
-
                 else if (ihm.arm) {
                         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
-                        System.out.println("@------ ARM ------");
-                        expression_reducted.accept(new PrintVisitor());
+                        System.out.println("------ ARM ------");
+                        System.out.println("Do the shit here");
                         System.out.println("");
                 }
 
-                else{
+                else {
                         Exp expression_normalized = expression.accept(new KNormalization());
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
-                        System.out.println("------ AST ------");
-                        expression.accept(new PrintVisitor());
-                        System.out.println("");
-
-                        System.out.println("------ K-Normalization ------");
-                        expression_normalized.accept(new PrintVisitor());
-                        System.out.println("");
-
-                        System.out.println("------ AlphaConversion ------");
-                        expression_converted.accept(new PrintVisitor());
-                        System.out.println("");
-
-                        System.out.println("------ Reduction of Nested Let-Expressions ------");
                         expression_reducted.accept(new PrintVisitor());
-                        System.out.println("");
+                        System.out.println("\n");
 
                         HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
                         HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
@@ -119,25 +98,20 @@ static public void main(String argv[]) {
                         func.show();
                         System.out.println("");
 
+
+
                         RegisterAllocation regalloc = new RegisterAllocation();
                         regalloc.VBA(func);
                         System.out.println("------ Register Allocation ------");
                         func.showVariablesState();
                         System.out.println("");
 
-                        System.out.println("------ ARM code generation ------");
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
-                        ArmGenerator arm = new ArmGenerator();
-                        arm.generate_code(flist);
-                        StringBuilder text = arm.textSection.text;
-                        System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File("../ARM/output.s"))) {
-                                oS.write(text.toString().getBytes());
-                        } catch (IOException e) {
-                                e.printStackTrace();
-                        }
+
+                        System.out.println("------ ARM generation ------");
+                        System.out.println("Do the shit here");
+                        System.out.println("");
+
                 }
 
         } catch (Exception e) {

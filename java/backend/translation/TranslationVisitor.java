@@ -120,9 +120,9 @@ public Instruction visit(LetRec e, Function func){
 public void visit(App e, Function func){
         List<Object> arguments = new ArrayList<Object>();
         for (Exp o : e.es) {
-                arguments.add(visit(o, func));
+                arguments.add((Object)visit(o, func));
         }
-        InstructionCALL inst = new InstructionCALL(arguments, "test");
+        InstructionCALL inst = new InstructionCALL(arguments, ((Var)e.e).id.toString());
         func.addInstruction(inst);
         // return inst;
 }

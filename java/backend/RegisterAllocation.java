@@ -31,7 +31,7 @@ public static void VBA(Function fun) {
                         }
                 }
         }
-        RegisterUtils.showRegisters(registers);
+        RegisterUtils.showRegisters(fun.registers);
 }
 
 public static void SpillEverything(Function fun) {
