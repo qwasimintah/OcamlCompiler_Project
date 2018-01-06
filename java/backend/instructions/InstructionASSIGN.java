@@ -10,16 +10,19 @@ public List<Object> operands=new ArrayList<Object>();
 public InstructionASSIGN(Function func, Variable x, Variable y) {
         this.operands.add(x);
         this.operands.add(y);
+        // func.getVariables().add(x);
 }
 
 public InstructionASSIGN(Function func, Variable x, Integer y) {
         this.operands.add(x);
         this.operands.add(y);
+        // func.getVariables().add(x);
 }
 
 public InstructionASSIGN(Function func, Variable x, Instruction inst) {
         this.operands.add(x);
         this.operands.add(inst);
+        // func.getVariables().add(x);
 }
 
 public InstructionASSIGN(Function func, Object x, Object y) {

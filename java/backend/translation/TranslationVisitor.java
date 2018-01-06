@@ -13,6 +13,13 @@ import ast.type.*;
 
 public class TranslationVisitor {
 
+private static Integer tmp_id = 0;
+
+public String getTempVarName() {
+        tmp_id++;
+        return "tmpVar" + tmp_id.toString();
+}
+
 public Object visit(Exp e, Function func) {
         if (e instanceof Add) {
                 visit((Add)e, func);
@@ -36,25 +43,55 @@ public Object visit(Exp e, Function func) {
 }
 
 public void visit(Add e, Function func) {
-        InstructionADD inst = new InstructionADD(func, visit(e.e1, func), visit(e.e2, func));
+        System.out.println("ADD");
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for (Variable var : func.getVariables()) {
+                if (var.getName() == ((Var)e.e1).id.id) {
+                        vars.add(var);
+                } else if (var.getName() == ((Var)e.e2).id.id) {
+                        vars.add(var);
+                }
+        }
+        InstructionADD inst = new InstructionADD(func, vars.get(0), vars.get(1));
         func.addInstruction(inst);
-        // return inst;
 }
 
 public void visit(Sub e, Function func){
-        InstructionSUB inst = new InstructionSUB(func, visit(e.e1, func), visit(e.e2, func));
+        System.out.println("SUB");
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for (Variable var : func.getVariables()) {
+                if (var.getName() == ((Var)e.e1).id.id) {
+                        vars.add(var);
+                } else if (var.getName() == ((Var)e.e2).id.id) {
+                        vars.add(var);
+                }
+        }
+        InstructionADD inst = new InstructionSUB(func, vars.get(0), vars.get(1));
         func.addInstruction(inst);
-        // return inst;
 }
 
 public void visit(Let e, Function func){
-        // func.addInstruction((Instruction) visit(e.e1, func));
-        visit(e.e1, func);
+        System.out.println("LET");
+        if (e.t instanceof TInt) {
+                Integer value = (Integer) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, value, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+        }
+        // if (visit(e.e1, func) instanceof Integer) {
+        //   System.out.println("int");
+        //   Integer op1 = (Integer) visit(e.e1, func);
+        //   VInteger tmpX = new VInteger(getTempVarName(), op1, func.registers, func);
+        //   InstructionASSIGN assX = new InstructionASSIGN(func, tmpX, op1);
+        //   func.addInstruction(assX);
+        // }
+        // visit(e.e1, func);
         visit(e.e2, func);
 }
 
 public Variable visit(Var e, Function func){
-        return new Variable(e.id.toString(), func.registers, func);
+        return new Variable(e.id.id + "bis", func.registers, func);
 }
 
 public Integer visit(Int e, Function func){

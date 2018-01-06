@@ -20,7 +20,7 @@ public Variable(String name, HashMap<Register, Variable> registers, Function fun
         this.registers = registers;
         this.function = func;
         this.interval = new Interval(this);
-        allocRegister();
+        // allocRegister();
 }
 
 public String getName() {

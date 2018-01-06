@@ -17,7 +17,7 @@ static public void main(String argv[]) {
         try {
                 Parser p = new Parser(new Lexer(new FileReader(argv[0])));
                 Exp expression = (Exp) p.parse().value;
-                assert (expression != null);
+                // assert (expression != null);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -71,14 +71,6 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
                 }
-
-                // if (true) {
-                //         System.out.println("------ Translation to Jerry ------");
-                //         TranslationVisitor tv = new TranslationVisitor();
-                //         Function func = new Function("main", new ArrayList(), new ArrayList());
-                //         tv.visit((Exp) expression, func);
-                //         System.out.println("");
-                // }
 
                 else if (ihm.arm) {
                         Exp expression_reducted = expression.accept(new ReductionNestedExpression());
