@@ -39,6 +39,9 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof App) {
                 visit((App)e, func);
         }
+        else if (e instanceof Neg) {
+                return (Integer) visit((Neg)e, func);
+        }
         return null;
 }
 
@@ -52,11 +55,20 @@ public void visit(Add e, Function func) {
                         vars.add(var);
                 }
         }
-        InstructionADD inst = new InstructionADD(func, vars.get(0), vars.get(1));
-        func.addInstruction(inst);
+        try {
+                InstructionADD inst = new InstructionADD(func, vars.get(0), vars.get(1));
+                func.addInstruction(inst);
+        } catch (IndexOutOfBoundsException exception) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                func.getVariables().add(tmpX);
+                func.getVariables().add(tmpY);
+                InstructionADD inst = new InstructionADD(func, tmpX, tmpY);
+                func.addInstruction(inst);
+        }
 }
 
-public void visit(Sub e, Function func){
+public void visit(Sub e, Function func) {
         System.out.println("SUB");
         ArrayList<Variable> vars = new ArrayList<Variable>();
         for (Variable var : func.getVariables()) {
@@ -78,15 +90,19 @@ public void visit(Let e, Function func){
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+        } else if (e.e1 instanceof App) {
+                visit(e.e1, func);
         }
         visit(e.e2, func);
 }
 
 public Variable visit(Var e, Function func){
+        System.out.println("VAR");
         return new Variable(e.id.id + "bis", func.registers, func);
 }
 
 public Integer visit(Int e, Function func){
+        System.out.println("INT");
         return e.i;
 }
 
@@ -106,8 +122,10 @@ public Instruction visit(Not e, Function func){
         return null;
 }
 
-public Instruction visit(Neg e, Function func){
-        return null;
+public Integer visit(Neg e, Function func){
+        System.out.println("NEG");
+        Integer i = (Integer) visit(e.e, func);
+        return -i;
 }
 
 public Instruction visit(FNeg e, Function func){
@@ -147,6 +165,7 @@ public Instruction visit(LetRec e, Function func){
 }
 
 public void visit(App e, Function func){
+        System.out.println("APP");
         List<Object> arguments = new ArrayList<Object>();
         for (Exp o : e.es) {
                 arguments.add((Object)visit(o, func));
