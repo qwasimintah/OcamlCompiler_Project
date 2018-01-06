@@ -66,7 +66,7 @@ public void visit(Sub e, Function func){
                         vars.add(var);
                 }
         }
-        InstructionADD inst = new InstructionSUB(func, vars.get(0), vars.get(1));
+        InstructionSUB inst = new InstructionSUB(func, vars.get(0), vars.get(1));
         func.addInstruction(inst);
 }
 
@@ -79,14 +79,6 @@ public void visit(Let e, Function func){
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
-        // if (visit(e.e1, func) instanceof Integer) {
-        //   System.out.println("int");
-        //   Integer op1 = (Integer) visit(e.e1, func);
-        //   VInteger tmpX = new VInteger(getTempVarName(), op1, func.registers, func);
-        //   InstructionASSIGN assX = new InstructionASSIGN(func, tmpX, op1);
-        //   func.addInstruction(assX);
-        // }
-        // visit(e.e1, func);
         visit(e.e2, func);
 }
 
