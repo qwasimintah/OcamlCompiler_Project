@@ -1,2 +1,2 @@
 ------ Reduction of Nested Let-Expressions ------
-(let z = e0 in (let y = e1 in e2))
+(let z = e0 in (let y = e1 in (let x = e2 in e3)))

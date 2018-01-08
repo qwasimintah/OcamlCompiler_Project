@@ -73,10 +73,33 @@ static public void main(String argv[]) {
                 }
 
                 else if (ihm.arm) {
-                        Exp expression_reducted = expression.accept(new ReductionNestedExpression());
-                        System.out.println("@------ ARM ------");
-                        expression_reducted.accept(new PrintVisitor());
-                        System.out.println("");
+
+                        Exp expression_normalized = expression.accept(new KNormalization());
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+
+
+                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
+                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
+
+
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        TranslationVisitor tv = new TranslationVisitor();
+                        tv.visit(expression_reducted, func);
+
+                        RegisterAllocation regalloc = new RegisterAllocation();
+                        regalloc.VBA(func);
+ 
+
+                        System.out.println("@------ ARM------");
+                        List<Function> flist = new ArrayList<Function>();
+                        flist.add(func);
+                        ArmGenerator arm = new ArmGenerator();
+                        arm.generate_code(flist);
+                        StringBuilder text = arm.textSection.text;
+                        System.out.println(text);
+
                 }
 
                 else{

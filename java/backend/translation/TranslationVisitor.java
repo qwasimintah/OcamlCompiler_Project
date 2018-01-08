@@ -46,7 +46,7 @@ public Object visit(Exp e, Function func) {
 }
 
 public void visit(Add e, Function func) {
-        System.out.println("ADD");
+        //System.out.println("ADD");
         ArrayList<Variable> vars = new ArrayList<Variable>();
         for (Variable var : func.getVariables()) {
                 if (var.getName() == ((Var)e.e1).id.id) {
@@ -69,7 +69,7 @@ public void visit(Add e, Function func) {
 }
 
 public void visit(Sub e, Function func) {
-        System.out.println("SUB");
+        //System.out.println("SUB");
         ArrayList<Variable> vars = new ArrayList<Variable>();
         for (Variable var : func.getVariables()) {
                 if (var.getName() == ((Var)e.e1).id.id) {
@@ -83,7 +83,7 @@ public void visit(Sub e, Function func) {
 }
 
 public void visit(Let e, Function func){
-        System.out.println("LET");
+        //System.out.println("LET");
         if (e.t instanceof TInt) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func.registers, func);
@@ -97,12 +97,12 @@ public void visit(Let e, Function func){
 }
 
 public Variable visit(Var e, Function func){
-        System.out.println("VAR");
+        //System.out.println("VAR");
         return new Variable(e.id.id + "bis", func.registers, func);
 }
 
 public Integer visit(Int e, Function func){
-        System.out.println("INT");
+        //System.out.println("INT");
         return e.i;
 }
 
@@ -123,7 +123,7 @@ public Instruction visit(Not e, Function func){
 }
 
 public Integer visit(Neg e, Function func){
-        System.out.println("NEG");
+        //System.out.println("NEG");
         Integer i = (Integer) visit(e.e, func);
         return -i;
 }

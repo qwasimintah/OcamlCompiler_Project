@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
-package backend;
->>>>>>> 2daec31cbc509b60ff98514e1380b732dc08d26c
 
+package backend;
 import java.io.*;
 import java.util.*;
 import backend.instructions.*;
@@ -42,11 +39,11 @@ public static void VBA(Function fun) {
                 }
                 catch (Exception e) {
                         System.out.println(e.getMessage());
-                        RegisterUtils.showRegisters(registers);
+                        //RegisterUtils.showRegisters(registers);
                         return;
                 }
         }
-        RegisterUtils.showRegisters(fun.registers);
+        //RegisterUtils.showRegisters(fun.registers);
 }
 
 public static void SpillEverything(Function fun) {
@@ -107,7 +104,7 @@ public static void LinearScan(Function fun) {
                         }
                 }
         }
-        RegisterUtils.showRegisters(registers);
+        //RegisterUtils.showRegisters(registers);
 }
 
 // public static void main(String[] args) {
