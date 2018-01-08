@@ -1,6 +1,14 @@
 # README for the Compiler Project of the Cons Pileurs
 As requested, you have to be located in the root folder
 
+
+
+# Previous important remark
+Our project is able to produce arm but not able to produce asml yet.
+Small changes have to be done
+
+
+
 ## General inforamtion
 From this location, you can run the following commands :
 - make *to compile the project*
