@@ -10,8 +10,7 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r5, =42
-	MOV r0, r5
+	LDR r0, =42
 	BL min_caml_print_int
 	BL min_caml_print_newline
 

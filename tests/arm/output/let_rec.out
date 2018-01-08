@@ -1,5 +1,4 @@
-new_exp :
-(let ?v4 = x in (let ?v5 = 1 in (?v4 + ?v5)))@------ ARM------
+@------ ARM------
 	.text
 	.global _start
 _start:

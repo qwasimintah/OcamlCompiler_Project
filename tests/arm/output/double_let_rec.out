@@ -1,6 +1,4 @@
-new_exp :
-(let ?v6 = y in (let ?v7 = x in (?v6 + ?v7)))new_exp :
-(let rec ?v4 ?v5 = (let ?v6 = y in (let ?v7 = x in (?v6 + ?v7))) in y)@------ ARM------
+@------ ARM------
 	.text
 	.global _start
 _start:

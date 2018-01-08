@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ?v14
 ?v15
 ?v13
@@ -38,7 +36,6 @@
 ?v18
 ?v12
 ?v20
->>>>>>> 1b0e78277ee9e7846bb51a71cae63c7c8ae0f46f
 @------ ARM------
 	.text
 	.global _start
@@ -58,11 +55,6 @@ _main:
 	ADD r0, r9, r4
 	MOV r0, r0
 	LDR r1 , [fp ,#20]
-<<<<<<< HEAD
-	LDR r1 , [fp ,#20]
-	MOV r6, r1
-=======
->>>>>>> 1b0e78277ee9e7846bb51a71cae63c7c8ae0f46f
 	LDR r0, =2
 	STR r0 , [fp , #8]
 	LDR r1 , [fp ,#8]
@@ -70,11 +62,6 @@ _main:
 	ADD r0, r6, r1
 	MOV r0, r0
 	LDR r1 , [fp ,#4]
-<<<<<<< HEAD
-	LDR r1 , [fp ,#4]
-	MOV r8, r1
-=======
->>>>>>> 1b0e78277ee9e7846bb51a71cae63c7c8ae0f46f
 	LDR r0, =3
 	STR r0 , [fp , #16]
 	LDR r1 , [fp ,#16]
@@ -89,8 +76,6 @@ _main:
 	LDR r1 , [fp ,#12]
 	SUB r0, r0, r1
 	MOV r11, r0
-	MOV r7, r10
-	MOV r5, r11
 	SUB r0, , 
 	ADD sp, #20
 
