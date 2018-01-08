@@ -3,6 +3,7 @@ SRC= Lexer.java Parser.java Main.java
 
 all: ${SRC}
 	javac -sourcepath . -cp java-cup-11b-runtime.jar:. *.java
+	@ cp mincamlc ../scripts
 
 Lexer.java: Lexer.flex
 	jflex/bin/jflex Lexer.flex

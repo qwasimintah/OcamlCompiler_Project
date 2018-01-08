@@ -12,12 +12,12 @@ private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-public HashMap<Register, Variable> registers;
-public HashMap<Register, Variable> parametersRegisters;
+public TreeMap<Register, Variable> registers;
+public TreeMap<Register, Variable> parametersRegisters;
 
 public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-                HashMap<Register, Variable> registers,
-                HashMap<Register, Variable> parametersRegisters) {
+                TreeMap<Register, Variable> registers,
+                TreeMap<Register, Variable> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
@@ -84,5 +84,12 @@ public void showVariablesState() {
         for (Variable v : variables) {
                 v.getSaveState();
         }
+}
+
+public void showVariables() {
+        for (Variable v : variables) {
+                System.out.println(v.getName());
+        }
+
 }
 }

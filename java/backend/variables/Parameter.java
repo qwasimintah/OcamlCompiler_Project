@@ -8,7 +8,7 @@ public class Parameter extends Variable {
 
 private String reg;
 
-  public Parameter(String name, String reg,  HashMap registers, Function func) {
+  public Parameter(String name, String reg,  TreeMap registers, Function func) {
           super(name, registers, func);
           this.reg=reg;
   }

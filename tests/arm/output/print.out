@@ -1,4 +1,32 @@
-APP
-APP
-APP
 @------ ARM------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
+
+	BL min_caml_print_int
+	BL min_caml_print_newline
+	BL min_caml_print_int
+	BL min_caml_print_newline
+	LDR r5, =789
+	LDR r4, =0
+	ADD r0, r5, r4
+	BL min_caml_print_int
+	BL min_caml_print_newline
+
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
+
+	MOV r7, #1
+	swi 0
+

@@ -12,8 +12,8 @@ _main:
 	MOV fp, sp
 
 	LDR r5, =1
-	LDR r7, =2
-	SUB r0, r5, r7
+	LDR r4, =2
+	SUB r0, r5, r4
 
 	@MAIN EPILOGUE
 	ADD sp, #4

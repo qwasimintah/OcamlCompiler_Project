@@ -1,4 +1,6 @@
-@------ ARM------
+new_exp :
+(let ?v6 = y in (let ?v7 = x in (?v6 + ?v7)))new_exp :
+(let rec ?v4 ?v5 = (let ?v6 = y in (let ?v7 = x in (?v6 + ?v7))) in y)@------ ARM------
 	.text
 	.global _start
 _start:
@@ -11,9 +13,6 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r5, =1
-	LDR r4, =2
-	ADD r0, r5, r4
 
 	@MAIN EPILOGUE
 	ADD sp, #4

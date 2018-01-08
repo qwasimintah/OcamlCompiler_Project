@@ -22,10 +22,10 @@ public String getTempVarName() {
 
 public Object visit(Exp e, Function func) {
         if (e instanceof Add) {
-                visit((Add)e, func);
+                return (InstructionADD)visit((Add)e, func);
         }
         else if (e instanceof Sub) {
-                visit((Sub)e, func);
+                return (InstructionSUB) visit((Sub)e, func);
         }
         else if (e instanceof Let) {
                 visit((Let)e, func);
@@ -45,19 +45,38 @@ public Object visit(Exp e, Function func) {
         return null;
 }
 
-public void visit(Add e, Function func) {
-        //System.out.println("ADD");
+public InstructionADD visit(Add e, Function func) {
+        // System.out.println("ADD");
         ArrayList<Variable> vars = new ArrayList<Variable>();
+
+        String var1 = ((Var)e.e1).id.id;
+        String var2 = ((Var)e.e2).id.id;
+
         for (Variable var : func.getVariables()) {
-                if (var.getName() == ((Var)e.e1).id.id) {
-                        vars.add(var);
-                } else if (var.getName() == ((Var)e.e2).id.id) {
+                if (var1 == var.getName()) {
                         vars.add(var);
                 }
         }
+        if (vars.size() == 0) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                vars.add(tmpX);
+        }
+
+        for (Variable var : func.getVariables()) {
+                if (var2 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                vars.add(tmpY);
+        }
+
+
         try {
                 InstructionADD inst = new InstructionADD(func, vars.get(0), vars.get(1));
                 func.addInstruction(inst);
+                return inst;
         } catch (IndexOutOfBoundsException exception) {
                 VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
                 VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
@@ -65,44 +84,106 @@ public void visit(Add e, Function func) {
                 func.getVariables().add(tmpY);
                 InstructionADD inst = new InstructionADD(func, tmpX, tmpY);
                 func.addInstruction(inst);
+                return inst;
         }
 }
 
-public void visit(Sub e, Function func) {
-        //System.out.println("SUB");
+public InstructionSUB visit(Sub e, Function func) {
+        // System.out.println("SUB");
         ArrayList<Variable> vars = new ArrayList<Variable>();
+
+        String var1 = ((Var)e.e1).id.id;
+        String var2 = ((Var)e.e2).id.id;
+
         for (Variable var : func.getVariables()) {
-                if (var.getName() == ((Var)e.e1).id.id) {
-                        vars.add(var);
-                } else if (var.getName() == ((Var)e.e2).id.id) {
+                if (var1 == var.getName()) {
                         vars.add(var);
                 }
         }
-        InstructionSUB inst = new InstructionSUB(func, vars.get(0), vars.get(1));
-        func.addInstruction(inst);
+        if (vars.size() == 0) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                vars.add(tmpX);
+        }
+
+        for (Variable var : func.getVariables()) {
+                if (var2 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                vars.add(tmpY);
+        }
+
+        try {
+                InstructionSUB inst = new InstructionSUB(func, vars.get(0), vars.get(1));
+                func.addInstruction(inst);
+                return inst;
+        } catch (IndexOutOfBoundsException exception) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                func.getVariables().add(tmpX);
+                func.getVariables().add(tmpY);
+                InstructionSUB inst = new InstructionSUB(func, tmpX, tmpY);
+                func.addInstruction(inst);
+                return inst;
+        }
 }
 
 public void visit(Let e, Function func){
-        //System.out.println("LET");
-        if (e.t instanceof TInt) {
+        // System.out.println("LET");
+        // System.out.println(e.e1.getClass());
+        if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func.registers, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
-        } else if (e.e1 instanceof App) {
+        }
+        else if (e.e1 instanceof App) {
+                visit(e.e1, func);
+        }
+        else if (e.e1 instanceof Add) {
+                InstructionADD instadd = (InstructionADD) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, 0, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+        }
+        else if (e.e1 instanceof Sub) {
+                InstructionSUB instadd = (InstructionSUB) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, 0, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+        }
+        else if (e.e1 instanceof Var) {
+                Variable var = new Variable(e.id.id, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, (Variable)visit(e.e1, func));
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+                func.showVariables();
+        }
+        else {
                 visit(e.e1, func);
         }
         visit(e.e2, func);
 }
 
 public Variable visit(Var e, Function func){
-        //System.out.println("VAR");
-        return new Variable(e.id.id + "bis", func.registers, func);
+        // System.out.println("VAR");
+        String varName = ((Var)e).id.id;
+
+        for (Variable var : func.getVariables()) {
+                if (varName == var.getName()) {
+                        return var;
+                }
+        }
+        return null;
 }
 
 public Integer visit(Int e, Function func){
-        //System.out.println("INT");
+        // System.out.println("INT");
         return e.i;
 }
 
@@ -165,14 +246,25 @@ public Instruction visit(LetRec e, Function func){
 }
 
 public void visit(App e, Function func){
-        System.out.println("APP");
-        List<Object> arguments = new ArrayList<Object>();
-        for (Exp o : e.es) {
-                arguments.add((Object)visit(o, func));
+        // System.out.println("APP");
+        ArrayList<Object> vars = new ArrayList<Object>();
+        try {
+                for (Variable var : func.getVariables()) {
+                        for (Exp o : e.es) {
+                                if (var.getName() == ((Var)o).id.id) {
+                                        vars.add(var);
+                                }
+                        }
+                }
+        } catch (ClassCastException exc) {
         }
-        InstructionCALL inst = new InstructionCALL(arguments, ((Var)e.e).id.toString());
+        for (Exp e1 : e.es) {
+                Object var = (Object) visit(e1, func);
+                // func.getVariables().add(var);
+                // vars.add(var);
+        }
+        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
         func.addInstruction(inst);
-        // return inst;
 }
 
 public Instruction visit(Tuple e, Function func){
