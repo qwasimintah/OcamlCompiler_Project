@@ -1,4 +1,2 @@
-new_exp :
-(y + x)new_exp :
-(let rec ?v2 ?v3 = (y + x) in y)------ AlphaConversion ------
+------ AlphaConversion ------
 (let rec ?v0 ?v1 = (let rec ?v2 ?v3 = (y + x) in y) in x)

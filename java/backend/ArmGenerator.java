@@ -485,6 +485,33 @@ public class ArmGenerator {
                   }
             }
 
+
+            if(op1 instanceof Variable){
+                  if(((Variable)op1).getRegister()!=null){
+                    operand1=((Variable)op1).getRegister().getName();
+                  }
+                  else{
+
+                    offset1="[fp , #" + ((Variable)op1).getOffset().toString()+"]";
+                    //textSection.text.append("\tSTR r0 , "). append(operand1).append("\n");
+                    operand1="r0";
+                  }
+            }
+
+
+            if(op2 instanceof Variable){
+                  if(((Variable)op2).getRegister()!=null){
+                    operand2=((Variable)op2).getRegister().getName();
+                  }
+                  else{
+                    operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                    operand2="r1";
+
+                  }
+            }
+
+
             else if(op2 instanceof Parameter){
 
                     if(((Parameter)op2).getRegister()!=null){
@@ -502,14 +529,14 @@ public class ArmGenerator {
 
 
 
-               if(op1 instanceof VInteger && op2 instanceof Variable){
+               if((op1 instanceof VInteger || op1 instanceof Variable)&& op2 instanceof Variable){
                      assign(operand1, operand2);
                      if(offset1!=""){
                       textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
                      }
                }
 
-               else if(op1 instanceof VInteger && op2 instanceof Integer){
+               else if((op1 instanceof VInteger || op1 instanceof Variable) && op2 instanceof Integer){
 
                     assign(operand1, ((int)op2));
                     if(offset1!=""){
@@ -740,9 +767,19 @@ public String get_label(String name){
           //Parameter param = (Parameter)params.get(0);
 
           if(params.size() != 0){
+
+            if(!(params.get(0) instanceof Integer)){
+
             Variable param = (Variable)params.get(0);
             assign("r0" , param.getRegister().getName());
+            }
+            else{
+
+              assign("r0" , (int)params.get(0));
+            }
+
           }
+
 
           textSection.text.append("\tBL min_caml_print_int\n");
           textSection.text.append("\tBL min_caml_print_newline\n");

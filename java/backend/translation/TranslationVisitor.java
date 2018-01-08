@@ -162,7 +162,11 @@ public void visit(Let e, Function func){
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, (Variable)visit(e.e1, func));
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+<<<<<<< HEAD
                 // func.showVariables();
+=======
+                //func.showVariables();
+>>>>>>> 0c4e883c511f124a74e8083fea65d8b02e622cbb
         }
         else {
                 visit(e.e1, func);
