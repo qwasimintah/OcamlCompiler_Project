@@ -10,12 +10,12 @@ import backend.intervals.*;
 public class Variable {
 private String name;
 private Register register;
-private HashMap<Register, Variable> registers;
+private SortedMap<Register, Variable> registers;
 private Integer offset;
 private Function function;
 private Interval interval;
 
-public Variable(String name, HashMap<Register, Variable> registers, Function func) {
+public Variable(String name, SortedMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
         this.function = func;

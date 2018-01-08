@@ -192,6 +192,18 @@ public class ArmGenerator {
                     operand1="r0";
                   }
             }
+
+            if(op1 instanceof Variable){
+                  if(((Variable)op1).getRegister()!=null){
+                    operand1=((Variable)op1).getRegister().getName();
+                  }
+                  else{
+
+                    operand1="[fp, #" + ((Variable)op1).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                    operand1="r0";
+                  }
+            }
             // else if operand1 is a function parameter
             else if(op1 instanceof Parameter){
               if(((Parameter)op1).getRegister()!=null){
@@ -210,6 +222,18 @@ public class ArmGenerator {
             if(op2 instanceof VInteger){
                   if(((VInteger)op2).getRegister()!=null){
                     operand2=((VInteger)op2).getRegister().getName();
+                  }
+                  else{
+                    operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
+                    textSection.text.append("\tLDR r1 , "). append(operand2).append("\n");
+                    operand2="r1";
+
+                  }
+            }
+
+            if(op2 instanceof Variable){
+                  if(((Variable)op2).getRegister()!=null){
+                    operand2=((Variable)op2).getRegister().getName();
                   }
                   else{
                     operand2="[fp ,#" + ((VInteger)op2).getOffset().toString()+"]";
@@ -500,27 +524,27 @@ public class ArmGenerator {
 
                       if(op2 instanceof InstructionADD){
 
-                        generate_addition((InstructionADD) op2);
+                        // generate_addition((InstructionADD) op2);
                         assign(reg, "r0" );
 
                       }
                       else if(op2 instanceof InstructionSUB){
 
-                        generate_sub((InstructionSUB) op2);
+                        // generate_sub((InstructionSUB) op2);
                         assign(reg, "r0");
 
                       }
 
                       else if(op2 instanceof InstructionMULT){
 
-                        generate_mult((InstructionMULT) op2);
+                        // generate_mult((InstructionMULT) op2);
                         assign(reg, "r0");
 
                       }
 
                       else if(op2 instanceof InstructionCALL){
 
-                        generate_function_call((InstructionCALL) op2);
+                        // generate_function_call((InstructionCALL) op2);
                         assign(reg, ((InstructionCALL)op2).getReturn());
 
                       }
@@ -714,8 +738,12 @@ public String get_label(String name){
 
         if(instr.getFname().equals("print_int")){
           //Parameter param = (Parameter)params.get(0);
-          Variable param = (Variable)params.get(0);
-          assign("r0" , param.getRegister().getName());
+
+          if(params.size() != 0){
+            Variable param = (Variable)params.get(0);
+            assign("r0" , param.getRegister().getName());
+          }
+
           textSection.text.append("\tBL min_caml_print_int\n");
           textSection.text.append("\tBL min_caml_print_newline\n");
           return;
