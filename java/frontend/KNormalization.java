@@ -45,8 +45,18 @@ public Exp visit(Let e) {
 public Exp visit(LetRec e) {
   FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
   LetRec new_rec = (new LetRec(new_fun, e.e.accept(this)));
-  return e;
+  return new_rec;
 }
+
+public Exp visit(App e) {
+  List<Exp> new_es = new ArrayList<Exp>();
+  for (int i = 0; i < e.es.size(); i++){
+    Exp es_temp = e.es.get(i);
+    new_es.add(es_temp.accept(this));
+  }
+  return (new App(e.e.accept(this), new_es));
+}
+
 
 public Exp visit(Unit e) {
         return e;
@@ -101,9 +111,6 @@ public Exp visit(If e) {
 }
 
 
-public Exp visit(App e) {
-        return e;
-}
 
 public Exp visit(Tuple e) {
         return e;

@@ -35,6 +35,15 @@ public Exp visit(Let e) {
   return(insert(e, e.e1.accept(this)));
 }
 
+public Exp visit(App e) {
+  List<Exp> new_es = new ArrayList<Exp>();
+  for (int i = 0; i < e.es.size(); i++){
+    Exp es_temp = e.es.get(i);
+    new_es.add(es_temp.accept(this));
+  }
+  return (new App(e.e.accept(this), new_es));
+}
+
 public Exp visit(Unit e) {
         return e;
 }
@@ -91,9 +100,7 @@ public Exp visit(LetRec e) {
         return e;
 }
 
-public Exp visit(App e) {
-        return e;
-}
+
 
 public Exp visit(Tuple e) {
         return e;
