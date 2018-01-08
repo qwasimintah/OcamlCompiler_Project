@@ -3,9 +3,10 @@ As requested, you have to be located in the root folder
 
 
 
-# Previous important remark
-Our project is able to produce arm but not able to produce asml yet.
-Small changes have to be done
+# Previous important remarks
+- Our project is able to produce arm but not able to produce asml yet, because we wanted to give priority to Arm generation and have focused on that.
+Small changes have to be done.
+- Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change).
 
 
 
