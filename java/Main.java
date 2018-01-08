@@ -87,10 +87,9 @@ static public void main(String argv[]) {
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
-
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
@@ -130,10 +129,9 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
-
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
@@ -156,7 +154,7 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File("../ARM/output.s"))) {
+                        try (FileOutputStream oS = new FileOutputStream(new File("ARM/output.s"))) {
                                 oS.write(text.toString().getBytes());
                         } catch (IOException e) {
                                 e.printStackTrace();
