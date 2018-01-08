@@ -42,6 +42,12 @@ public Exp visit(Let e) {
         return new_let;
 }
 
+public Exp visit(LetRec e) {
+  FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
+  LetRec new_rec = (new LetRec(new_fun, e.e.accept(this)));
+  return e;
+}
+
 public Exp visit(Unit e) {
         return e;
 }
@@ -94,9 +100,6 @@ public Exp visit(If e) {
         return e;
 }
 
-public Exp visit(LetRec e) {
-        return e;
-}
 
 public Exp visit(App e) {
         return e;
