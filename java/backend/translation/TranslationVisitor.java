@@ -162,7 +162,7 @@ public void visit(Let e, Function func){
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, (Variable)visit(e.e1, func));
                 func.getVariables().add(var);
                 func.addInstruction(inst);
-                func.showVariables();
+                // func.showVariables();
         }
         else {
                 visit(e.e1, func);
@@ -260,8 +260,10 @@ public void visit(App e, Function func){
         }
         for (Exp e1 : e.es) {
                 Object var = (Object) visit(e1, func);
-                // func.getVariables().add(var);
-                // vars.add(var);
+                if (!(e1 instanceof Let)) {
+                  System.out.println(e1.getClass());
+                  vars.add(var);
+                }
         }
         InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
         func.addInstruction(inst);

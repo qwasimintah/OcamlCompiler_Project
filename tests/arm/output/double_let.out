@@ -1,6 +1,3 @@
-?v1
-?v0
-?v1
 @------ ARM------
 	.text
 	.global _start

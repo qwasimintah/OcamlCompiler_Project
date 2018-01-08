@@ -1,10 +1,3 @@
-?v3
-?v2
-?v4
-?v3
-?v2
-?v5
-?v4
 @------ ARM------
 	.text
 	.global _start
