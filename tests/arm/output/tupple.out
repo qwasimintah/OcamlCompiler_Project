@@ -1,5 +1,23 @@
-<<<<<<< HEAD
-=======
-@------ ARM ------
-(1, 2, (5 +. 4), (let x = (let y = 5 in (y + 2)) in (x - 3)))
->>>>>>> 8890224b8900594702414d3dd6aefd7adb048b01
+@------ ARM------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
+
+
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
+
+	MOV r7, #1
+	swi 0
+

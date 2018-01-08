@@ -13,6 +13,13 @@ import ast.type.*;
 
 public class TranslationVisitor {
 
+private static Integer tmp_id = 0;
+
+public String getTempVarName() {
+        tmp_id++;
+        return "tmpVar" + tmp_id.toString();
+}
+
 public Object visit(Exp e, Function func) {
         if (e instanceof Add) {
                 visit((Add)e, func);
@@ -32,32 +39,70 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof App) {
                 visit((App)e, func);
         }
+        else if (e instanceof Neg) {
+                return (Integer) visit((Neg)e, func);
+        }
         return null;
 }
 
 public void visit(Add e, Function func) {
-        InstructionADD inst = new InstructionADD(func, visit(e.e1, func), visit(e.e2, func));
-        func.addInstruction(inst);
-        // return inst;
+        //System.out.println("ADD");
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for (Variable var : func.getVariables()) {
+                if (var.getName() == ((Var)e.e1).id.id) {
+                        vars.add(var);
+                } else if (var.getName() == ((Var)e.e2).id.id) {
+                        vars.add(var);
+                }
+        }
+        try {
+                InstructionADD inst = new InstructionADD(func, vars.get(0), vars.get(1));
+                func.addInstruction(inst);
+        } catch (IndexOutOfBoundsException exception) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                func.getVariables().add(tmpX);
+                func.getVariables().add(tmpY);
+                InstructionADD inst = new InstructionADD(func, tmpX, tmpY);
+                func.addInstruction(inst);
+        }
 }
 
-public void visit(Sub e, Function func){
-        InstructionSUB inst = new InstructionSUB(func, visit(e.e1, func), visit(e.e2, func));
+public void visit(Sub e, Function func) {
+        //System.out.println("SUB");
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        for (Variable var : func.getVariables()) {
+                if (var.getName() == ((Var)e.e1).id.id) {
+                        vars.add(var);
+                } else if (var.getName() == ((Var)e.e2).id.id) {
+                        vars.add(var);
+                }
+        }
+        InstructionSUB inst = new InstructionSUB(func, vars.get(0), vars.get(1));
         func.addInstruction(inst);
-        // return inst;
 }
 
 public void visit(Let e, Function func){
-        // func.addInstruction((Instruction) visit(e.e1, func));
-        visit(e.e1, func);
+        //System.out.println("LET");
+        if (e.t instanceof TInt) {
+                Integer value = (Integer) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, value, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+        } else if (e.e1 instanceof App) {
+                visit(e.e1, func);
+        }
         visit(e.e2, func);
 }
 
 public Variable visit(Var e, Function func){
-        return new Variable(e.id.toString(), func.registers, func);
+        //System.out.println("VAR");
+        return new Variable(e.id.id + "bis", func.registers, func);
 }
 
 public Integer visit(Int e, Function func){
+        //System.out.println("INT");
         return e.i;
 }
 
@@ -77,8 +122,10 @@ public Instruction visit(Not e, Function func){
         return null;
 }
 
-public Instruction visit(Neg e, Function func){
-        return null;
+public Integer visit(Neg e, Function func){
+        //System.out.println("NEG");
+        Integer i = (Integer) visit(e.e, func);
+        return -i;
 }
 
 public Instruction visit(FNeg e, Function func){
@@ -118,6 +165,7 @@ public Instruction visit(LetRec e, Function func){
 }
 
 public void visit(App e, Function func){
+        System.out.println("APP");
         List<Object> arguments = new ArrayList<Object>();
         for (Exp o : e.es) {
                 arguments.add((Object)visit(o, func));

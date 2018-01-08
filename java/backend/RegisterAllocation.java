@@ -1,5 +1,5 @@
-package backend;
 
+package backend;
 import java.io.*;
 import java.util.*;
 import backend.instructions.*;
@@ -16,22 +16,34 @@ private static HashMap<Register, Variable> registers = new HashMap<Register, Var
 private static HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
 
 public static void VBA(Function fun) {
-        for (Instruction inst : fun.getInstructions()) {
-                for (Object op : inst.getOperands()) {
-                        try {
-                                Variable var = (Variable) op;
-                                if (var.getRegister() == null) {
-                                        var.allocRegister();
-                                }
-                        }
-                        catch (Exception e) {
-                                System.out.println(e.getMessage());
-                                RegisterUtils.showRegisters(registers);
-                                return;
+        // for (Instruction inst : fun.getInstructions()) {
+        //         for (Object op : inst.getOperands()) {
+        //                 try {
+        //                         Variable var = (Variable) op;
+        //                         if (var.getRegister() == null) {
+        //                                 var.allocRegister();
+        //                         }
+        //                 }
+        //                 catch (Exception e) {
+        //                         System.out.println(e.getMessage());
+        //                         RegisterUtils.showRegisters(registers);
+        //                         return;
+        //                 }
+        //         }
+        // }
+        for (Variable var : fun.getVariables()) {
+                try {
+                        if (var.getRegister() == null) {
+                                var.allocRegister();
                         }
                 }
+                catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        //RegisterUtils.showRegisters(registers);
+                        return;
+                }
         }
-        RegisterUtils.showRegisters(fun.registers);
+        //RegisterUtils.showRegisters(fun.registers);
 }
 
 public static void SpillEverything(Function fun) {
@@ -92,7 +104,7 @@ public static void LinearScan(Function fun) {
                         }
                 }
         }
-        RegisterUtils.showRegisters(registers);
+        //RegisterUtils.showRegisters(registers);
 }
 
 // public static void main(String[] args) {

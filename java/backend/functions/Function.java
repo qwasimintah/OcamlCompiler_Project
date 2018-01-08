@@ -30,7 +30,6 @@ public List<Instruction> getInstructions() {
 }
 
 public String getName(){
-
         return name;
 }
 
@@ -38,17 +37,17 @@ public String getName(){
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
 
-        for (Object v : instruction.getOperands()) {
-                if (v instanceof Variable) {
-                        variables.add((Variable) v);
-                } else if (v instanceof Instruction) {
-                        for (Object x : ((Instruction)v).getOperands()) {
-                                if (x instanceof Variable) {
-                                        variables.add((Variable) x);
-                                }
-                        }
-                }
-        }
+        // for (Object v : instruction.getOperands()) {
+        //         if (v instanceof Variable) {
+        //                 variables.add((Variable) v);
+        //         } else if (v instanceof Instruction) {
+        //                 for (Object x : ((Instruction)v).getOperands()) {
+        //                         if (x instanceof Variable) {
+        //                                 variables.add((Variable) x);
+        //                         }
+        //                 }
+        //         }
+        // }
 }
 
 public Iterator<Instruction> iterator() {
@@ -68,7 +67,6 @@ public void setOffset(Integer value) {
 }
 
 public HashSet<Variable> getVariables(){
-
         return variables;
 }
 
