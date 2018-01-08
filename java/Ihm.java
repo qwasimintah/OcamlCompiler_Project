@@ -3,10 +3,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Ihm {
-String output_file;
+String input_file, output_file;
 Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, arm, translation, register, complete;
 
 public Ihm(String options[]){
+        input_file = options[options.length-1];
         output_file = "";
         given_output =
           typecheck_only =
@@ -30,6 +31,9 @@ public Ihm(String options[]){
                 case "-o":
                         if (i < options.length - 1) {
                                 given_output = true;
+                                if (i == options.length - 2){
+                                  input_file = options[options.length-3];
+                                }
                                 output_file = options[i+1];
                         } else {
                                 System.out.println("If you specify -o, you must also specified the name of the output file.");
@@ -46,6 +50,8 @@ public Ihm(String options[]){
                         break;
                 case "-t":
                         typecheck_only = true;
+                        given_output = true;
+                        output_file = options[i+1];
                         break;
                 case "-p":
                         parse_only = true;

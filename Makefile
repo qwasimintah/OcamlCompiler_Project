@@ -1,9 +1,8 @@
-
-SRC= Lexer.java Parser.java Main.java
+SRC= java/Lexer.java java/Parser.java java/Main.java
 
 all: ${SRC}
-	javac -sourcepath . -cp java-cup-11b-runtime.jar:. *.java
-	@ cp mincamlc ../scripts
+	$(MAKE) -C ./java all
+
 
 Lexer.java: Lexer.flex
 	jflex/bin/jflex Lexer.flex
@@ -19,4 +18,4 @@ test:
 	@ cd -
 
 clean:
-	rm -rf *.class *~ **/*.class **/**/*.class
+	$(MAKE) -C ./java clean

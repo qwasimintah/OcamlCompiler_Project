@@ -713,8 +713,9 @@ public String get_label(String name){
         int num_params=params.size();
 
         if(instr.getFname().equals("print_int")){
-          Parameter param = (Parameter)params.get(0);
-          assign("r0" , param.getVReg());
+          //Parameter param = (Parameter)params.get(0);
+          Variable param = (Variable)params.get(0);
+          assign("r0" , param.getRegister().getName());
           textSection.text.append("\tBL min_caml_print_int\n");
           textSection.text.append("\tBL min_caml_print_newline\n");
           return;

@@ -12,18 +12,26 @@ import backend.registers.*;
 
 public class Main {
 static public void main(String argv[]) {
-        // À mettre dans une IHM
         Ihm ihm = new Ihm(argv);
         try {
-                Parser p = new Parser(new Lexer(new FileReader(argv[0])));
+                System.out.println(ihm.output_file);
+                System.out.println(ihm.input_file);
+                System.out.println(ihm.output_asml);
+                if (ihm.typecheck_only){
+                  System.out.println("Sorry, the typechecking is not available yet. It soon will be.");
+                  return;
+                }
+                Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
+                int height = Height.computeHeight(expression);
+
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
                 }
 
-                int height = Height.computeHeight(expression);
+
 
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
@@ -90,7 +98,7 @@ static public void main(String argv[]) {
 
                         RegisterAllocation regalloc = new RegisterAllocation();
                         regalloc.VBA(func);
- 
+
 
                         System.out.println("@------ ARM------");
                         List<Function> flist = new ArrayList<Function>();
