@@ -6,6 +6,7 @@ import backend.functions.*;
 import backend.translation.*;
 import exp.*;
 import ast.*;
+import exceptions.*;
 import frontend.*;
 import backend.variables.*;
 import backend.registers.*;
@@ -18,8 +19,7 @@ static public void main(String argv[]) {
                 // System.out.println(ihm.input_file);
                 // System.out.println(ihm.output_asml);
                 if (ihm.typecheck_only){
-                  System.out.println("Sorry, the typechecking is not available yet. It soon will be.");
-                  return;
+                  throw new NotYetImplemented();
                 }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
@@ -163,6 +163,8 @@ static public void main(String argv[]) {
 
         } catch (Exception e) {
                 e.printStackTrace();
+                System.exit(1);
         }
-}
+      System.exit(0);
+      }
 }
