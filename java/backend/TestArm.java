@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package backend;
 /**
  *
  * @author DJAN DENNIS MINTAH
  */
 import java.util.*;
-import variables.*;
-import functions.*;
-import instructions.*;
-import registers.*;
-import exceptions.*;
+import backend.variables.*;
+import backend.functions.*;
+import backend.instructions.*;
+import backend.registers.*;
+import backend.exceptions.*;
 import java.io.*;
 
 /*

@@ -1,4 +1,8 @@
+package frontend;
+
 import java.util.*;
+import exp.*;
+import ast.*;
 
 public class AlphaConversion implements ObjVisitor<Exp>{
   private static HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
@@ -70,11 +74,11 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     return e;
   }
 
-  public Exp visit(Bool e){
+  public Exp visit(exp.Bool e){
     return e;
   }
 
-  public Exp visit(Float e){
+  public Exp visit(exp.Float e){
     return e;
   }
 

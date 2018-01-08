@@ -1,4 +1,8 @@
+package frontend;
+
 import java.util.*;
+import exp.*;
+import ast.*;
 
 class EvaluationVisitor implements ObjVisitor<Integer> {
 public Integer visit(Int e) {
@@ -17,6 +21,13 @@ public Integer visit(Unit e) {
         return 1;
 }
 
+public Integer visit(exp.Bool e) {
+        return 1;
+}
+
+public Integer visit(exp.Float e) {
+        return 1;
+}
 public Integer visit(Bool e) {
         return 1;
 }

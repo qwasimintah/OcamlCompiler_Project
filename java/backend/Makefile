@@ -2,14 +2,14 @@ JAVAC=javac
 SRC=./
 DEST=./
 FILES=RegisterAllocation.java ArmGenerator.java
-FLAGS=-Xlint:-serial
+FLAGS=-Xlint:-serial -sourcepath ..
 
 all: $(FILES)
-	$(JAVAC) -d $(DEST) $(FLAGS) $(SRC)$<
+	$(JAVAC) $(FLAGS) $(SRC)$<
 
 RegisterAllocation.java:
 
 ArmGenerator.java:
 
 clean:
-	rm -rf **/*.class
+	rm -rf **/*.class *.class

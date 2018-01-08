@@ -1,10 +1,10 @@
-package instructions;
-import variables.*;
+package backend.instructions;
 
+import backend.variables.*;
 import java.io.*;
 import java.util.*;
-import variables.*;
-import functions.*;
+import backend.variables.*;
+import backend.functions.*;
 
 public class InstructionADD implements Instruction {
 public List<Object> operands = new ArrayList<Object>();

@@ -1,0 +1,5 @@
+------ AST ------
+(let rec f x = (x + 1) in x)
+------ Height of the AST ------
+using Height.computeHeight: 2
+using HeightVisitor: 2

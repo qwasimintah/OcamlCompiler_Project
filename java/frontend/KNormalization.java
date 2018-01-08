@@ -1,7 +1,14 @@
-import java.util.*;
+package frontend;
 
+import java.util.*;
+import exp.*;
+import ast.*;
+import ast.type.*;
 
 public class KNormalization implements ObjVisitor<Exp> {
+
+private Id id_generator = new Id("id");
+
 public Exp visit(Int e) {
         return e;
 }
@@ -12,8 +19,8 @@ public Exp visit(Var e) {
 
 public Exp visit(Add e) {
         Type t = new TInt();
-        Var var1 = new Var(Id.gen());
-        Var var2 = new Var(Id.gen());
+        Var var1 = new Var(id_generator.gen());
+        Var var2 = new Var(id_generator.gen());
         Add new_op = (new Add(var1, var2));
         Let new_let2 = (new Let(var2.id, t, e.e2.accept(this), new_op));
         Let new_let1 = (new Let(var1.id, t, e.e1.accept(this), new_let2));
@@ -22,8 +29,8 @@ public Exp visit(Add e) {
 
 public Exp visit(Sub e) {
         Type t = new TInt();
-        Var var1 = new Var(Id.gen());
-        Var var2 = new Var(Id.gen());
+        Var var1 = new Var(id_generator.gen());
+        Var var2 = new Var(id_generator.gen());
         Sub new_op = (new Sub(var1, var2));
         Let new_let2 = (new Let(var2.id, t, e.e2.accept(this), new_op));
         Let new_let1 = (new Let(var1.id, t, e.e1.accept(this), new_let2));
@@ -39,11 +46,11 @@ public Exp visit(Unit e) {
         return e;
 }
 
-public Exp visit(Bool e) {
+public Exp visit(exp.Bool e) {
         return e;
 }
 
-public Exp visit(Float e) {
+public Exp visit(exp.Float e) {
         return e;
 }
 

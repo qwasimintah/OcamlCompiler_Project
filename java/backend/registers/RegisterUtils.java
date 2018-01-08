@@ -1,8 +1,7 @@
-package registers;
+package backend.registers;
 
 import java.util.*;
-import registers.*;
-import variables.*;
+import backend.variables.*;
 
 public class RegisterUtils {
 

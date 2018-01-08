@@ -1,28 +1,19 @@
+package frontend;
+
 import java.util.*;
+import exp.*;
+import ast.*;
 
 public class ReductionNestedExpression implements ObjVisitor<Exp> {
-public Let insert(Let e){
-        Exp exp = e.e1.accept(this);
-
-        if (exp instanceof Let) {
-                Let exp_res_temp = (Let) exp;
-                if (exp_res_temp.e2 instanceof Let) {
-                        Let e2_temp = (Let) exp_res_temp.e2;
-                        Let exp_res = new Let(exp_res_temp.id, exp_res_temp.t, exp_res_temp.e1, insert(e2_temp));
-                        return(exp_res);
-                }
-                else {
-                        Let exp_res = new Let(exp_res_temp.id, exp_res_temp.t, exp_res_temp.e1, new Let(e.id, e.t, exp_res_temp.e2, e.e2.accept(this)));
-                        return(exp_res);
-
-                }
-        }
-
-        else {
-                Let exp_res = new Let(e.id, e.t, exp, e.e2.accept(this));
-                return(exp_res);
-        }
-}
+  public Let insert(Let e, Exp exp){
+    if (exp instanceof Let) {
+      Let new_let = (Let) exp;
+      return (new Let(new_let.id, new_let.t, new_let.e1, insert(e, new_let.e2)));
+    }
+    else {
+      return (new Let(e.id, e.t, exp, e.e2.accept(this)));
+    }
+  }
 
 public Exp visit(Int e) {
         return e;
@@ -41,18 +32,18 @@ public Exp visit(Sub e) {
 }
 
 public Exp visit(Let e) {
-        return(insert(e));
+  return(insert(e, e.e1.accept(this)));
 }
 
 public Exp visit(Unit e) {
         return e;
 }
 
-public Exp visit(Bool e) {
+public Exp visit(exp.Bool e) {
         return e;
 }
 
-public Exp visit(Float e) {
+public Exp visit(exp.Float e) {
         return e;
 }
 

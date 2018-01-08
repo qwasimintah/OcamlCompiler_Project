@@ -1,4 +1,4 @@
-package registers;
+package backend.registers;
 
 public class Register {
   private Integer index;

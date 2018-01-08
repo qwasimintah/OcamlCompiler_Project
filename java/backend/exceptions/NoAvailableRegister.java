@@ -1,4 +1,4 @@
-package exceptions;
+package backend.exceptions;
 
 import java.io.*;
 

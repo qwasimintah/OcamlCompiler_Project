@@ -1,7 +1,7 @@
-package instructions;
+package backend.instructions;
 
-import variables.*;
-import functions.*;
+import backend.variables.*;
+import backend.functions.*;
 import java.util.*;
 
 public class InstructionMULT implements Instruction {

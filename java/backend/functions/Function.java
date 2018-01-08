@@ -1,8 +1,9 @@
-package functions;
+package backend.functions;
 
 import java.util.*;
-import variables.*;
-import instructions.*;
+import backend.variables.*;
+import backend.instructions.*;
+import backend.registers.*;
 
 public class Function {
 
@@ -11,11 +12,17 @@ private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
+public HashMap<Register, Variable> registers;
+public HashMap<Register, Variable> parametersRegisters;
 
-public Function(String name, List<Parameter> arguments, List<Instruction> instructions) {
+public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
+                HashMap<Register, Variable> registers,
+                HashMap<Register, Variable> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
+        this.registers = registers;
+        this.parametersRegisters = parametersRegisters;
 }
 
 public List<Instruction> getInstructions() {
@@ -23,7 +30,6 @@ public List<Instruction> getInstructions() {
 }
 
 public String getName(){
-
         return name;
 }
 
@@ -31,17 +37,17 @@ public String getName(){
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
 
-        for (Object v : instruction.getOperands()) {
-                if (v instanceof Variable) {
-                        variables.add((Variable) v);
-                } else if (v instanceof Instruction) {
-                        for (Object x : ((Instruction)v).getOperands()) {
-                                if (x instanceof Variable) {
-                                        variables.add((Variable) x);
-                                }
-                        }
-                }
-        }
+        // for (Object v : instruction.getOperands()) {
+        //         if (v instanceof Variable) {
+        //                 variables.add((Variable) v);
+        //         } else if (v instanceof Instruction) {
+        //                 for (Object x : ((Instruction)v).getOperands()) {
+        //                         if (x instanceof Variable) {
+        //                                 variables.add((Variable) x);
+        //                         }
+        //                 }
+        //         }
+        // }
 }
 
 public Iterator<Instruction> iterator() {
@@ -61,7 +67,6 @@ public void setOffset(Integer value) {
 }
 
 public HashSet<Variable> getVariables(){
-
         return variables;
 }
 

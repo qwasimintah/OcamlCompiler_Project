@@ -6,7 +6,6 @@ all: generate diff
 
 generate:
 	@$(SCRIPTFOLDER)generate.sh ${test}
-	@$(SCRIPTFOLDER)generate.sh ${test} > test_result.txt
 
 back_generate:
 	@$(SCRIPTFOLDER)back_generate.sh

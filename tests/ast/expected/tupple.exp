@@ -1,0 +1,5 @@
+------ AST ------
+(1, 2, (5 +. 4), (let x = (let y = 5 in (y + 2)) in (x - 3)))
+------ Height of the AST ------
+using Height.computeHeight: 4
+using HeightVisitor: 4
