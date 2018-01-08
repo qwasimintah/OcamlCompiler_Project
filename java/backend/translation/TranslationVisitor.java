@@ -168,7 +168,9 @@ public void visit(App e, Function func){
         System.out.println("APP");
         List<Object> arguments = new ArrayList<Object>();
         for (Exp o : e.es) {
+                // (Parameter) obj = (Parameter)visit(o, func);
                 arguments.add((Object)visit(o, func));
+                // arguments.add(obj);
         }
         InstructionCALL inst = new InstructionCALL(arguments, ((Var)e.e).id.toString());
         func.addInstruction(inst);
