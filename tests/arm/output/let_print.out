@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+?v6
+?v5
+?v6
+?v4
+?v5
+?v7
+?v8
+>>>>>>> 1b0e78277ee9e7846bb51a71cae63c7c8ae0f46f
 @------ ARM------
 	.text
 	.global _start
@@ -12,11 +22,17 @@ _main:
 	MOV fp, sp
 
 	LDR r6, =1
+<<<<<<< HEAD
 	MOV r4, r6
 	LDR r8, =5
 	ADD r0, r4, r8
 	MOV r5, r0
 	MOV r9, r5
+=======
+	LDR r8, =5
+	ADD r0, r4, r8
+	MOV r5, r0
+>>>>>>> 1b0e78277ee9e7846bb51a71cae63c7c8ae0f46f
 	LDR r7, =12
 	ADD r0, r9, r7
 	BL min_caml_print_int
