@@ -152,8 +152,8 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     }
     sec_exp_let = true;
     Exp new_exp = let_rec.fd.e.accept(this);
-    System.out.println("new_exp :");
-    new_exp.accept(new PrintVisitor());
+    //System.out.println("new_exp :");
+    //new_exp.accept(new PrintVisitor());
     FunDef new_fd = new FunDef(new_id, let_rec.fd.type, new_args, new_exp);
     while (!used_in_let.empty()) {
       String key = (String) used_in_let.pop();
