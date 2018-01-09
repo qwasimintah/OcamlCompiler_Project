@@ -128,9 +128,12 @@ static public void main(String argv[]) {
                   Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                   TranslationVisitor tv = new TranslationVisitor();
                   tv.visit(expression_reducted, func);
-                  System.out.println("------ Translation to Jerry ------");
-                  func.show();
-                  System.out.println("");
+                   List<Function> flist = new ArrayList<Function>();
+                    flist.add(func);
+                    AsmlConverter asml = new AsmlConverter();
+                    StringBuilder text1 = asml.convert(flist);
+                    System.out.println(text1);
+
 
                 }
 
@@ -176,10 +179,6 @@ static public void main(String argv[]) {
                         List<Function> flist = new ArrayList<Function>();
                         flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
-
-                        AsmlConverter asml = new AsmlConverter();
-                        StringBuilder text1 = asml.convert(flist);
-                        System.out.println(text1);
 
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
