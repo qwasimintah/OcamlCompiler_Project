@@ -51,8 +51,6 @@ public Ihm(String options[]){
                         break;
                 case "-t":
                         typecheck_only = true;
-                        given_output = true;
-                        output_file = options[i+1];
                         break;
                 case "-p":
                         parse_only = true;

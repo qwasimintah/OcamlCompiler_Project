@@ -12,36 +12,36 @@ _main:
 	MOV fp, sp
 
 	SUB sp, #20
-	LDR r7, =4
-	LDR r10, =1
-	ADD r0, r7, r10
-	MOV r4, r0
-	MOV r6, r4
-	LDR r0, =2
-	STR r0 , [fp , #24]
+	LDR r4, =4
+	LDR r6, =1
+	ADD r0, r4, r6
+	MOV r0, r0
 	LDR r1 , [fp ,#24]
 	LDR r1 , [fp ,#24]
-	ADD r0, r6, r1
-	MOV r0, r0
-	LDR r1 , [fp ,#8]
-	LDR r1 , [fp ,#8]
-	MOV r9, r1
-	LDR r11, =3
-	ADD r0, r9, r11
-	MOV r0, r0
-	LDR r8, =2
-	LDR r0, =1
-	STR r0 , [fp , #16]
-	LDR r1 , [fp ,#16]
-	SUB r0, r8, r1
-	MOV r0, r0
-	LDR r1 , [fp ,#4]
-	LDR r1 , [fp ,#4]
 	MOV r0, r1
+	STR r0 , [fp , #8]
+	LDR r10, =2
+	LDR r0 , [fp, #8]
+	ADD r0, r0, r10
+	MOV r11, r0
+	MOV r0, r11
+	STR r0 , [fp , #4]
+	LDR r9, =3
+	LDR r0 , [fp, #4]
+	ADD r0, r0, r9
+	MOV r0, r0
+	LDR r0, =2
+	STR r0 , [fp , #20]
+	LDR r0, =1
 	STR r0 , [fp , #12]
-	LDR r1 , [fp ,#20]
-	LDR r1 , [fp ,#20]
-	MOV r5, r1
+	LDR r0 , [fp, #20]
+	LDR r1 , [fp ,#12]
+	SUB r0, r0, r1
+	MOV r5, r0
+	LDR r1 , [fp ,#16]
+	LDR r1 , [fp ,#16]
+	MOV r8, r1
+	MOV r7, r5
 	SUB r0, , 
 	ADD sp, #20
 
