@@ -11,17 +11,10 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-<<<<<<< HEAD
-	LDR r4, =1
-	LDR r6, =2
-	ADD r0, r4, r6
-	MOV r5, r0
-=======
 	LDR r5, =1
 	LDR r4, =2
 	ADD r0, r5, r4
 	MOV r6, r0
->>>>>>> 48912285d15bd6d1818b0a5cce97984fec5bb3b1
 
 	@MAIN EPILOGUE
 	ADD sp, #4

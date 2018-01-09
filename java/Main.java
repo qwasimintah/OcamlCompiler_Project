@@ -25,10 +25,6 @@ static public void main(String argv[]) {
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
-<<<<<<< HEAD
-=======
-                int height = Height.computeHeight(expression);
->>>>>>> 48912285d15bd6d1818b0a5cce97984fec5bb3b1
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
