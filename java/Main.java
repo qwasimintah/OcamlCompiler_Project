@@ -18,14 +18,14 @@ static public void main(String argv[]) {
                 // System.out.println(ihm.output_file);
                 // System.out.println(ihm.input_file);
                 // System.out.println(ihm.output_asml);
+                // System.out.println(ihm.typecheck_only);
                 if (ihm.typecheck_only){
                   throw new NotYetImplemented();
                 }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
-                int height = Height.computeHeight(expression);
-
+                  int height = Height.computeHeight(expression);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -53,6 +53,12 @@ static public void main(String argv[]) {
                    System.out.println("------ Evaluation ------");
                    System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
                  */
+
+                 //For TypeChecking :
+
+                //  else if (ihm.typecheck_only) {
+                //       Exp expression_typechecked = expression.accept(new TypeChecking());
+                //  }
 
                 // For KNormalization :
                 else if (ihm.knorm) {

@@ -4,9 +4,8 @@ As requested, you have to be located in the root folder
 
 
 # Previous important remarks
-- Our project is able to produce arm but not able to produce asml yet, because we wanted to give priority to Arm generation and have focused on that.
-Small changes have to be done.
-- Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change), __as you can see here__: 
+- Our project is able to produce arm and able to produce asml. We have also created our own intermediate langage (Jerry), because we thought it would be more interesting to program own langage to figure out what were the constraint that we wouldn't have thought to otherwise.
+- Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change), __as you can see here__:    
 ![proof](images/proof.png)
 
 
