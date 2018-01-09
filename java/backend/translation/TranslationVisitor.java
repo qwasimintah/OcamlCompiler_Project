@@ -260,12 +260,10 @@ public void visit(App e, Function func){
         }
         for (Exp e1 : e.es) {
                 Object var = (Object) visit(e1, func);
-
-                if(!(e1 instanceof Let)){
-                     vars.add(var);   
+                if (!(e1 instanceof Let)) {
+                  // System.out.println(e1.getClass());
+                  vars.add(var);
                 }
-                // func.getVariables().add(var);
-                // 
         }
         InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
         func.addInstruction(inst);

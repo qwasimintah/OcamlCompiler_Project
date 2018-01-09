@@ -8,12 +8,12 @@ public class Parameter extends Variable {
 
 private String reg;
 
-  public Parameter(String name, String reg,  TreeMap registers, Function func) {
-          super(name, registers, func);
-          this.reg=reg;
-  }
+public Parameter(String name, String reg,  LinkedHashMap registers, Function func) {
+        super(name, registers, func);
+        this.reg=reg;
+}
 
-  public String getVReg() {
-          return reg;
-  }
+public String getVReg() {
+        return reg;
+}
 }

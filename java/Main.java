@@ -100,8 +100,8 @@ static public void main(String argv[]) {
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -127,16 +127,19 @@ static public void main(String argv[]) {
                   Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                  TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                  TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                  LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
+                  LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
                   RegisterUtils.initRegisters(registers, parametersRegisters);
 
                   Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                   TranslationVisitor tv = new TranslationVisitor();
                   tv.visit(expression_reducted, func);
-                  System.out.println("------ Translation to Jerry ------");
-                  func.show();
-                  System.out.println("");
+                   List<Function> flist = new ArrayList<Function>();
+                    flist.add(func);
+                    AsmlConverter asml = new AsmlConverter();
+                    StringBuilder text1 = asml.convert(flist);
+                    System.out.println(text1);
+
 
                 }
 
@@ -160,9 +163,10 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
+                        // RegisterUtils.showRegisters(registers);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
@@ -181,6 +185,7 @@ static public void main(String argv[]) {
                         List<Function> flist = new ArrayList<Function>();
                         flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
+
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
