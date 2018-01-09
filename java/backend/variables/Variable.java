@@ -2,6 +2,7 @@ package backend.variables;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import backend.registers.*;
 import backend.exceptions.*;
 import backend.functions.*;
@@ -10,12 +11,14 @@ import backend.intervals.*;
 public class Variable {
 private String name;
 private Register register;
-private LinkedHashMap<Register, Variable> registers;
+// private LinkedHashMap<Register, Variable> registers;
+private ArrayList<Register> registers;
 private Integer offset;
 private Function function;
 private Interval interval;
 
-public Variable(String name, LinkedHashMap<Register, Variable> registers, Function func) {
+public Variable(String name, ArrayList<Register> registers, Function func) {
+        // public Variable(String name, LinkedHashMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
         this.function = func;
@@ -28,15 +31,26 @@ public String getName() {
 }
 
 public void allocRegister() {
-        for(Object key: registers.keySet()) {
-                if (registers.get(key) == null) {
-                        Register reg = (Register) key;
-                        this.setRegister(reg);
-                        registers.put(reg, this);
-                        return;
-                }
+        // try {
+        //         Register reg =
+        //                 registers.entrySet().stream()
+        //                 .filter(entry -> entry.getValue() == null)
+        //                 .findFirst()
+        //                 .get()
+        //                 .getKey();
+        //         this.setRegister(reg);
+        //         registers.put(reg, this);
+        //         return;
+        // } catch (NoSuchElementException e) {
+        //         spill();
+        // }
+        if (registers.isEmpty()) {
+                spill();
+        } else {
+                Register reg = registers.get(0);
+                registers.remove(0);
+                this.setRegister(reg);
         }
-        spill();
 }
 
 public void spill() {
@@ -80,6 +94,7 @@ public Interval getInterval() {
 }
 
 public void kill() {
-        registers.put(this.register, null);
+        // registers.put(this.register, null);
+        registers.add(this.register);
 }
 }

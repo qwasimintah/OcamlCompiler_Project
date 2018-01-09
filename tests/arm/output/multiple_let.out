@@ -12,6 +12,7 @@ _main:
 	MOV fp, sp
 
 	SUB sp, #20
+<<<<<<< HEAD
 	LDR r0, =4
 	STR r0 , [fp , #4]
 	LDR r10, =1
@@ -28,9 +29,25 @@ _main:
 	LDR r5, =3
 	LDR r0 , [fp, #12]
 	ADD r0, r0, r5
+=======
+	LDR r8, =4
+	LDR r5, =1
+	ADD r0, r8, r5
 	MOV r0, r0
-	LDR r0, =2
+	LDR r1 , [fp ,#4]
+	LDR r1 , [fp ,#4]
+	MOV r0, r1
+	STR r0 , [fp , #12]
+	LDR r6, =2
+	LDR r0 , [fp, #12]
+	ADD r0, r0, r6
+>>>>>>> 48912285d15bd6d1818b0a5cce97984fec5bb3b1
+	MOV r0, r0
+	LDR r1 , [fp ,#8]
+	LDR r1 , [fp ,#8]
+	MOV r0, r1
 	STR r0 , [fp , #20]
+<<<<<<< HEAD
 	LDR r0, =1
 	STR r0 , [fp , #16]
 	LDR r0 , [fp, #20]
@@ -42,6 +59,23 @@ _main:
 	MOV r0, r1
 	STR r0 , [fp , #24]
 	MOV r9, r6
+=======
+	LDR r0, =3
+	STR r0 , [fp , #16]
+	LDR r0 , [fp, #20]
+	LDR r1 , [fp ,#16]
+	LDR r1 , [fp ,#16]
+	ADD r0, r0, r1
+	MOV r7, r0
+	LDR r0, =2
+	STR r0 , [fp , #24]
+	LDR r10, =1
+	LDR r0 , [fp, #24]
+	SUB r0, r0, r10
+	MOV r11, r0
+	MOV r4, r7
+	MOV r9, r11
+>>>>>>> 48912285d15bd6d1818b0a5cce97984fec5bb3b1
 	SUB r0, , 
 	ADD sp, #20
 

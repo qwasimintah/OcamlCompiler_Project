@@ -11,6 +11,7 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
+<<<<<<< HEAD
 	LDR r4, =1
 	MOV r8, r4
 	LDR r7, =5
@@ -19,6 +20,16 @@ _main:
 	MOV r5, r6
 	LDR r9, =12
 	ADD r0, r5, r9
+=======
+	LDR r7, =1
+	MOV r4, r7
+	LDR r9, =5
+	ADD r0, r4, r9
+	MOV r8, r0
+	MOV r5, r8
+	LDR r6, =12
+	ADD r0, r5, r6
+>>>>>>> 48912285d15bd6d1818b0a5cce97984fec5bb3b1
 	BL min_caml_print_int
 	BL min_caml_print_newline
 

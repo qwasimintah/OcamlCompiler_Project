@@ -11,15 +11,17 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r0, =123
+	LDR r5, =123
+	MOV r0, r5
 	BL min_caml_print_int
 	BL min_caml_print_newline
-	LDR r0, =-456
+	LDR r4, =-456
+	MOV r0, r4
 	BL min_caml_print_int
 	BL min_caml_print_newline
-	LDR r4, =789
-	LDR r5, =0
-	ADD r0, r4, r5
+	LDR r7, =789
+	LDR r6, =0
+	ADD r0, r7, r6
 	BL min_caml_print_int
 	BL min_caml_print_newline
 
