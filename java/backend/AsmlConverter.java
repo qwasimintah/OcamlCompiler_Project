@@ -16,10 +16,6 @@ public class AsmlConverter{
 
 	public StringBuilder convert(List<Function> funs){
 
-
-		
-
-
 		text.append("let _ = \n");
 
 		for(Function fun : funs){
@@ -39,21 +35,26 @@ public class AsmlConverter{
        	    	 if(count >= 1 && count < size){
        	    	 	in =true;
        	    	 }
-       	    	 
-                 if(instr instanceof InstructionADD){
 
+                 if(instr instanceof InstructionADD){
+									 if(count == intr_size){
                     text.append("\tadd ");
+									 }
                     Object op1= ((InstructionADD)instr).operands.get(0);
-            		Object op2= ((InstructionADD)instr).operands.get(1);
+            				Object op2= ((InstructionADD)instr).operands.get(1);
 
             		if(op1 instanceof Variable || op1 instanceof VInteger){
             			if(op1 instanceof Variable){
+										if(count == intr_size){
             				text.append(((Variable)op1).getName().substring(1)).append(" ");
+										}
             			}
             			else if(op1 instanceof VInteger){
+										if(count == intr_size){
             				text.append(((VInteger)op1).getName().substring(1)).append(" ");
+										}
             			}
-            			
+
             		}
             		else if (op1 instanceof Integer){
 
@@ -61,21 +62,25 @@ public class AsmlConverter{
             		}
 
             		if(op2 instanceof Variable || op2 instanceof VInteger){
-            			if(op1 instanceof Variable){
+            			if(op2 instanceof Variable){
+										if(count == intr_size){
             				text.append(((Variable)op2).getName().substring(1));
             				// if(in && count < size){
             				// 	text.append(" in ");
             				// }
             				text.append(" \n");
+									}
             			}
             			else if(op2 instanceof VInteger){
+										if(count == intr_size){
             				text.append(((VInteger)op2).getName().substring(1));
             				// if(in && count < size){
             				// 	text.append(" in ");
             				// }
             				text.append(" \n");
+									}
             			}
-            			
+
             		}
             		else if (op2 instanceof Integer){
             			text.append((int)op2);
@@ -101,7 +106,7 @@ public class AsmlConverter{
             			else if(op1 instanceof VInteger){
             				text.append(((VInteger)op1).getName().substring(1)).append(" ");
             			}
-            			
+
             		}
             		else if (op1 instanceof Integer){
 
@@ -111,7 +116,7 @@ public class AsmlConverter{
             		if(op2 instanceof Variable || op2 instanceof VInteger){
             			if(op1 instanceof Variable){
             				text.append(((Variable)op2).getName().substring(1));
-            				if(in && count < size){
+            				if(in && count < intr_size){
             					text.append(" in ");
             				}
             				text.append(" \n");
@@ -123,7 +128,7 @@ public class AsmlConverter{
             				// }
             				text.append(" \n");
             			}
-            			
+
             		}
             		else if (op2 instanceof Integer){
             			text.append((int)op2);
@@ -147,7 +152,7 @@ public class AsmlConverter{
             			else if(op1 instanceof VInteger){
             				text.append(((VInteger)op1).getName().substring(1)).append(" ");
             			}
-            			
+
             		}
             		else if (op1 instanceof Integer){
 
@@ -157,7 +162,7 @@ public class AsmlConverter{
             		if(op2 instanceof Variable || op2 instanceof VInteger){
             			if(op1 instanceof Variable){
             				text.append(((Variable)op2).getName().substring(1));
-            				if(in && count < size){
+            				if(in && count < intr_size){
             					text.append(" in ");
             				}
             				text.append(" \n");
@@ -169,7 +174,7 @@ public class AsmlConverter{
             				// }
             				text.append(" \n");
             			}
-            			
+
             		}
             		else if (op2 instanceof Integer){
             			text.append((int)op2);
@@ -194,14 +199,14 @@ public class AsmlConverter{
             			else if(op1 instanceof VInteger){
             				text.append(((VInteger)op1).getName().substring(1)).append(" = ");
             			}
-            			
+
             		}
-            		
+
 
             		if(op2 instanceof Variable ){
 
             			text.append(((Variable)op2).getName().substring(1));
-            			if(in && count < size){
+            			if(in && count < intr_size){
             					text.append(" in ");
             				}
             			text.append("\n");
@@ -209,7 +214,7 @@ public class AsmlConverter{
 
             		else if (op2 instanceof VInteger){
             				text.append(((VInteger)op2).getName().substring(1));
-            				if(in && count < size){
+            				if(in && count < intr_size){
             					text.append(" in ");
             				}
             				text.append("\n");
@@ -223,18 +228,18 @@ public class AsmlConverter{
             		else if (op2 instanceof Instruction){
 
             			if(op2 instanceof InstructionADD){
-            				
+
             				Object op4= ((InstructionADD)op2).operands.get(0);
 	            			Object op3= ((InstructionADD)op2).operands.get(1);
 
-	            			arithmetic("add", op4, op3, (InstructionADD)op2, in, count,size);
+	            			arithmetic("add", op4, op3, (InstructionADD)op2, in, count,intr_size);
 
             			}
 
-            			
-	                    
+
+
 	            	}
-            	
+
                  }
                  else if (instr instanceof InstructionCALL){
 
@@ -257,7 +262,7 @@ public class AsmlConverter{
 			            	// if(count < size){
 			            	// 	text.append(" in ");
 			            	// }
-            					
+
             				}
 			            text.append("\n");
 			            //assign("r0" , param.getRegister().getName());
@@ -268,7 +273,7 @@ public class AsmlConverter{
             				// 	text.append(" in ");
             				// }
 			              text.append("\n");
-			              
+
 			            }
 
 			          }
@@ -304,7 +309,7 @@ public class AsmlConverter{
     			else if(op4 instanceof VInteger){
     				text.append(((VInteger)op4).getName().substring(1)).append(" ");
     			}
-    			
+
     		}
     		else if (op4 instanceof Integer){
 
@@ -316,16 +321,16 @@ public class AsmlConverter{
     				text.append(((Variable)op3).getName().substring(1));
 
 					text.append(" in ");
-				
+
     				text.append("\n");
     			}
     			else if(op3 instanceof VInteger){
     				text.append(((VInteger)op3).getName().substring(1));
 					text.append(" in ");
-				
+
     				text.append(" \n");
     			}
-    			
+
     		}
     		else if (op3 instanceof Integer){
     			text.append((int)op3);
@@ -335,6 +340,6 @@ public class AsmlConverter{
     			text.append("\n");
     		}
     	}
-	
 
-} 
+
+}

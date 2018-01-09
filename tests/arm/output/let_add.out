@@ -12,9 +12,9 @@ _main:
 	MOV fp, sp
 
 	LDR r4, =3
-	MOV r5, r4
 	MOV r6, r4
-	ADD r0, r5, r6
+	MOV r5, r4
+	ADD r0, r6, r5
 
 	@MAIN EPILOGUE
 	ADD sp, #4
