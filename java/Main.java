@@ -150,6 +150,11 @@ static public void main(String argv[]) {
                         List<Function> flist = new ArrayList<Function>();
                         flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
+
+                        AsmlConverter asml = new AsmlConverter();
+                        StringBuilder text1 = asml.convert(flist);
+                        System.out.println(text1);
+
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
