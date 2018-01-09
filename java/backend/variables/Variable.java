@@ -47,7 +47,8 @@ public void allocRegister() {
                 Register reg = result.getKey();
                 this.setRegister(reg);
                 registers.put(reg, this);
-        } catch (NullPointerException e) {
+                return;
+        } catch (NoSuchElementException e) {
                 spill();
         }
 
