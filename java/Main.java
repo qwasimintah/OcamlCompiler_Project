@@ -19,13 +19,13 @@ static public void main(String argv[]) {
                 // System.out.println(ihm.input_file);
                 // System.out.println(ihm.output_asml);
                 // System.out.println(ihm.typecheck_only);
-                if (ihm.typecheck_only){
-                  throw new NotYetImplemented();
+                if (ihm.typecheck_only) {
+                        throw new NotYetImplemented();
                 }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
-                  int height = Height.computeHeight(expression);
+                int height = Height.computeHeight(expression);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -54,7 +54,7 @@ static public void main(String argv[]) {
                    System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
                  */
 
-                 //For TypeChecking :
+                //For TypeChecking :
 
                 //  else if (ihm.typecheck_only) {
                 //       Exp expression_typechecked = expression.accept(new TypeChecking());
@@ -100,8 +100,10 @@ static public void main(String argv[]) {
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
-                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -121,24 +123,26 @@ static public void main(String argv[]) {
                         System.out.println(text);
 
                 }
-                else if (ihm.output_asml){
-                  Exp expression_normalized = expression.accept(new KNormalization());
-                  Exp expression_converted = expression_normalized.accept(new AlphaConversion());
-                  Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+                else if (ihm.output_asml) {
+                        Exp expression_normalized = expression.accept(new KNormalization());
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                  LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
-                  LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
-                  RegisterUtils.initRegisters(registers, parametersRegisters);
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
 
-                  Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
-                  TranslationVisitor tv = new TranslationVisitor();
-                  tv.visit(expression_reducted, func);
-                   List<Function> flist = new ArrayList<Function>();
-                    flist.add(func);
-                    AsmlConverter asml = new AsmlConverter();
-                    StringBuilder text1 = asml.convert(flist);
-                    System.out.println(text1);
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        TranslationVisitor tv = new TranslationVisitor();
+                        tv.visit(expression_reducted, func);
+                        List<Function> flist = new ArrayList<Function>();
+                        flist.add(func);
+                        AsmlConverter asml = new AsmlConverter();
+                        StringBuilder text1 = asml.convert(flist);
+                        System.out.println(text1);
 
 
                 }
@@ -163,8 +167,10 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
-                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 
@@ -176,7 +182,7 @@ static public void main(String argv[]) {
                         System.out.println("");
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.VBA(func);
+                        regalloc.LinearScan(func);
                         System.out.println("------ Register Allocation ------");
                         func.showVariablesState();
                         System.out.println("");
@@ -201,6 +207,6 @@ static public void main(String argv[]) {
                 e.printStackTrace();
                 System.exit(1);
         }
-      System.exit(0);
-      }
+        System.exit(0);
+}
 }
