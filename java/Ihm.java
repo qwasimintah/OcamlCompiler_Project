@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Ihm {
-String output_file;
+String input_file, output_file;
 Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, closure_conversion, arm, translation, register, complete;
 
 public Ihm(String options[]){

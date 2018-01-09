@@ -28,7 +28,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Let e){
-    String current_function = current_functions.peek();
+    String current_function = (String) current_functions.peek();
     Stack stack = current_variables.get(current_function);
     if (stack == null){
       stack = new Stack();
@@ -42,9 +42,9 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Var e){
-    String current_function = current_functions.peek();
+    String current_function = (String) current_functions.peek();
     Stack stack = current_variables.get(current_function);
-    Int stack_position = stack.search(e.id.toString());
+    int stack_position = stack.search(e.id.toString());
     if (stack_position == -1){
       free_variable = true;
     }
@@ -118,8 +118,8 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       if (stack == null){
         stack = new Stack();
       }
-      for (String arg: let_rec.fd.args){
-        stack.push(arg);
+      for (Id arg: let_rec.fd.args){
+        stack.push(arg.toString());
       }
       current_variables.put(let_rec.fd.id.toString(), stack);
       Exp new_exp_fd = let_rec.fd.e.accept(this);
