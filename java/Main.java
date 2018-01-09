@@ -66,8 +66,6 @@ static public void main(String argv[]) {
                 else if (ihm.alpha_conversion) {
                         Exp expression_converted = expression.accept(new AlphaConversion());
                         System.out.println("------ AlphaConversion ------");
-                        //Exp expression_normalized = expression.accept(new KNormalization());
-                        //Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
                 }
@@ -79,6 +77,15 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
                 }
+
+                //For ClosureConversion :
+                else if (ihm.closure_conversion) {
+                        Exp expression_converted = expression.accept(new ClosureConversion());
+                        System.out.println("------ ClosureConversion ------");
+                        expression_converted.accept(new PrintVisitor());
+                        System.out.println("");
+                }
+
 
                 else if (ihm.arm) {
 
