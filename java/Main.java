@@ -107,6 +107,37 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
+                } else if (ihm.output_asml){
+                  Exp expression_normalized = expression.accept(new KNormalization());
+                  Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                  Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+                  System.out.println("------ AST ------");
+                  expression.accept(new PrintVisitor());
+                  System.out.println("");
+
+                  System.out.println("------ K-Normalization ------");
+                  expression_normalized.accept(new PrintVisitor());
+                  System.out.println("");
+
+                  System.out.println("------ AlphaConversion ------");
+                  expression_converted.accept(new PrintVisitor());
+                  System.out.println("");
+
+                  System.out.println("------ Reduction of Nested Let-Expressions ------");
+                  expression_reducted.accept(new PrintVisitor());
+                  System.out.println("");
+
+                  TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                  TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                  RegisterUtils.initRegisters(registers, parametersRegisters);
+
+                  Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                  TranslationVisitor tv = new TranslationVisitor();
+                  tv.visit(expression_reducted, func);
+                  System.out.println("------ Translation to Jerry ------");
+                  func.show();
+                  System.out.println("");
+
                 }
 
                 else{
