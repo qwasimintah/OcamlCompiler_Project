@@ -132,6 +132,7 @@ static public void main(String argv[]) {
                         TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
                         TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
+                        // RegisterUtils.showRegisters(registers);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();

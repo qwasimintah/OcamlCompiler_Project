@@ -261,7 +261,7 @@ public void visit(App e, Function func){
         for (Exp e1 : e.es) {
                 Object var = (Object) visit(e1, func);
                 if (!(e1 instanceof Let)) {
-                  System.out.println(e1.getClass());
+                  // System.out.println(e1.getClass());
                   vars.add(var);
                 }
         }
