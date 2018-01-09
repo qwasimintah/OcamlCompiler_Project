@@ -66,8 +66,6 @@ static public void main(String argv[]) {
                 else if (ihm.alpha_conversion) {
                         Exp expression_converted = expression.accept(new AlphaConversion());
                         System.out.println("------ AlphaConversion ------");
-                        //Exp expression_normalized = expression.accept(new KNormalization());
-                        //Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
                 }
@@ -79,6 +77,15 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
                 }
+
+                //For ClosureConversion :
+                else if (ihm.closure_conversion) {
+                        Exp expression_converted = expression.accept(new ClosureConversion());
+                        System.out.println("------ ClosureConversion ------");
+                        expression_converted.accept(new PrintVisitor());
+                        System.out.println("");
+                }
+
 
                 else if (ihm.arm) {
 
@@ -106,6 +113,24 @@ static public void main(String argv[]) {
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
+
+                }
+                else if (ihm.output_asml){
+                  Exp expression_normalized = expression.accept(new KNormalization());
+                  Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                  Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+
+
+                  TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                  TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                  RegisterUtils.initRegisters(registers, parametersRegisters);
+
+                  Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                  TranslationVisitor tv = new TranslationVisitor();
+                  tv.visit(expression_reducted, func);
+                  System.out.println("------ Translation to Jerry ------");
+                  func.show();
+                  System.out.println("");
 
                 }
 
