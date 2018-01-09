@@ -11,6 +11,7 @@ _main:
 	MOV fp, sp
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 	LDR r6, =1
@@ -21,11 +22,12 @@ _main:
 	SUB r0, r7, r5
 =======
 >>>>>>> 3121e27a5b482752efecf90b06335fc3f4fdfc60
+=======
+>>>>>>> 335c53b8c22eda1ed8c219338e67d520032bb1fc
 	LDR r4, =42
 	MOV r0, r4
 	BL min_caml_print_int
 	BL min_caml_print_newline
->>>>>>> refs/remotes/origin/master
 
 	@MAIN EPILOGUE
 	ADD sp, #4

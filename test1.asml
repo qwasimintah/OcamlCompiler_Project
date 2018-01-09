@@ -1,12 +1,6 @@
 let _ = 
-	let v5 = 1 in
-	let v6 = v5 in 
-	let v7 = 5 in
-	add v6 v7 
-	let v4 =  add v6 v7 in 
-	let v8 = v4
-	let v9 = 12 in
-	add v8 v9 
-	call _min_caml_print_int 
+	let v0 = 42 in
+	call _min_caml_print_int v0
+
 
 
