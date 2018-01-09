@@ -94,8 +94,8 @@ static public void main(String argv[]) {
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -121,8 +121,8 @@ static public void main(String argv[]) {
                   Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
 
 
-                  TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                  TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                  LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
+                  LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
                   RegisterUtils.initRegisters(registers, parametersRegisters);
 
                   Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -157,8 +157,8 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                        LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 

@@ -5,7 +5,7 @@ import backend.variables.*;
 
 public class RegisterUtils {
 
-public static void initRegisters(TreeMap<Register, Variable> registers, TreeMap<Register, Variable> parametersRegisters) {
+public static void initRegisters(LinkedHashMap<Register, Variable> registers, LinkedHashMap<Register, Variable> parametersRegisters) {
         for (Integer i = 4; i < 12; i++) {
                 Register reg = new Register(i);
                 registers.put(reg, null);
@@ -17,7 +17,7 @@ public static void initRegisters(TreeMap<Register, Variable> registers, TreeMap<
         }
 }
 
-public static void showRegisters(TreeMap<Register, Variable> registers) {
+public static void showRegisters(LinkedHashMap<Register, Variable> registers) {
         System.out.println("------ State of the registers ------");
         for(Object key: registers.keySet()) {
                 Register reg = (Register) key;
