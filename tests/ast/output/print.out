@@ -1,5 +1,2 @@
 ------ AST ------
 (let ?v1 = (print_int 123) in (let ?v0 = (print_int (- 456)) in (print_int (789 + 0))))
------- Height of the AST ------
-using Height.computeHeight: 4
-using HeightVisitor: 4

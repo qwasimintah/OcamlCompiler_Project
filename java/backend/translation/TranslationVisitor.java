@@ -132,7 +132,6 @@ public InstructionSUB visit(Sub e, Function func) {
 
 public void visit(Let e, Function func){
         // System.out.println("LET");
-        // System.out.println(e.e1.getClass());
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func.registers, func);
@@ -200,6 +199,30 @@ public Integer visit(Neg e, Function func){
         return -i;
 }
 
+public void visit(App e, Function func){
+        // System.out.println("APP");
+        ArrayList<Object> vars = new ArrayList<Object>();
+
+        if (!(e.es.get(0) instanceof Let)) {
+                for (Exp e1 : e.es) {
+                        Object var = (Object) visit(e1, func);
+                        if (var instanceof Integer) {
+                                var = new VInteger(getTempVarName(), (Integer)var, func.registers, func);
+                                func.getVariables().add((VInteger)var);
+                                InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
+                                func.addInstruction(inst);
+                        }
+                        vars.add(var);
+                }
+        } else {
+                assert e.es.size() == 1;
+                visit(e.es.get(0), func);
+        }
+
+        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
+        func.addInstruction(inst);
+}
+
 public Instruction visit(Unit e, Function func){
         return null;
 }
@@ -252,27 +275,6 @@ public Instruction visit(LetRec e, Function func){
         return null;
 }
 
-public void visit(App e, Function func){
-        // System.out.println("APP");
-        ArrayList<Object> vars = new ArrayList<Object>();
-
-        if (!(e.es.get(0) instanceof Let)) {
-                for (Exp e1 : e.es) {
-                        Object var = (Object) visit(e1, func);
-                        if (var instanceof Integer) {
-                                var = new VInteger(getTempVarName(), (Integer)var, func.registers, func);
-                                func.getVariables().add((VInteger)var);
-                                InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
-                                func.addInstruction(inst);
-                        }
-                        vars.add(var);
-                }
-        }
-
-        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
-        func.addInstruction(inst);
-}
-
 public Instruction visit(Tuple e, Function func){
         return null;
 }
@@ -292,20 +294,4 @@ public Instruction visit(Get e, Function func){
 public Instruction visit(Put e, Function func){
         return null;
 }
-
-// public static void main(String[] args) {
-//         Function fun = new Function("main", new ArrayList(), new ArrayList());
-//         Int x = new Int(1);
-//         Int y = new Int(2);
-//         Add add = new Add(x, y);
-//         Sub sub = new Sub(x, y);
-//         Var print = new Var(new Id("print_int"));
-//         List params = new ArrayList();
-//         params.add(x);
-//         App call = new App(print, params);
-//         Let let1 = new Let(new Id("id1"), new TInt(), sub, call);
-//         Let let2 = new Let(new Id("id2"), new TInt(), add, let1);
-//         visit(let2, fun);
-//         fun.show();
-// }
 }

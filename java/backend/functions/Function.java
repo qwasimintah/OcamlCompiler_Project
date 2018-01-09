@@ -12,12 +12,17 @@ private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-public LinkedHashMap<Register, Variable> registers;
-public LinkedHashMap<Register, Variable> parametersRegisters;
+// public LinkedHashMap<Register, Variable> registers;
+// public LinkedHashMap<Register, Variable> parametersRegisters;
+public ArrayList<Register> registers;
+public ArrayList<Register> parametersRegisters;
 
+// public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
+//                 LinkedHashMap<Register, Variable> registers,
+//                 LinkedHashMap<Register, Variable> parametersRegisters) {
 public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-                LinkedHashMap<Register, Variable> registers,
-                LinkedHashMap<Register, Variable> parametersRegisters) {
+                ArrayList<Register> registers,
+                ArrayList<Register> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
@@ -33,21 +38,8 @@ public String getName(){
         return name;
 }
 
-
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
-
-        // for (Object v : instruction.getOperands()) {
-        //         if (v instanceof Variable) {
-        //                 variables.add((Variable) v);
-        //         } else if (v instanceof Instruction) {
-        //                 for (Object x : ((Instruction)v).getOperands()) {
-        //                         if (x instanceof Variable) {
-        //                                 variables.add((Variable) x);
-        //                         }
-        //                 }
-        //         }
-        // }
 }
 
 public Iterator<Instruction> iterator() {
