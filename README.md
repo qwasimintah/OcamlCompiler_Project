@@ -8,6 +8,8 @@ As requested, you have to be located in the root folder
 - Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change), __as you can see here__:    
 ![proof](images/proof.png)
 
+#### Furthermore the generated arm can be launched by qemu-arm and return the expected values.
+
 
 ## General inforamtion
 From this location, you can run the following commands :

@@ -25,7 +25,6 @@ static public void main(String argv[]) {
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
-                  int height = Height.computeHeight(expression);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -37,12 +36,6 @@ static public void main(String argv[]) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
                         System.out.println();
-
-                        System.out.println("------ Height of the AST ------");
-                        System.out.println("using Height.computeHeight: " + height);
-                        ObjVisitor<Integer> v = new HeightVisitor();
-                        height = expression.accept(v);
-                        System.out.println("using HeightVisitor: " + height);
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
@@ -190,7 +183,7 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File("ARM/output.s"))) {
+                        try (FileOutputStream oS = new FileOutputStream(new File(ihm.output_file))) {
                                 oS.write(text.toString().getBytes());
                         } catch (IOException e) {
                                 e.printStackTrace();

@@ -12,13 +12,13 @@ _main:
 	MOV fp, sp
 
 	LDR r4, =1
-	MOV r6, r4
-	LDR r9, =5
-	ADD r0, r6, r9
-	MOV r7, r0
-	MOV r8, r7
-	LDR r5, =12
-	ADD r0, r8, r5
+	MOV r8, r4
+	LDR r7, =5
+	ADD r0, r8, r7
+	MOV r6, r0
+	MOV r5, r6
+	LDR r9, =12
+	ADD r0, r5, r9
 	BL min_caml_print_int
 	BL min_caml_print_newline
 
