@@ -7,7 +7,7 @@ import backend.functions.*;
 public class VInteger extends Variable {
   private Integer value;
 
-  public VInteger(String name, Integer value, SortedMap registers, Function func) {
+  public VInteger(String name, Integer value, TreeMap registers, Function func) {
     super(name, registers, func);
     this.value = value;
   }
