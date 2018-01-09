@@ -1,5 +1,58 @@
-<<<<<<< HEAD
-=======
-@------ ARM ------
-(let z = (4 + 1) in (let y = (z + 2) in (y + 3)))
->>>>>>> 8890224b8900594702414d3dd6aefd7adb048b01
+@------ ARM------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
+
+	SUB sp, #20
+	LDR r9, =4
+	LDR r4, =1
+	ADD r0, r9, r4
+	MOV r0, r0
+	LDR r1 , [fp ,#20]
+	LDR r1 , [fp ,#20]
+	MOV r6, r1
+	LDR r0, =2
+	STR r0 , [fp , #8]
+	LDR r1 , [fp ,#8]
+	LDR r1 , [fp ,#8]
+	ADD r0, r6, r1
+	MOV r0, r0
+	LDR r1 , [fp ,#4]
+	LDR r1 , [fp ,#4]
+	MOV r8, r1
+	LDR r0, =3
+	STR r0 , [fp , #16]
+	LDR r1 , [fp ,#16]
+	LDR r1 , [fp ,#16]
+	ADD r0, r8, r1
+	MOV r10, r0
+	LDR r0, =2
+	STR r0 , [fp , #24]
+	LDR r0, =1
+	STR r0 , [fp , #12]
+	LDR r0 , [fp, #24]
+	LDR r1 , [fp ,#12]
+	SUB r0, r0, r1
+	MOV r11, r0
+	MOV r7, r10
+	MOV r5, r11
+	SUB r0, , 
+	ADD sp, #20
+
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
+
+	MOV r7, #1
+	swi 0
+

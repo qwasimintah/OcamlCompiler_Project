@@ -1,0 +1,5 @@
+------ AST ------
+(if (not (x <= y)) then x else y)
+------ Height of the AST ------
+using Height.computeHeight: 3
+using HeightVisitor: 3

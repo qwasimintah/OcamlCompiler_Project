@@ -6,24 +6,32 @@ import backend.functions.*;
 import backend.translation.*;
 import exp.*;
 import ast.*;
+import exceptions.*;
 import frontend.*;
 import backend.variables.*;
 import backend.registers.*;
 
 public class Main {
 static public void main(String argv[]) {
-        // À mettre dans une IHM
         Ihm ihm = new Ihm(argv);
         try {
-                Parser p = new Parser(new Lexer(new FileReader(argv[0])));
+                // System.out.println(ihm.output_file);
+                // System.out.println(ihm.input_file);
+                // System.out.println(ihm.output_asml);
+                if (ihm.typecheck_only){
+                  throw new NotYetImplemented();
+                }
+                Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
                 // assert (expression != null);
+                int height = Height.computeHeight(expression);
+
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
                 }
 
-                int height = Height.computeHeight(expression);
+
 
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
@@ -80,10 +88,32 @@ static public void main(String argv[]) {
 
 
                 else if (ihm.arm) {
-                        Exp expression_reducted = expression.accept(new ReductionNestedExpression());
-                        System.out.println("@------ ARM ------");
-                        expression_reducted.accept(new PrintVisitor());
-                        System.out.println("");
+
+                        Exp expression_normalized = expression.accept(new KNormalization());
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+
+
+                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
+
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        TranslationVisitor tv = new TranslationVisitor();
+                        tv.visit(expression_reducted, func);
+
+                        RegisterAllocation regalloc = new RegisterAllocation();
+                        regalloc.VBA(func);
+
+
+                        System.out.println("@------ ARM------");
+                        List<Function> flist = new ArrayList<Function>();
+                        flist.add(func);
+                        ArmGenerator arm = new ArmGenerator();
+                        arm.generate_code(flist);
+                        StringBuilder text = arm.textSection.text;
+                        System.out.println(text);
+
                 }
 
                 else{
@@ -106,10 +136,9 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
+                        TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
-
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
@@ -132,7 +161,7 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File("../ARM/output.s"))) {
+                        try (FileOutputStream oS = new FileOutputStream(new File("ARM/output.s"))) {
                                 oS.write(text.toString().getBytes());
                         } catch (IOException e) {
                                 e.printStackTrace();
@@ -141,6 +170,8 @@ static public void main(String argv[]) {
 
         } catch (Exception e) {
                 e.printStackTrace();
+                System.exit(1);
         }
-}
+      System.exit(0);
+      }
 }
