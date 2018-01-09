@@ -10,12 +10,12 @@ import backend.intervals.*;
 public class Variable {
 private String name;
 private Register register;
-private SortedMap<Register, Variable> registers;
+private TreeMap<Register, Variable> registers;
 private Integer offset;
 private Function function;
 private Interval interval;
 
-public Variable(String name, SortedMap<Register, Variable> registers, Function func) {
+public Variable(String name, TreeMap<Register, Variable> registers, Function func) {
         this.name = name;
         this.registers = registers;
         this.function = func;
@@ -35,12 +35,8 @@ public void allocRegister() {
                         registers.put(reg, this);
                         return;
                 }
-                /*else{
-                        spill();
-                   }*/
         }
         spill();
-        //throw new NoAvailableRegister();
 }
 
 public void spill() {

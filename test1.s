@@ -6,15 +6,12 @@
 (let ?v0 = 42 in (print_int ?v0))
 ------ Reduction of Nested Let-Expressions ------
 (let ?v0 = 42 in (print_int ?v0))
-LET
-INT
-APP
 ------ Translation to Jerry ------
-backend.variables.VInteger@266474c2 := 42
-CALL print_int backend.variables.VInteger@266474c2 
+backend.variables.VInteger@12a3a380 := 42
+CALL print_int backend.variables.VInteger@12a3a380 backend.variables.VInteger@12a3a380 
 
 ------ Register Allocation ------
-Variable ?v0 stored in register r5
+Variable ?v0 stored in register r4
 
 ------ ARM code generation ------
 	.text
@@ -29,8 +26,8 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r5, =42
-	MOV r0, r5
+	LDR r4, =42
+	MOV r0, r4
 	BL min_caml_print_int
 	BL min_caml_print_newline
 
