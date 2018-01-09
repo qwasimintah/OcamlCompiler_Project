@@ -12,8 +12,8 @@ import backend.translation.*;
 
 public class RegisterAllocation {
 
-private static TreeMap<Register, Variable> registers = new TreeMap<Register, Variable>();
-private static TreeMap<Register, Variable> parametersRegisters = new TreeMap<Register, Variable>();
+private static LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+private static LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
 
 public static void VBA(Function fun) {
         // for (Instruction inst : fun.getInstructions()) {

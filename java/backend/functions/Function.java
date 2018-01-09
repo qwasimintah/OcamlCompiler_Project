@@ -12,12 +12,12 @@ private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-public TreeMap<Register, Variable> registers;
-public TreeMap<Register, Variable> parametersRegisters;
+public LinkedHashMap<Register, Variable> registers;
+public LinkedHashMap<Register, Variable> parametersRegisters;
 
 public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-                TreeMap<Register, Variable> registers,
-                TreeMap<Register, Variable> parametersRegisters) {
+                LinkedHashMap<Register, Variable> registers,
+                LinkedHashMap<Register, Variable> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
