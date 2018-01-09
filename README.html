@@ -2,11 +2,10 @@
 <p>As requested, you have to be located in the root folder</p>
 <h1 id="previous-important-remarks">Previous important remarks</h1>
 <ul>
-<li>Our project is able to produce arm but not able to produce asml yet, because we wanted to give priority to Arm generation and have focused on that.
-Small changes have to be done.</li>
-<li>Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change), <strong>as you can see here</strong>: \
-<img src="images/proof.png" alt="proof"></li>
+<li>Our project is able to produce arm and able to produce asml. We have also created our own intermediate langage (Jerry), because we thought it would be more interesting to program own langage to figure out what were the constraint that we wouldn't have thought to otherwise.</li>
+<li>Sometimes some tests, as add_sub.out work and sometimes not, due to register allocation (which might change), <strong>as you can see here</strong>:<br><img src="images/proof.png" alt="proof"></li>
 </ul>
+<h4 id="furthermore-the-generated-arm-can-be-launched-by-qemu-arm-and-return-the-expected-values-"> <font color="red">Furthermore the generated arm can be launched by qemu-arm and return the expected values.</font></h4>
 <h2 id="general-inforamtion">General inforamtion</h2>
 <p>From this location, you can run the following commands :</p>
 <ul>
@@ -30,4 +29,3 @@ All these commands call other files located in the <strong>java folder</strong> 
 <li>Arithmetical Expressions</li>
 <li>call to print_int function</li>
 </ul>
-
