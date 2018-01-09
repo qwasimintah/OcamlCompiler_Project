@@ -140,6 +140,13 @@ public void visit(Let e, Function func){
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
+        else if (e.e1 instanceof Neg) {
+                Integer value = (Integer) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, value, func.registers, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+        }
         else if (e.e1 instanceof App) {
                 visit(e.e1, func);
         }
@@ -187,6 +194,12 @@ public Integer visit(Int e, Function func){
         return e.i;
 }
 
+public Integer visit(Neg e, Function func){
+        //System.out.println("NEG");
+        Integer i = (Integer) visit(e.e, func);
+        return -i;
+}
+
 public Instruction visit(Unit e, Function func){
         return null;
 }
@@ -201,12 +214,6 @@ public Instruction visit(exp.Float e, Function func){
 
 public Instruction visit(Not e, Function func){
         return null;
-}
-
-public Integer visit(Neg e, Function func){
-        //System.out.println("NEG");
-        Integer i = (Integer) visit(e.e, func);
-        return -i;
 }
 
 public Instruction visit(FNeg e, Function func){
@@ -248,23 +255,20 @@ public Instruction visit(LetRec e, Function func){
 public void visit(App e, Function func){
         // System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
-        try {
-                for (Variable var : func.getVariables()) {
-                        for (Exp o : e.es) {
-                                if (var.getName() == ((Var)o).id.id) {
-                                        vars.add(var);
-                                }
+
+        if (!(e.es.get(0) instanceof Let)) {
+                for (Exp e1 : e.es) {
+                        Object var = (Object) visit(e1, func);
+                        if (var instanceof Integer) {
+                                var = new VInteger(getTempVarName(), (Integer)var, func.registers, func);
+                                func.getVariables().add((VInteger)var);
+                                InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
+                                func.addInstruction(inst);
                         }
-                }
-        } catch (ClassCastException exc) {
-        }
-        for (Exp e1 : e.es) {
-                Object var = (Object) visit(e1, func);
-                if (!(e1 instanceof Let)) {
-                  // System.out.println(e1.getClass());
-                  vars.add(var);
+                        vars.add(var);
                 }
         }
+
         InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
         func.addInstruction(inst);
 }

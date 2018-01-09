@@ -39,7 +39,8 @@ public void allocRegister() {
         // }
 
         try {
-                 Map.Entry<Register,Variable> result =
+          // System.out.println(registers.)
+                 Map.Entry<Register, Variable> result =
                         registers.entrySet().stream()
                         .filter(entry -> entry.getValue() == null)
                         .findFirst()
