@@ -7,8 +7,8 @@
 ------ Reduction of Nested Let-Expressions ------
 (let ?v0 = 42 in (print_int ?v0))
 ------ Translation to Jerry ------
-backend.variables.VInteger@12a3a380 := 42
-CALL print_int backend.variables.VInteger@12a3a380 backend.variables.VInteger@12a3a380 
+backend.variables.VInteger@5e481248 := 42
+CALL print_int backend.variables.VInteger@5e481248 backend.variables.VInteger@5e481248 
 
 ------ Register Allocation ------
 Variable ?v0 stored in register r4
