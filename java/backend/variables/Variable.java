@@ -2,6 +2,7 @@ package backend.variables;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import backend.registers.*;
 import backend.exceptions.*;
 import backend.functions.*;
@@ -28,15 +29,51 @@ public String getName() {
 }
 
 public void allocRegister() {
-        for(Object key: registers.keySet()) {
-                if (registers.get(key) == null) {
-                        Register reg = (Register) key;
-                        this.setRegister(reg);
-                        registers.put(reg, this);
-                        return;
-                }
+        // for(Object key: registers.keySet()) {
+        //         if (registers.get(key) == null) {
+        //                 Register reg = (Register) key;
+        //                 this.setRegister(reg);
+        //                 registers.put(reg, this);
+        //                 return;
+        //         }
+        // }
+
+        try {
+                 Map.Entry<Register,Variable> result =
+                        registers.entrySet().stream()
+                        .filter(entry -> entry.getValue() == null)
+                        .findFirst()
+                        .get();
+                Register reg = result.getKey();
+                this.setRegister(reg);
+                registers.put(reg, this);
+        } catch (NullPointerException e) {
+                spill();
         }
-        spill();
+
+        // registers.forEach(
+        //         (reg, var) -> {
+        //           System.out.println(reg);
+        //           System.out.println(var);
+        //                 if (var == null) {
+        //                         this.setRegister(reg);
+        //                         registers.put(reg, this);
+        //                         return;
+        //                 }
+        //         }
+        //         );
+
+        // for (registers.Entry<Register, Variable> entry : registers.entrySet()) {
+        //         Register reg = entry.getKey();
+        //         Variable var = entry.getValue();
+        //         if (var == null) {
+        //                 this.setRegister(reg);
+        //                 registers.put(reg, this);
+        //                 return;
+        //         }
+        // }
+
+        // spill();
 }
 
 public void spill() {

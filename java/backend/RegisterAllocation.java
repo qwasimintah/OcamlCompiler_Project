@@ -1,5 +1,6 @@
 
 package backend;
+
 import java.io.*;
 import java.util.*;
 import backend.instructions.*;
@@ -16,21 +17,6 @@ private static LinkedHashMap<Register, Variable> registers = new LinkedHashMap<R
 private static LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
 
 public static void VBA(Function fun) {
-        // for (Instruction inst : fun.getInstructions()) {
-        //         for (Object op : inst.getOperands()) {
-        //                 try {
-        //                         Variable var = (Variable) op;
-        //                         if (var.getRegister() == null) {
-        //                                 var.allocRegister();
-        //                         }
-        //                 }
-        //                 catch (Exception e) {
-        //                         System.out.println(e.getMessage());
-        //                         RegisterUtils.showRegisters(registers);
-        //                         return;
-        //                 }
-        //         }
-        // }
         for (Variable var : fun.getVariables()) {
                 try {
                         if (var.getRegister() == null) {
