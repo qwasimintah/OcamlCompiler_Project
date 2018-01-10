@@ -11,15 +11,12 @@ private String name;
 private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
+private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-// public LinkedHashMap<Register, Variable> registers;
-// public LinkedHashMap<Register, Variable> parametersRegisters;
+private ArrayList<ArrayList<Object> > parameters = new ArrayList<ArrayList<Object> >();
 public ArrayList<Register> registers;
 public ArrayList<Register> parametersRegisters;
 
-// public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-//                 LinkedHashMap<Register, Variable> registers,
-//                 LinkedHashMap<Register, Variable> parametersRegisters) {
 public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
                 ArrayList<Register> registers,
                 ArrayList<Register> parametersRegisters) {
@@ -54,16 +51,28 @@ public Integer getOffset() {
         return spillOffset;
 }
 
+public Integer getOffsetParameters() {
+        return spillOffsetParameters;
+}
+
 public void setOffset(Integer value) {
         spillOffset = value;
+}
+
+public void setOffsetParameters(Integer value) {
+        spillOffsetParameters = value;
 }
 
 public HashSet<Variable> getVariables(){
         return variables;
 }
 
+public ArrayList<ArrayList<Object> > getParameters() {
+        return parameters;
+}
+
 public void setVariables (HashSet<Variable> locals){
-        variables =locals;
+        variables = locals;
 }
 
 public void show() {
@@ -75,6 +84,14 @@ public void show() {
 public void showVariablesState() {
         for (Variable v : variables) {
                 v.getSaveState();
+        }
+
+        for (ArrayList<Object> list : parameters) {
+                for (Object o : list) {
+                        if (o instanceof Variable) {
+                                ((Variable)o).getSaveState();
+                        }
+                }
         }
 }
 
