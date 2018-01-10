@@ -5,14 +5,19 @@ import java.util.*;
 import backend.functions.*;
 
 public class VInteger extends Variable {
-  private Integer value;
+private Integer value;
 
-  public VInteger(String name, Integer value, SortedMap registers, Function func) {
-    super(name, registers, func);
-    this.value = value;
-  }
+// public VInteger(String name, Integer value, LinkedHashMap registers, Function func) {
+public VInteger(String name, Integer value, ArrayList registers, Function func) {
+        super(name, registers, func);
+        this.value = value;
+}
 
-  public Integer getValue() {
-    return value;
-  }
+public Integer getValue() {
+        return value;
+}
+
+public void setValue(int newValue) {
+        this.value = newValue;
+}
 }
