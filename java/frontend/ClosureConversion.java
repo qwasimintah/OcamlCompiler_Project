@@ -28,13 +28,15 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Let e){
-    String current_function = (String) current_functions.peek();
-    HashSet set = current_variables.get(current_function);
-    if (set == null){
-      set = new HashSet();
+    if (!current_functions.empty()){
+      String current_function = (String) current_functions.peek();
+      HashSet set = current_variables.get(current_function);
+      if (set == null){
+        set = new HashSet();
+      }
+      set.add(e.id.toString());
+      current_variables.put(current_function, set);
     }
-    set.add(e.id.toString());
-    current_variables.put(current_function, set);
     Exp new_e1 = e.e1.accept(this);
     Exp new_e2 = e.e2.accept(this);
     Let new_let = new Let(e.id, e.t, new_e1, new_e2);
@@ -133,7 +135,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       }
       current_variables.put(let_rec.fd.id.toString(), set);
       Exp new_exp_fd = let_rec.fd.e.accept(this);
-      System.out.println("let_rec: " + let_rec.fd.id.toString());
+      //System.out.println("let_rec: " + let_rec.fd.id.toString());
       //System.out.println(free_variables.get(let_rec.fd.id.toString()));
       HashSet set_free_variables = free_variables.get(let_rec.fd.id.toString());
       if (set_free_variables == null){
@@ -141,7 +143,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       }
       if (!(set_free_variables.isEmpty())){
         //TODO
-        System.out.println(free_variables.get(let_rec.fd.id.toString()));
+        //System.out.println(free_variables.get(let_rec.fd.id.toString()));
         //System.out.println(known);
         Iterator<String> arg_iterator = (free_variables.get(let_rec.fd.id.toString())).iterator();
         LinkedList<Id> list_args = new LinkedList<Id> ();
@@ -151,12 +153,12 @@ public class ClosureConversion implements ObjVisitor<Exp>{
           list_args.add(new Id(new_arg));
         }
         list_args.addAll(let_rec.fd.args);
-        System.out.println(list_args);
+        //System.out.println(list_args);
         FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, let_rec.fd.e);
         LetRec new_let_rec = new LetRec(new_fd, let_rec.e);
         //new_let_rec.accept(new PrintVisitor());
         current_functions.pop();
-        System.out.println("current_functions: " + current_functions);
+        //System.out.println("current_functions: " + current_functions);
         return new_let_rec;
       } else {
         known.remove(let_rec.fd.id.toString());
@@ -168,7 +170,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
         //new_let_rec.accept(new PrintVisitor());
         //return new_let_rec;
         current_functions.pop();
-        System.out.println("current_functions: " + current_functions);
+        //System.out.println("current_functions: " + current_functions);
         return new_let_rec;
       }
     }
@@ -180,11 +182,11 @@ public class ClosureConversion implements ObjVisitor<Exp>{
     test_app = false;
     if (in_known){
       //TODO
-      System.out.println("Known");
+      //System.out.println("Known");
       return app;
     } else {
       //TODO
-      System.out.println("Unknown");
+      //System.out.println("Unknown");
       return app;
     }
   }
