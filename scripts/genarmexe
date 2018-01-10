@@ -1,0 +1,5 @@
+#! /bin/bash
+cp $1 ./ARM
+cd ./ARM
+make
+cp ${1::-2}.arm ../${1::-2}

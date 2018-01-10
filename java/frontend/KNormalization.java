@@ -42,6 +42,65 @@ public Exp visit(Let e) {
         return new_let;
 }
 
+public Exp visit(LetRec e) {
+        FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
+        LetRec new_rec = (new LetRec(new_fun, e.e.accept(this)));
+        return new_rec;
+}
+
+public Exp visit(App e) {
+        List<Exp> new_es = new ArrayList<Exp>();
+        for (int i = 0; i < e.es.size(); i++) {
+                Exp es_temp = e.es.get(i);
+                new_es.add(es_temp.accept(this));
+        }
+        return (new App(e.e.accept(this), new_es));
+}
+
+public Exp visit(If e) {
+  if (e.e1 instanceof Eq) {
+    Type t = new TInt();
+    Eq ref_eq = (Eq) e.e1;
+    Var var1 = new Var(id_generator.gen());
+    Var var2 = new Var(id_generator.gen());
+    Eq new_eq = new Eq(var1, var2);
+    If new_if = new If(new_eq, e.e2.accept(this), e.e3.accept(this));
+    Let let2 = new Let(var2.id, t, ref_eq.e2.accept(this), new_if);
+    Let let1 = new Let(var1.id, t, ref_eq.e1.accept(this), let2);
+    return let1;
+  }
+  else if (e.e1 instanceof LE) {
+    Type t = new TInt();
+    LE ref_le = (LE) e.e1;
+    Var var1 = new Var(id_generator.gen());
+    Var var2 =  new Var(id_generator.gen());
+    LE new_le = new LE(var1, var2);
+    If new_if = new If(ref_le, e.e2.accept(this), e.e3.accept(this));
+    Let let2 = new Let(var2.id, t, ref_le.e2.accept(this), new_if);
+    Let let1 = new Let(var1.id, t, ref_le.e1.accept(this), let2);
+    return let1;
+  }
+  else if (e.e1 instanceof Not) {
+    Not ref_not = (Not) e.e1;
+    if (ref_not.e instanceof Eq) {
+      Eq ref_eq = (Eq) ref_not.e;
+      If new_if = new If(new Eq(ref_eq.e1, ref_eq.e2), e.e3, e.e2);
+      return new_if.accept(this);
+    }
+    else if (ref_not.e instanceof LE) {
+      LE ref_le = (LE) ref_not.e;
+      If new_if = new If(new LE(ref_le.e1, ref_le.e2), e.e3, e.e2);
+      return new_if.accept(this);
+    }
+  }
+  else if (e.e1 instanceof Var) {
+    Var ref_var = (Var) e.e1;
+    If new_if = new If(new Eq(ref_var, new exp.Bool(false)), e.e3, e.e2);
+    return new_if.accept(this);
+  }
+  return e;
+}
+
 public Exp visit(Unit e) {
         return e;
 }
@@ -90,17 +149,8 @@ public Exp visit(LE e) {
         return e;
 }
 
-public Exp visit(If e) {
-        return e;
-}
 
-public Exp visit(LetRec e) {
-        return e;
-}
 
-public Exp visit(App e) {
-        return e;
-}
 
 public Exp visit(Tuple e) {
         return e;

@@ -6,35 +6,36 @@ import backend.functions.*;
 import backend.translation.*;
 import exp.*;
 import ast.*;
+import exceptions.*;
 import frontend.*;
 import backend.variables.*;
 import backend.registers.*;
 
 public class Main {
 static public void main(String argv[]) {
-        // À mettre dans une IHM
         Ihm ihm = new Ihm(argv);
         try {
-                Parser p = new Parser(new Lexer(new FileReader(argv[0])));
+                // System.out.println(ihm.output_file);
+                // System.out.println(ihm.input_file);
+                // System.out.println(ihm.output_asml);
+                // System.out.println(ihm.typecheck_only);
+                if (ihm.typecheck_only) {
+                        throw new NotYetImplemented();
+                }
+                Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                assert (expression != null);
+                // assert (expression != null);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
                 }
 
-                int height = Height.computeHeight(expression);
+
 
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
                         System.out.println();
-
-                        System.out.println("------ Height of the AST ------");
-                        System.out.println("using Height.computeHeight: " + height);
-                        ObjVisitor<Integer> v = new HeightVisitor();
-                        height = expression.accept(v);
-                        System.out.println("using HeightVisitor: " + height);
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
@@ -45,6 +46,12 @@ static public void main(String argv[]) {
                    System.out.println("------ Evaluation ------");
                    System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
                  */
+
+                //For TypeChecking :
+
+                //  else if (ihm.typecheck_only) {
+                //       Exp expression_typechecked = expression.accept(new TypeChecking());
+                //  }
 
                 // For KNormalization :
                 else if (ihm.knorm) {
@@ -58,8 +65,6 @@ static public void main(String argv[]) {
                 else if (ihm.alpha_conversion) {
                         Exp expression_converted = expression.accept(new AlphaConversion());
                         System.out.println("------ AlphaConversion ------");
-                        //Exp expression_normalized = expression.accept(new KNormalization());
-                        //Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
                 }
@@ -72,19 +77,67 @@ static public void main(String argv[]) {
                         System.out.println("");
                 }
 
-                // if (true) {
-                //         System.out.println("------ Translation to Jerry ------");
-                //         TranslationVisitor tv = new TranslationVisitor();
-                //         Function func = new Function("main", new ArrayList(), new ArrayList());
-                //         tv.visit((Exp) expression, func);
-                //         System.out.println("");
-                // }
+                //For ClosureConversion :
+                else if (ihm.closure_conversion) {
+                        Exp expression_converted = expression.accept(new ClosureConversion());
+                        System.out.println("------ ClosureConversion ------");
+                        expression_converted.accept(new PrintVisitor());
+                        System.out.println("");
+                }
+
 
                 else if (ihm.arm) {
-                        Exp expression_reducted = expression.accept(new ReductionNestedExpression());
-                        System.out.println("@------ ARM ------");
-                        expression_reducted.accept(new PrintVisitor());
-                        System.out.println("");
+
+                        Exp expression_normalized = expression.accept(new KNormalization());
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+
+
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
+
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        TranslationVisitor tv = new TranslationVisitor();
+                        tv.visit(expression_reducted, func);
+
+                        RegisterAllocation regalloc = new RegisterAllocation();
+                        regalloc.VBA(func);
+
+
+                        System.out.println("@------ ARM------");
+                        List<Function> flist = new ArrayList<Function>();
+                        flist.add(func);
+                        ArmGenerator arm = new ArmGenerator();
+                        arm.generate_code(flist);
+                        StringBuilder text = arm.textSection.text;
+                        System.out.println(text);
+
+                }
+                else if (ihm.output_asml) {
+                        Exp expression_normalized = expression.accept(new KNormalization());
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
+
+
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        RegisterUtils.initRegisters(registers, parametersRegisters);
+
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        TranslationVisitor tv = new TranslationVisitor();
+                        tv.visit(expression_reducted, func);
+                        List<Function> flist = new ArrayList<Function>();
+                        flist.add(func);
+                        AsmlConverter asml = new AsmlConverter();
+                        StringBuilder text1 = asml.convert(flist);
+                        System.out.println(text1);
+
+
                 }
 
                 else{
@@ -107,10 +160,12 @@ static public void main(String argv[]) {
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
-                        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-                        HashMap<Register, Variable> parametersRegisters = new HashMap<Register, Variable>(4);
+                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
+                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
+                        ArrayList<Register> registers = new ArrayList<Register>(9);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
-
+                        // RegisterUtils.showRegisters(registers);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
                         TranslationVisitor tv = new TranslationVisitor();
@@ -120,7 +175,7 @@ static public void main(String argv[]) {
                         System.out.println("");
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.VBA(func);
+                        regalloc.LinearScan(func);
                         System.out.println("------ Register Allocation ------");
                         func.showVariablesState();
                         System.out.println("");
@@ -129,11 +184,12 @@ static public void main(String argv[]) {
                         List<Function> flist = new ArrayList<Function>();
                         flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
+
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File("../ARM/output.s"))) {
+                        try (FileOutputStream oS = new FileOutputStream(new File(ihm.output_file))) {
                                 oS.write(text.toString().getBytes());
                         } catch (IOException e) {
                                 e.printStackTrace();
@@ -142,6 +198,8 @@ static public void main(String argv[]) {
 
         } catch (Exception e) {
                 e.printStackTrace();
+                System.exit(1);
         }
+        System.exit(0);
 }
 }

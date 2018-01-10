@@ -42,9 +42,9 @@ public String getFname() {
 
 public void show() {
         System.out.print("CALL " + fname + " ");
-        // for (Object o : params) {
-        //   System.out.print(o + " ");
-        // }
+        for (Object o : params) {
+          System.out.print(o + " ");
+        }
         System.out.println("");
 }
 
