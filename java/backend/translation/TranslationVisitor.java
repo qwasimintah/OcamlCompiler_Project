@@ -33,6 +33,9 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof Int) {
                 return (Integer) visit((Int)e, func);
         }
+        else if (e instanceof Bool) {
+                return (boolean) visit((Bool)e, func);
+        }
         else if (e instanceof Var) {
                 return (Variable) visit((Var)e, func);
         }
@@ -58,7 +61,7 @@ public InstructionADD visit(Add e, Function func) {
                 }
         }
         if (vars.size() == 0) {
-                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
                 vars.add(tmpX);
         }
 
@@ -68,7 +71,7 @@ public InstructionADD visit(Add e, Function func) {
                 }
         }
         if (vars.size() == 0) {
-                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
                 vars.add(tmpY);
         }
 
@@ -78,8 +81,8 @@ public InstructionADD visit(Add e, Function func) {
                 func.addInstruction(inst);
                 return inst;
         } catch (IndexOutOfBoundsException exception) {
-                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
-                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
                 func.getVariables().add(tmpX);
                 func.getVariables().add(tmpY);
                 InstructionADD inst = new InstructionADD(func, tmpX, tmpY);
@@ -101,7 +104,7 @@ public InstructionSUB visit(Sub e, Function func) {
                 }
         }
         if (vars.size() == 0) {
-                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
                 vars.add(tmpX);
         }
 
@@ -111,7 +114,7 @@ public InstructionSUB visit(Sub e, Function func) {
                 }
         }
         if (vars.size() == 0) {
-                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
                 vars.add(tmpY);
         }
 
@@ -120,8 +123,8 @@ public InstructionSUB visit(Sub e, Function func) {
                 func.addInstruction(inst);
                 return inst;
         } catch (IndexOutOfBoundsException exception) {
-                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func.registers, func);
-                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func.registers, func);
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
                 func.getVariables().add(tmpX);
                 func.getVariables().add(tmpY);
                 InstructionSUB inst = new InstructionSUB(func, tmpX, tmpY);
@@ -134,14 +137,14 @@ public void visit(Let e, Function func){
         // System.out.println("LET");
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
-                VInteger var = new VInteger(e.id.id, value, func.registers, func);
+                VInteger var = new VInteger(e.id.id, value, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
         else if (e.e1 instanceof Neg) {
                 Integer value = (Integer) visit(e.e1, func);
-                VInteger var = new VInteger(e.id.id, value, func.registers, func);
+                VInteger var = new VInteger(e.id.id, value, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
@@ -151,20 +154,20 @@ public void visit(Let e, Function func){
         }
         else if (e.e1 instanceof Add) {
                 InstructionADD instadd = (InstructionADD) visit(e.e1, func);
-                VInteger var = new VInteger(e.id.id, 0, func.registers, func);
+                VInteger var = new VInteger(e.id.id, 0, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
         else if (e.e1 instanceof Sub) {
                 InstructionSUB instadd = (InstructionSUB) visit(e.e1, func);
-                VInteger var = new VInteger(e.id.id, 0, func.registers, func);
+                VInteger var = new VInteger(e.id.id, 0, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
         else if (e.e1 instanceof Var) {
-                Variable var = new Variable(e.id.id, func.registers, func);
+                Variable var = new Variable(e.id.id, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, (Variable)visit(e.e1, func));
                 func.getVariables().add(var);
                 func.addInstruction(inst);
@@ -203,39 +206,56 @@ public void visit(App e, Function func){
         // System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
 
-        if (!(e.es.get(0) instanceof Let)) {
-                for (Exp e1 : e.es) {
-                        Object var = (Object) visit(e1, func);
-                        if (var instanceof Integer) {
-                                var = new VInteger(getTempVarName(), (Integer)var, func.registers, func);
-                                func.getVariables().add((VInteger)var);
-                                InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
-                                func.addInstruction(inst);
-                        }
-                        vars.add(var);
+        // if (!(e.es.get(0) instanceof Let)) {
+        for (Exp e1 : e.es) {
+                Object var = (Object) visit(e1, func);
+                if (var instanceof Integer) {
+                        var = new VInteger(getTempVarName(), (Integer)var, func);
+                        // func.getVariables().add((VInteger)var);
+                        InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
+                        func.addInstruction(inst);
                 }
-        } else {
-                assert e.es.size() == 1;
-                visit(e.es.get(0), func);
+                vars.add(var);
         }
-
-        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.toString());
+        // } else {
+        //         assert e.es.size() == 1;
+        //         visit(e.es.get(0), func);
+        // }
+        func.getParameters().add(vars);
+        for (Object o : vars) {
+          if (o instanceof Variable) {
+            ((Variable)o).allocParametersRegister();
+          }
+        }
+        for (Object o : vars) {
+          if (o instanceof Variable) {
+            ((Variable)o).killParameter();
+          }
+        }
+        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.id);
         func.addInstruction(inst);
+}
+
+public boolean visit(exp.Bool e, Function func){
+        boolean b = e.b;
+        return b;
+}
+
+public boolean visit(Not e, Function func){
+        boolean b = (boolean) visit(e.e, func);
+        return !b;
+}
+
+public void visit(LetRec e, Function func){
+        visit(e.e, func);
+        return;
 }
 
 public Instruction visit(Unit e, Function func){
         return null;
 }
 
-public Instruction visit(exp.Bool e, Function func){
-        return null;
-}
-
 public Instruction visit(exp.Float e, Function func){
-        return null;
-}
-
-public Instruction visit(Not e, Function func){
         return null;
 }
 
@@ -268,10 +288,6 @@ public Instruction visit(LE e, Function func){
 }
 
 public Instruction visit(If e, Function func){
-        return null;
-}
-
-public Instruction visit(LetRec e, Function func){
         return null;
 }
 

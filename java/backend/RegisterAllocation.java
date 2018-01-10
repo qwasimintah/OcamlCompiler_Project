@@ -19,8 +19,8 @@ private static ArrayList<Register> registers = new ArrayList<Register>(9);
 private static ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
 
 
-public static void VBA(Function fun) {
-        for (Variable var : fun.getVariables()) {
+public static void VBA(Function func) {
+        for (Variable var : func.getVariables()) {
                 try {
                         if (var.getRegister() == null) {
                                 var.allocRegister();
@@ -28,15 +28,13 @@ public static void VBA(Function fun) {
                 }
                 catch (Exception e) {
                         System.out.println(e.getMessage());
-                        //RegisterUtils.showRegisters(registers);
                         return;
                 }
         }
-        //RegisterUtils.showRegisters(fun.registers);
 }
 
-public static void SpillEverything(Function fun) {
-        for (Instruction inst : fun.getInstructions()) {
+public static void SpillEverything(Function func) {
+        for (Instruction inst : func.getInstructions()) {
                 for (Object op : inst.getOperands()) {
                         try {
                                 Variable var = (Variable) op;
@@ -52,12 +50,12 @@ public static void SpillEverything(Function fun) {
         }
 }
 
-public static void LinearScan(Function fun) {
+public static void LinearScan(Function func) {
         HashSet<Variable> variables = new HashSet<Variable>();
         List<Interval>intervals = new ArrayList<Interval>();
         Integer i = 0;
 
-        for (Instruction inst : fun.getInstructions()) {
+        for (Instruction inst : func.getInstructions()) {
                 try {
                         for (Object op : inst.getOperands()) {
                                 Variable var = (Variable) op;
@@ -82,7 +80,6 @@ public static void LinearScan(Function fun) {
 
 
         for (Integer j = 0; j < i; j++) {
-                // RegisterUtils.showRegisters(fun.registers);
                 for (Interval interval : intervals) {
                         if (interval.getStartingPoint() == j) {
                                 try {
@@ -96,6 +93,5 @@ public static void LinearScan(Function fun) {
                         }
                 }
         }
-        //RegisterUtils.showRegisters(registers);
 }
 }
