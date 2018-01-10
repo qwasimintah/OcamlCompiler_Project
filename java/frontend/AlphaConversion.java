@@ -149,11 +149,10 @@ public class AlphaConversion implements ObjVisitor<Exp>{
       }
       arg_stack.push(new_arg.toString());
       new_args.add(new_arg);
+      epsilon.put(arg.toString(), arg_stack);
     }
     sec_exp_let = true;
     Exp new_exp = let_rec.fd.e.accept(this);
-    System.out.println("new_exp :");
-    new_exp.accept(new PrintVisitor());
     FunDef new_fd = new FunDef(new_id, let_rec.fd.type, new_args, new_exp);
     while (!used_in_let.empty()) {
       String key = (String) used_in_let.pop();
@@ -162,10 +161,12 @@ public class AlphaConversion implements ObjVisitor<Exp>{
         tmp_stack.pop();
       }
     }
-    used_in_let = new Stack();
-    sec_exp_let = false;
+    sec_exp_let = true;
     Exp let_rec_e = let_rec.e.accept(this);
-    stack.pop();
+    if (!stack.empty()){
+      stack.pop();
+    }
+    sec_exp_let = false;
     LetRec new_let_rec = new LetRec(new_fd, let_rec_e);
     return new_let_rec;
   }
