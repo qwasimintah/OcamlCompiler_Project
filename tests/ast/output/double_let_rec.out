@@ -1,5 +1,2 @@
 ------ AST ------
 (let rec f x = (let rec g y = (y + x) in y) in x)
------- Height of the AST ------
-using Height.computeHeight: 3
-using HeightVisitor: 3

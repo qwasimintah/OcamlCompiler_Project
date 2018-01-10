@@ -33,14 +33,15 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     sec_exp_let = true;
     Exp new_e2 = e.e2.accept(this);
     Let new_let = new Let(new_var.id, e.t, new_e1, new_e2);
+    HashSet set = new HashSet();
     while (!used_in_let.empty()) {
       String key = (String) used_in_let.pop();
       Stack tmp_stack = epsilon.get(key);
-      if (!tmp_stack.empty()) {
+      if (!tmp_stack.empty() && !set.contains(key)) {
         tmp_stack.pop();
+        set.add(key);
       }
     }
-    used_in_let = new Stack();
     sec_exp_let = false;
     return new_let;
   }
@@ -82,16 +83,19 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     return e;
   }
 
-  public Exp visit(Not e){
-    return e;
+  public Exp visit(Not not){
+    Not new_not = new Not(not.e.accept(this));
+    return new_not;
   }
 
-  public Exp visit(Neg e){
-    return e;
+  public Exp visit(Neg neg){
+    Neg new_neg = new Neg(neg.e.accept(this));
+    return new_neg;
   }
 
-  public Exp visit(FNeg e){
-    return e;
+  public Exp visit(FNeg neg){
+    FNeg new_neg = new FNeg(neg.e.accept(this));
+    return new_neg;
   }
 
   public Exp visit(FAdd e){
@@ -132,44 +136,6 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     return new_if;
   }
 
-  public Exp visit(LetRec let_rec){
-    Id new_id = let_rec.fd.id.gen();
-    Stack stack = epsilon.get(let_rec.fd.id.toString());
-    if (stack == null) {
-      stack = new Stack();
-    }
-    stack.push(new_id.toString());
-    epsilon.put(let_rec.fd.id.toString(), stack);
-    List<Id> new_args = new LinkedList();
-    for (Id arg: let_rec.fd.args){
-      Id new_arg = arg.gen();
-      Stack arg_stack = epsilon.get(arg.toString());
-      if (arg_stack == null){
-        arg_stack = new Stack();
-      }
-      arg_stack.push(new_arg.toString());
-      new_args.add(new_arg);
-    }
-    sec_exp_let = true;
-    Exp new_exp = let_rec.fd.e.accept(this);
-    //System.out.println("new_exp :");
-    //new_exp.accept(new PrintVisitor());
-    FunDef new_fd = new FunDef(new_id, let_rec.fd.type, new_args, new_exp);
-    while (!used_in_let.empty()) {
-      String key = (String) used_in_let.pop();
-      Stack tmp_stack = epsilon.get(key);
-      if (!tmp_stack.empty()) {
-        tmp_stack.pop();
-      }
-    }
-    used_in_let = new Stack();
-    sec_exp_let = false;
-    Exp let_rec_e = let_rec.e.accept(this);
-    stack.pop();
-    LetRec new_let_rec = new LetRec(new_fd, let_rec_e);
-    return new_let_rec;
-  }
-
   public Exp visit(App app){
     Exp new_exp = app.e.accept(this);
     List<Exp> new_list = new LinkedList<Exp>();
@@ -205,5 +171,43 @@ public class AlphaConversion implements ObjVisitor<Exp>{
 
   public Exp visit(Put e){
     return e;
+  }
+
+  public Exp visit(LetRec let_rec){
+    Id new_id = let_rec.fd.id.gen();
+    Stack stack = epsilon.get(let_rec.fd.id.toString());
+    if (stack == null) {
+      stack = new Stack();
+    }
+    stack.push(new_id.toString());
+    epsilon.put(let_rec.fd.id.toString(), stack);
+    List<Id> new_args = new LinkedList();
+    for (Id arg: let_rec.fd.args){
+      Id new_arg = arg.gen();
+      Stack arg_stack = epsilon.get(arg.toString());
+      if (arg_stack == null){
+        arg_stack = new Stack();
+      }
+      arg_stack.push(new_arg.toString());
+      new_args.add(new_arg);
+      epsilon.put(arg.toString(), arg_stack);
+    }
+    sec_exp_let = true;
+    Exp new_exp = let_rec.fd.e.accept(this);
+    FunDef new_fd = new FunDef(new_id, let_rec.fd.type, new_args, new_exp);
+    for (Id arg: let_rec.fd.args){
+      Stack tmp_arg_stack = epsilon.get(arg.toString());
+      if (!tmp_arg_stack.empty()) {
+        tmp_arg_stack.pop();
+      }
+    }
+    sec_exp_let = true;
+    Exp let_rec_e = let_rec.e.accept(this);
+    if (!stack.empty()){
+      stack.pop();
+    }
+    sec_exp_let = false;
+    LetRec new_let_rec = new LetRec(new_fd, let_rec_e);
+    return new_let_rec;
   }
 }
