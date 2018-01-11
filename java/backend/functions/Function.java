@@ -11,13 +11,15 @@ private String name;
 private List<Instruction> instructions;
 private List<Parameter> arguments;
 private Integer spillOffset = 4;
+private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-public LinkedHashMap<Register, Variable> registers;
-public LinkedHashMap<Register, Variable> parametersRegisters;
+private ArrayList<Object> parameters = new ArrayList<Object>();
+public ArrayList<Register> registers;
+public ArrayList<Register> parametersRegisters;
 
 public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-                LinkedHashMap<Register, Variable> registers,
-                LinkedHashMap<Register, Variable> parametersRegisters) {
+                ArrayList<Register> registers,
+                ArrayList<Register> parametersRegisters) {
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;
@@ -33,21 +35,8 @@ public String getName(){
         return name;
 }
 
-
 public void addInstruction(Instruction instruction) {
         instructions.add(instruction);
-
-        // for (Object v : instruction.getOperands()) {
-        //         if (v instanceof Variable) {
-        //                 variables.add((Variable) v);
-        //         } else if (v instanceof Instruction) {
-        //                 for (Object x : ((Instruction)v).getOperands()) {
-        //                         if (x instanceof Variable) {
-        //                                 variables.add((Variable) x);
-        //                         }
-        //                 }
-        //         }
-        // }
 }
 
 public Iterator<Instruction> iterator() {
@@ -62,16 +51,28 @@ public Integer getOffset() {
         return spillOffset;
 }
 
+public Integer getOffsetParameters() {
+        return spillOffsetParameters;
+}
+
 public void setOffset(Integer value) {
         spillOffset = value;
+}
+
+public void setOffsetParameters(Integer value) {
+        spillOffsetParameters = value;
 }
 
 public HashSet<Variable> getVariables(){
         return variables;
 }
 
+public ArrayList<Object> getParameters() {
+        return parameters;
+}
+
 public void setVariables (HashSet<Variable> locals){
-        variables =locals;
+        variables = locals;
 }
 
 public void show() {
@@ -83,6 +84,14 @@ public void show() {
 public void showVariablesState() {
         for (Variable v : variables) {
                 v.getSaveState();
+        }
+
+        for (Object o : parameters) {
+             
+                        if (o instanceof Variable) {
+                                ((Variable)o).getSaveState();
+                        }
+                
         }
 }
 

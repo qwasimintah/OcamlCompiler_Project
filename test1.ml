@@ -1,1 +1,1 @@
-let x = 42 in print_int x
+let x = 1 + 1 in print_int x

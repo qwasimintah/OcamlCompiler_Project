@@ -11,9 +11,9 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r4, =6
-	LDR r5, =3
-	SUB r0, r4, r5
+	LDR r5, =6
+	LDR r4, =3
+	SUB r0, r5, r4
 	MOV r7, r0
 	LDR r6, =1
 	SUB r0, r7, r6

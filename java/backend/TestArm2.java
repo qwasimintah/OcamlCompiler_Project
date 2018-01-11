@@ -9,12 +9,12 @@ package backend;
  * @author DJAN DENNIS MINTAH
  */
 import java.util.*;
-import variables.*;
-import functions.*;
-import instructions.*;
-import registers.*;
-import exceptions.*;
 import java.io.*;
+import backend.variables.*;
+import backend.functions.*;
+import backend.instructions.*;
+import backend.registers.*;
+import backend.exceptions.*;
 
 /*"""
 
@@ -54,39 +54,42 @@ public class TestArm2 {
         //global structure
         List<Function> funs= new ArrayList<Function>();
 
-        //functions
-        Function fundef= new Function("main", null, instr);
-        Function fadd = new Function("add", null, add_instr);
-        Function _f = new Function("f", null, add_instr);
-
+        
 
         //variables
         Integer x= new Integer(1);
         Integer f = new Integer(2);
-        HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-        HashMap<Register, Variable> param_registers = new HashMap<Register, Variable>(4);
+        
+        ArrayList<Register> registers = new ArrayList<Register>(9);
+        ArrayList<Register> param_registers = new  ArrayList<Register>(4);
         HashSet<Variable> locals = new HashSet<Variable>();
         HashSet<Variable> flocals= new HashSet<Variable>();
 
         RegisterUtils.initRegisters(registers, param_registers);
        //
 
+        //functions
+        Function fundef= new Function("main", null, instr, registers, param_registers);
+        Function fadd = new Function("add", null, add_instr, registers, param_registers);
+        Function _f = new Function("f", null, add_instr, registers, param_registers);
+
+
        //RegisterUtils.showRegisters(registers);
 
 
-        VInteger z = new VInteger("z", -1, registers,fundef);
-        VInteger t = new VInteger("t", 2, registers,fundef);
-        VInteger l = new VInteger("l", -1, registers,fundef);
-        VInteger vx = new VInteger("x",0, registers,fundef);
-        VInteger vy = new VInteger("y",1, registers,fundef);
-        VInteger vw = new VInteger("w",3, registers,fundef);
-        VInteger vq = new VInteger("q",3, registers,fundef);
+        VInteger z = new VInteger("z", -1, fundef);
+        VInteger t = new VInteger("t", 2, fundef);
+        VInteger l = new VInteger("l", -1, fundef);
+        VInteger vx = new VInteger("x",0, fundef);
+        VInteger vy = new VInteger("y",1, fundef);
+        VInteger vw = new VInteger("w",3, fundef);
+        VInteger vq = new VInteger("q",3, fundef);
 
+        vx.allocRegister();
+        vy.allocRegister();
+        vw.allocRegister();
 
-        Parameter px = new Parameter(vx.getName(),vx.getRegister().getName(), param_registers, _f);
-        Parameter py = new Parameter(vy.getName(),vy.getRegister().getName(), param_registers, _f);
-        Parameter pz = new Parameter(l.getName(),l.getRegister().getName(), param_registers, fundef);
-        Parameter pw = new Parameter(vw.getName(),vw.getRegister().getName(), param_registers, _f);
+        vx.getSaveState();
 
 
         flocals.add(z);
@@ -99,10 +102,10 @@ public class TestArm2 {
         _f.setVariables(flocals);
 
 
-        List<Parameter> params = new ArrayList<Parameter>();
-        params.add(px);
-        params.add(py);
-        params.add(pw);
+        List<Object> params = new ArrayList<Object>();
+        params.add(vx);
+        params.add(vy);
+        params.add(vw);
 
 
         RegisterUtils.showRegisters(registers);
@@ -115,18 +118,18 @@ public class TestArm2 {
         InstructionASSIGN lmain = new InstructionASSIGN(fundef, l, call_f);
         //InstructionCALL call_f = new InstructionCALL(params, "f");
 
-        List<Parameter> para = new ArrayList<Parameter>();
-        para.add(pz);
+        List<Object> para = new ArrayList<Object>();
+        para.add(z);
         InstructionCALL call_min = new InstructionCALL(para, "print_int");
 
 
 
-        InstructionADD add_f = new InstructionADD(_f, px, py);
+        InstructionADD add_f = new InstructionADD(_f, vx, vy);
         InstructionASSIGN vz = new InstructionASSIGN(_f, z, add_f);
         InstructionASSIGN vt = new InstructionASSIGN(_f, t, 2);
         InstructionSUB sub_f= new InstructionSUB(_f, t, z);
         InstructionASSIGN qass = new InstructionASSIGN(_f, vq, sub_f);
-        InstructionADD add_q = new InstructionADD(_f, pw, vq);
+        InstructionADD add_q = new InstructionADD(_f, vw, vq);
 
         //fundef.addInstruction(call);
         fundef.addInstruction(q);

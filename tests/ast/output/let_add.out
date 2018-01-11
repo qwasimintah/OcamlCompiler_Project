@@ -1,5 +1,2 @@
 ------ AST ------
 (let x = 3 in (x + x))
------- Height of the AST ------
-using Height.computeHeight: 2
-using HeightVisitor: 2
