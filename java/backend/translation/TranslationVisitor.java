@@ -7,17 +7,24 @@ import backend.exceptions.*;
 import backend.functions.*;
 import backend.instructions.*;
 import backend.variables.*;
+import backend.booleans.*;
 import exp.*;
 import ast.*;
 import ast.type.*;
 
 public class TranslationVisitor {
 
-private static Integer tmp_id = 0;
+private static Integer tmpId = 0;
+private static Integer tmpExpId = 0;
 
 public String getTempVarName() {
-        tmp_id++;
-        return "tmpVar" + tmp_id.toString();
+        tmpId++;
+        return "tmpVar" + tmpId.toString();
+}
+
+public String getTempBoolExpName() {
+        tmpExpId++;
+        return "tmpBoolExp" + tmpExpId.toString();
 }
 
 public Object visit(Exp e, Function func) {
@@ -34,6 +41,9 @@ public Object visit(Exp e, Function func) {
                 return (Integer) visit((Int)e, func);
         }
         else if (e instanceof Bool) {
+                return (boolean) visit((Bool)e, func);
+        }
+        else if (e instanceof Not) {
                 return (boolean) visit((Bool)e, func);
         }
         else if (e instanceof Var) {
@@ -215,22 +225,25 @@ public void visit(App e, Function func){
                         InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
                         func.addInstruction(inst);
                 }
+                else if (var instanceof Boolean) {
+                        var = new VBoolean(getTempVarName(), (boolean)var, func);
+                        // func.getVariables().add((VInteger)var);
+                        InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VBoolean)var).getExp());
+                        func.addInstruction(inst);
+                }
                 vars.add(var);
         }
-        // } else {
-        //         assert e.es.size() == 1;
-        //         visit(e.es.get(0), func);
-        // }
+
         func.getParameters().add(vars);
         for (Object o : vars) {
-          if (o instanceof Variable) {
-            ((Variable)o).allocParametersRegister();
-          }
+                if (o instanceof Variable) {
+                        ((Variable)o).allocParametersRegister();
+                }
         }
         for (Object o : vars) {
-          if (o instanceof Variable) {
-            ((Variable)o).killParameter();
-          }
+                if (o instanceof Variable) {
+                        ((Variable)o).killParameter();
+                }
         }
         InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.id);
         func.addInstruction(inst);
@@ -244,6 +257,66 @@ public boolean visit(exp.Bool e, Function func){
 public boolean visit(Not e, Function func){
         boolean b = (boolean) visit(e.e, func);
         return !b;
+}
+
+public BooleanEQ visit(Eq e, Function func){
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+
+        String var1 = ((Var)e.e1).id.id;
+        String var2 = ((Var)e.e2).id.id;
+
+        for (Variable var : func.getVariables()) {
+                if (var1 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
+                vars.add(tmpX);
+        }
+
+        for (Variable var : func.getVariables()) {
+                if (var2 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
+                vars.add(tmpY);
+        }
+
+        BooleanEQ exp = new BooleanEQ(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        return exp;
+}
+
+public BooleanLE visit(LE e, Function func){
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+
+        String var1 = ((Var)e.e1).id.id;
+        String var2 = ((Var)e.e2).id.id;
+
+        for (Variable var : func.getVariables()) {
+                if (var1 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
+                vars.add(tmpX);
+        }
+
+        for (Variable var : func.getVariables()) {
+                if (var2 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        if (vars.size() == 0) {
+                VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
+                vars.add(tmpY);
+        }
+
+        BooleanLE exp = new BooleanLE(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        return exp;
 }
 
 public void visit(LetRec e, Function func){
@@ -276,14 +349,6 @@ public Instruction visit(FMul e, Function func){
 }
 
 public Instruction visit(FDiv e, Function func){
-        return null;
-}
-
-public Instruction visit(Eq e, Function func){
-        return null;
-}
-
-public Instruction visit(LE e, Function func){
         return null;
 }
 
