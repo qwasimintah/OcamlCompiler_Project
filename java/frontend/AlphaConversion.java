@@ -158,19 +158,43 @@ public class AlphaConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(LetTuple e){
-    return e;
+    List<Id> new_ids = new LinkedList<Id>();
+    for (Id id: e.ids){
+      Id new_id = id.gen();
+      Stack stack = epsilon.get(id.toString());
+      if (stack == null){
+        stack = new Stack();
+      }
+      stack.push(new_id.toString());
+      epsilon.put(id.toString(), stack);
+      new_ids.add(new_id);
+    }
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    LetTuple new_e = new LetTuple(new_ids, e.ts, new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Array e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Array new_e = new Array(new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Get e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Get new_e = new Get(new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Put e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Exp new_e3 = e.e3.accept(this);
+    Put new_e = new Put(new_e1, new_e2, new_e3);
+    return new_e;
   }
 
   public Exp visit(LetRec let_rec){
