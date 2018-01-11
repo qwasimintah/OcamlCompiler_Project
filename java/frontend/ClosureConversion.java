@@ -47,9 +47,9 @@ public class ClosureConversion implements ObjVisitor<Exp>{
     String current_function = (String) current_functions.peek();
     HashSet set = current_variables.get(current_function);
     boolean in_set = set.contains(e.id.toString());
-    System.out.println("current_function: " + current_function);
-    System.out.println("var: " + e.id.toString());
-    System.out.println("in_set: " + in_set);
+    //System.out.println("current_function: " + current_function);
+    //System.out.println("var: " + e.id.toString());
+    //System.out.println("in_set: " + in_set);
     if (!in_set && !current_functions.contains(e.id.toString())){
       HashSet set_free_variables = free_variables.get(e.id.toString());
       if (set_free_variables == null){
@@ -170,9 +170,9 @@ public Exp visit(Not not){
         list_args.addAll(let_rec.fd.args);
         //System.out.println(list_args);
         FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, let_rec.fd.e);
-        /*Exp new_rec_e = let_rec.e.accept(this);
+        Exp new_rec_e = let_rec.e.accept(this);
         System.out.println("free_variables ap2: " + free_variables.get(let_rec.fd.id.toString()));
-        LetRec new_let_rec = new LetRec(new_fd, new_rec_e);*/
+        //LetRec new_let_rec = new LetRec(new_fd, new_rec_e);
         LetRec new_let_rec = new LetRec(new_fd, let_rec.e);
         //new_let_rec.accept(new PrintVisitor());
         current_functions.pop();
