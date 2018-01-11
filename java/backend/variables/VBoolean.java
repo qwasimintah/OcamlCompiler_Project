@@ -3,20 +3,26 @@ package backend.variables;
 import java.io.*;
 import java.util.*;
 import backend.functions.*;
+import backend.booleans.*;
 
 public class VBoolean extends Variable {
-private boolean value;
+private BooleanExpression exp;
 
-public VInteger(String name, boolean value, Function func) {
+public VBoolean(String name, BooleanExpression exp, Function func) {
         super(name, func);
-        this.value = value;
+        this.exp = exp;
 }
 
-public boolean getValue() {
-        return value;
+public VBoolean(String name, boolean b, Function func) {
+        super(name, func);
+        if (b) {
+                this.exp = new BooleanTrue(name, func);
+        } else {
+                this.exp = new BooleanFalse(name, func);
+        }
 }
 
-public void setValue(boolean newValue) {
-        this.value = newValue;
+public BooleanExpression getExp() {
+        return exp;
 }
 }
