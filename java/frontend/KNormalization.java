@@ -75,7 +75,7 @@ public Exp visit(If e) {
                 Var var1 = new Var(id_generator.gen());
                 Var var2 =  new Var(id_generator.gen());
                 LE new_le = new LE(var1, var2);
-                If new_if = new If(ref_le, e.e2.accept(this), e.e3.accept(this));
+                If new_if = new If(new_le, e.e2.accept(this), e.e3.accept(this));
                 Let let2 = new Let(var2.id, t, ref_le.e2.accept(this), new_if);
                 Let let1 = new Let(var1.id, t, ref_le.e1.accept(this), let2);
                 return let1;
