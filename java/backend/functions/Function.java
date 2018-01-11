@@ -13,7 +13,7 @@ private List<Parameter> arguments;
 private Integer spillOffset = 4;
 private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-private ArrayList<ArrayList<Object> > parameters = new ArrayList<ArrayList<Object> >();
+private ArrayList<Object> parameters = new ArrayList<Object>();
 public ArrayList<Register> registers;
 public ArrayList<Register> parametersRegisters;
 
@@ -67,7 +67,7 @@ public HashSet<Variable> getVariables(){
         return variables;
 }
 
-public ArrayList<ArrayList<Object> > getParameters() {
+public ArrayList<Object> getParameters() {
         return parameters;
 }
 
@@ -86,12 +86,12 @@ public void showVariablesState() {
                 v.getSaveState();
         }
 
-        for (ArrayList<Object> list : parameters) {
-                for (Object o : list) {
+        for (Object o : parameters) {
+             
                         if (o instanceof Variable) {
                                 ((Variable)o).getSaveState();
                         }
-                }
+                
         }
 }
 
