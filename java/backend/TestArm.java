@@ -19,8 +19,8 @@ import java.io.*;
 /*
 """
 
-let _f x y =
-  let z = add x y in
+let _f v w =
+  let z = add v w in
   let t = 2 in
   sub t z
 
@@ -66,6 +66,7 @@ public class TestArm{
         HashSet<Variable> flocals= new HashSet<Variable>();
 
         RegisterUtils.initRegisters(registers, param_registers);
+        RegisterUtils.initRegisters(registers1, param_registers1);
        //
 
        //RegisterUtils.showRegisters(registers);
@@ -90,6 +91,7 @@ public class TestArm{
 
         fundef.setVariables(locals);
         _f.setVariables(flocals);
+
 
 
         List<Parameter> params = new ArrayList<Parameter>();
@@ -128,7 +130,7 @@ public class TestArm{
         //fundef.addInstruction(ass);stash
         _f.addInstruction(vz);
         _f.addInstruction(vt);
-        _f.addInstruction(sub_f);
+        _f.addInstruction(add_f);
 
         //fadd.addInstruction(add);
         //fadd.addInstruction(fadd_ass);

@@ -16,10 +16,6 @@ public class AsmlConverter{
 
 	public StringBuilder convert(List<Function> funs){
 
-
-		
-
-
 		text.append("let _ = \n");
 
 		for(Function fun : funs){
@@ -230,6 +226,24 @@ public class AsmlConverter{
 	            			arithmetic("add", op4, op3, (InstructionADD)op2, in, count,size);
 
             			}
+            			else if(op2 instanceof InstructionADD){
+            				
+            				Object op4= ((InstructionSUB)op2).operands.get(0);
+	            			Object op3= ((InstructionSUB)op2).operands.get(1);
+
+	            			arithmetic("sub", op4, op3, (InstructionSUB)op2, in, count,size);
+
+            			}
+
+            			else if(op2 instanceof InstructionMULT){
+            				
+            				Object op4= ((InstructionMULT)op2).operands.get(0);
+	            			Object op3= ((InstructionMULT)op2).operands.get(1);
+
+	            			arithmetic("mul", op4, op3, (InstructionMULT)op2, in, count,size);
+
+            			}
+
 
             			
 	                    
@@ -293,6 +307,15 @@ public class AsmlConverter{
 			if(mnemonic=="add"){
 
 				o = (InstructionADD)inst;
+			}
+
+			else if(mnemonic == "sub"){
+
+				o = (InstructionSUB)inst;
+			}
+
+			else if(mnemonic =="mul"){
+				o = (InstructionMULT)inst;
 			}
 
 			text.append(" ").append(mnemonic).append(" ");

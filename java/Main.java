@@ -32,8 +32,6 @@ static public void main(String argv[]) {
                         new Outgesture(ihm.output_file);
                 }
 
-
-
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
@@ -98,7 +96,6 @@ static public void main(String argv[]) {
                         System.out.println("");
                 }
 
-
                 else if (ihm.arm) {
 
                         Exp expression_normalized = expression.accept(new KNormalization());
@@ -109,7 +106,7 @@ static public void main(String argv[]) {
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -129,6 +126,7 @@ static public void main(String argv[]) {
                         System.out.println(text);
 
                 }
+
                 else if (ihm.output_asml) {
                         Exp expression_normalized = expression.accept(new KNormalization());
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
@@ -138,7 +136,7 @@ static public void main(String argv[]) {
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
                         ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
@@ -154,29 +152,29 @@ static public void main(String argv[]) {
                 }
 
                 else{
-                        Exp expression_normalized = expression.accept(new KNormalization());
-                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
-                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
                         System.out.println("");
 
                         System.out.println("------ K-Normalization ------");
+                        Exp expression_normalized = expression.accept(new KNormalization());
                         expression_normalized.accept(new PrintVisitor());
                         System.out.println("");
 
                         System.out.println("------ AlphaConversion ------");
+                        Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
 
                         System.out.println("------ Reduction of Nested Let-Expressions ------");
+                        Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
                         expression_reducted.accept(new PrintVisitor());
                         System.out.println("");
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 
