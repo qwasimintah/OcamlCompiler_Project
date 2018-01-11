@@ -47,10 +47,10 @@ public class ClosureConversion implements ObjVisitor<Exp>{
     String current_function = (String) current_functions.peek();
     HashSet set = current_variables.get(current_function);
     boolean in_set = set.contains(e.id.toString());
-    //System.out.println(current_function);
-    //System.out.println(e.id.toString());
-    //System.out.println(in_set);
-    if (!in_set){
+    System.out.println("current_function: " + current_function);
+    System.out.println("var: " + e.id.toString());
+    System.out.println("in_set: " + in_set);
+    if (!in_set && !current_functions.contains(e.id.toString())){
       HashSet set_free_variables = free_variables.get(e.id.toString());
       if (set_free_variables == null){
         set_free_variables = new HashSet();
@@ -79,47 +79,59 @@ public class ClosureConversion implements ObjVisitor<Exp>{
     return e;
   }
 
-  public Exp visit(Not e){
-    return e;
+public Exp visit(Not not){
+    Not new_not = new Not(not.e.accept(this));
+    return new_not;
   }
 
-  public Exp visit(Neg e){
-    return e;
+  public Exp visit(Neg neg){
+    Neg new_neg = new Neg(neg.e.accept(this));
+    return new_neg;
   }
 
-  public Exp visit(FNeg e){
-    return e;
+  public Exp visit(FNeg neg){
+    FNeg new_neg = new FNeg(neg.e.accept(this));
+    return new_neg;
   }
 
   public Exp visit(FAdd e){
-    return e;
+    FAdd new_fadd = new FAdd(e.e1.accept(this), e.e2.accept(this));
+    return new_fadd;
   }
 
   public Exp visit(FSub e){
-    return e;
+    FSub new_fsub = new FSub(e.e1.accept(this), e.e2.accept(this));
+    return new_fsub;
   }
 
   public Exp visit(FMul e){
-    return e;
+    FMul new_fmult = new FMul(e.e1.accept(this), e.e2.accept(this));
+    return new_fmult;
   }
 
   public Exp visit(FDiv e){
-    return e;
+    FDiv new_fdiv = new FDiv(e.e1.accept(this), e.e2.accept(this));
+    return new_fdiv;
   }
 
   public Exp visit(Eq e){
-    return e;
+    Eq new_eq = new Eq(e.e1.accept(this), e.e2.accept(this));
+    return new_eq;
   }
 
   public Exp visit(LE e){
-    return e;
+    LE new_le = new LE(e.e1.accept(this), e.e2.accept(this));
+    return new_le;
   }
 
   public Exp visit(If e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Exp new_e3 = e.e3.accept(this);
+    If new_if = new If(new_e1, new_e2, new_e3);
+    return new_if;
   }
-
-  public Exp visit(LetRec let_rec){
+    public Exp visit(LetRec let_rec){
     if (test_app){
       in_known = known.contains(let_rec.fd.id.toString());
       return let_rec;
@@ -130,13 +142,16 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       if (set == null){
         set = new HashSet();
       }
+      set.add(let_rec.fd.id.toString());
       for (Id arg: let_rec.fd.args){
         set.add(arg.toString());
       }
       current_variables.put(let_rec.fd.id.toString(), set);
+      System.out.println("let_rec: " + let_rec.fd.id.toString());
+      System.out.println("free_variables av: " + free_variables.get(let_rec.fd.id.toString()));
       Exp new_exp_fd = let_rec.fd.e.accept(this);
-      //System.out.println("let_rec: " + let_rec.fd.id.toString());
-      //System.out.println(free_variables.get(let_rec.fd.id.toString()));
+      System.out.println("let_rec: " + let_rec.fd.id.toString());
+      System.out.println("free_variables ap: " + free_variables.get(let_rec.fd.id.toString()));
       HashSet set_free_variables = free_variables.get(let_rec.fd.id.toString());
       if (set_free_variables == null){
         set_free_variables = new HashSet();
@@ -155,6 +170,9 @@ public class ClosureConversion implements ObjVisitor<Exp>{
         list_args.addAll(let_rec.fd.args);
         //System.out.println(list_args);
         FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, let_rec.fd.e);
+        /*Exp new_rec_e = let_rec.e.accept(this);
+        System.out.println("free_variables ap2: " + free_variables.get(let_rec.fd.id.toString()));
+        LetRec new_let_rec = new LetRec(new_fd, new_rec_e);*/
         LetRec new_let_rec = new LetRec(new_fd, let_rec.e);
         //new_let_rec.accept(new PrintVisitor());
         current_functions.pop();
