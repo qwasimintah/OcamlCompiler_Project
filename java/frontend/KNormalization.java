@@ -75,7 +75,7 @@ public Exp visit(If e) {
                 Var var1 = new Var(id_generator.gen());
                 Var var2 =  new Var(id_generator.gen());
                 LE new_le = new LE(var1, var2);
-                If new_if = new If(ref_le, e.e2.accept(this), e.e3.accept(this));
+                If new_if = new If(new_le, e.e2.accept(this), e.e3.accept(this));
                 Let let2 = new Let(var2.id, t, ref_le.e2.accept(this), new_if);
                 Let let1 = new Let(var1.id, t, ref_le.e1.accept(this), let2);
                 return let1;
@@ -101,8 +101,49 @@ public Exp visit(If e) {
         return e;
 }
 
+public Exp visit(Tuple e) {
+  List<Let> list_let = new ArrayList<Let>();
+  List<Exp> list_var = new ArrayList<Exp>();
+  for (int j = 0; j < e.es.size(); j++){
+    list_var.add(new Var(id_generator.gen()));
+    Var new_var = (Var) list_var.get(j);
+    list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+  }
+  for (int i = (e.es.size() - 1); i >= 0; i--){
+    Var new_var = (Var) list_var.get(i);
+    Type t = new TInt();
+    Exp es_temp = e.es.get(i);
+    if (i < e.es.size() - 1){
+      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
+    }
+    else {
+      Tuple new_tuple = new Tuple(list_var);
+      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_tuple));
+    }
+  }
+  return list_let.get(0);
+}
+
 public Exp visit(Unit e) {
         return e;
+}
+
+public Exp visit(Array e) {
+  Array new_array = new Array(e.e1.accept(this), e.e2);
+  return new_array;
+}
+
+public Exp visit(Get e) {
+  return e;
+}
+
+public Exp visit(Put e) {
+  Put new_put = new Put(e.e1, e.e2, e.e3.accept(this));
+  return new_put;
+}
+
+public Exp visit(LetTuple e) {
+  return (new LetTuple(e.ids, e.ts, e.e1.accept(this), e.e2.accept(this)));
 }
 
 public Exp visit(exp.Bool e) {
@@ -146,29 +187,6 @@ public Exp visit(Eq e) {
 }
 
 public Exp visit(LE e) {
-        return e;
-}
-
-
-
-
-public Exp visit(Tuple e) {
-        return e;
-}
-
-public Exp visit(LetTuple e) {
-        return e;
-}
-
-public Exp visit(Array e) {
-        return e;
-}
-
-public Exp visit(Get e) {
-        return e;
-}
-
-public Exp visit(Put e) {
         return e;
 }
 }
