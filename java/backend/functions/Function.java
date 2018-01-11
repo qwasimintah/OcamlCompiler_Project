@@ -75,6 +75,11 @@ public void setVariables (HashSet<Variable> locals){
         variables = locals;
 }
 
+public void setParameters(ArrayList<Object> params){
+
+        parameters = params;
+}
+
 public void show() {
         for (Instruction i : instructions) {
                 i.show();
