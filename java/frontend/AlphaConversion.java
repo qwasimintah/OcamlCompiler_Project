@@ -5,11 +5,13 @@ import exp.*;
 import ast.*;
 
 public class AlphaConversion implements ObjVisitor<Exp>{
-  private static HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
+  private HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
 
   private boolean sec_exp_let = false;
 
-  private static Stack used_in_let = new Stack();
+  private Stack used_in_let = new Stack();
+
+  private HashSet functions = new HashSet();
 
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
@@ -26,20 +28,25 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     Stack stack = epsilon.get(e.id.toString());
     if (stack == null) {
       stack = new Stack();
+      epsilon.put(e.id.toString(), stack);
     }
     stack.push(new_var.id.toString());
-    epsilon.put(e.id.toString(), stack);
+    //sec_exp_let = false;
     Exp new_e1 = e.e1.accept(this);
     sec_exp_let = true;
     Exp new_e2 = e.e2.accept(this);
     Let new_let = new Let(new_var.id, e.t, new_e1, new_e2);
     HashSet set = new HashSet();
-    while (!used_in_let.empty()) {
+    while (!used_in_let.empty()){
       String key = (String) used_in_let.pop();
-      Stack tmp_stack = epsilon.get(key);
-      if (!tmp_stack.empty() && !set.contains(key)) {
-        tmp_stack.pop();
-        set.add(key);
+      //System.out.println("key: " + key);
+      //System.out.println("functions: " + functions);
+      if (!functions.contains(key)){
+        Stack tmp_stack = epsilon.get(key);
+        if (!tmp_stack.empty() && !set.contains(key)) {
+          tmp_stack.pop();
+          set.add(key);
+        }
       }
     }
     sec_exp_let = false;
@@ -50,12 +57,12 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     Stack stack = epsilon.get(e.id.toString());
     if (stack == null) {
       stack = new Stack();
+      epsilon.put(e.id.toString(), stack);
     }
     if (!stack.empty()){
       if (!sec_exp_let){
         Var new_var = new Var(e.id.gen());
         stack.push(new_var.id.toString());
-        epsilon.put(e.id.toString(), stack);
         return new_var;
       } else {
         used_in_let.push(e.id.toString());
@@ -63,6 +70,8 @@ public class AlphaConversion implements ObjVisitor<Exp>{
         return e;
       }
     } else {
+      //System.out.println("var: " + e.id.toString());
+      //System.out.println("stack empty");
       return e;
     }
   }
@@ -164,9 +173,9 @@ public class AlphaConversion implements ObjVisitor<Exp>{
       Stack stack = epsilon.get(id.toString());
       if (stack == null){
         stack = new Stack();
+        epsilon.put(id.toString(), stack);
       }
       stack.push(new_id.toString());
-      epsilon.put(id.toString(), stack);
       new_ids.add(new_id);
     }
     Exp new_e1 = e.e1.accept(this);
@@ -198,6 +207,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(LetRec let_rec){
+    functions.add(let_rec.fd.id.toString());
     Id new_id = let_rec.fd.id.gen();
     Stack stack = epsilon.get(let_rec.fd.id.toString());
     if (stack == null) {
@@ -211,10 +221,10 @@ public class AlphaConversion implements ObjVisitor<Exp>{
       Stack arg_stack = epsilon.get(arg.toString());
       if (arg_stack == null){
         arg_stack = new Stack();
+        epsilon.put(arg.toString(), arg_stack);
       }
       arg_stack.push(new_arg.toString());
       new_args.add(new_arg);
-      epsilon.put(arg.toString(), arg_stack);
     }
     sec_exp_let = true;
     Exp new_exp = let_rec.fd.e.accept(this);
