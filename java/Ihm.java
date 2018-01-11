@@ -7,6 +7,9 @@ String input_file, output_file;
 Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, closure_conversion, arm, translation, register, complete;
 
 public Ihm(String options[]){
+        if (options.length == 0) {
+                print_help();
+        }
         input_file = options[options.length-1];
         output_file = "";
         given_output =
@@ -23,9 +26,7 @@ public Ihm(String options[]){
              translation =
                 register = false;
 
-        if (options.length == 0) {
-                print_help();
-        }
+
         for (int i = 0; i < options.length; i++)
         {
                 switch(options[i]) {
@@ -99,14 +100,6 @@ private void print_help(){
         System.out.println("-p : parse only");
         System.out.println("-asml : output ASML");
         System.out.println("-my-opt : you can add personal options (optimizations, etc.)");
-        try {
-                Scanner fileIn = new Scanner(new File("troll_head.txt"));
-                while(fileIn.hasNext())
-                {
-                        System.out.println(fileIn.nextLine());
-                }
-                fileIn.close();
-        } catch (FileNotFoundException e) {}
         System.exit(0);
-}
+      }
 }

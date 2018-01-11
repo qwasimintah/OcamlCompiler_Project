@@ -3,7 +3,7 @@ package ast.type;
 public class Type {
 private static int x = 0;
 
-public Type gen() {
+public static Type gen() {
         return new TVar("?" + x++);
 }
 

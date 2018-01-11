@@ -6,6 +6,7 @@ import backend.functions.*;
 import backend.translation.*;
 import exp.*;
 import ast.*;
+import ast.type.*;
 import exceptions.*;
 import frontend.*;
 import backend.variables.*;
@@ -19,11 +20,12 @@ static public void main(String argv[]) {
                 // System.out.println(ihm.input_file);
                 // System.out.println(ihm.output_asml);
                 // System.out.println(ihm.typecheck_only);
-                if (ihm.typecheck_only) {
-                        throw new NotYetImplemented();
-                }
+                // if (ihm.typecheck_only) {
+                //         throw new NotYetImplemented();
+                // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
+                System.out.println(expression);
                 // assert (expression != null);
 
                 if (ihm.given_output) {
@@ -47,11 +49,22 @@ static public void main(String argv[]) {
                    System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
                  */
 
-                //For TypeChecking :
+                // For TypeChecking :
 
-                //  else if (ihm.typecheck_only) {
-                //       Exp expression_typechecked = expression.accept(new TypeChecking());
-                //  }
+                 else if (ihm.typecheck_only) {
+                      LinkedList<EnvElem> env = new LinkedList<EnvElem>();
+                      env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
+                      env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
+                      Env predef = new Env(env);
+                      System.out.println(predef);
+                      GenEquation expression_typechecked = new GenEquation();
+                      expression_typechecked.generate(predef, expression, new TUnit());
+                      System.out.println(expression_typechecked.eqt_list);
+                      EquationSolver solved = new EquationSolver();
+                      solved.reduce(expression_typechecked);
+                      System.out.println(expression_typechecked.eqt_list);
+                      // System.out.println(solved.solve(expression_typechecked));
+                 }
 
                 // For KNormalization :
                 else if (ihm.knorm) {
