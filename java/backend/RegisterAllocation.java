@@ -33,22 +33,22 @@ public static void VBA(Function func) {
         }
 }
 
-public static void SpillEverything(Function func) {
-        for (Instruction inst : func.getInstructions()) {
-                for (Object op : inst.getOperands()) {
-                        try {
-                                Variable var = (Variable) op;
-                                if (var.getOffset() == null) {
-                                        var.spill();
-                                }
-                        }
-                        catch (Exception e) {
-                                System.out.println(e.getMessage());
-                                return;
-                        }
-                }
-        }
-}
+// public static void SpillEverything(Function func) {
+//         for (Instruction inst : func.getInstructions()) {
+//                 for (Object op : inst.getOperands()) {
+//                         try {
+//                                 Variable var = (Variable) op;
+//                                 if (var.getOffset() == null) {
+//                                         var.spill();
+//                                 }
+//                         }
+//                         catch (Exception e) {
+//                                 System.out.println(e.getMessage());
+//                                 return;
+//                         }
+//                 }
+//         }
+// }
 
 public static void LinearScan(Function func) {
         HashSet<Variable> variables = new HashSet<Variable>();

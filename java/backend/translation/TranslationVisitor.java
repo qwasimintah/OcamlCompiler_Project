@@ -16,6 +16,7 @@ public class TranslationVisitor {
 
 private static Integer tmpId = 0;
 private static Integer tmpExpId = 0;
+private static Integer label = 0;
 
 public String getTempVarName() {
         tmpId++;
@@ -27,6 +28,11 @@ public String getTempBoolExpName() {
         return "tmpBoolExp" + tmpExpId.toString();
 }
 
+public String getNewLabel() {
+        label++;
+        return "label" + label.toString();
+}
+
 public Object visit(Exp e, Function func) {
         if (e instanceof Add) {
                 return (InstructionADD)visit((Add)e, func);
@@ -36,6 +42,9 @@ public Object visit(Exp e, Function func) {
         }
         else if (e instanceof Let) {
                 visit((Let)e, func);
+        }
+        else if (e instanceof LetRec) {
+                visit((LetRec)e, func);
         }
         else if (e instanceof Int) {
                 return (Integer) visit((Int)e, func);
@@ -55,11 +64,14 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof Neg) {
                 return (Integer) visit((Neg)e, func);
         }
+        else if (e instanceof If) {
+                return (InstructionIF) visit((If)e, func);
+        }
         return null;
 }
 
 public InstructionADD visit(Add e, Function func) {
-        // System.out.println("ADD");
+        System.out.println("ADD");
         ArrayList<Variable> vars = new ArrayList<Variable>();
 
         String var1 = ((Var)e.e1).id.id;
@@ -144,7 +156,7 @@ public InstructionSUB visit(Sub e, Function func) {
 }
 
 public void visit(Let e, Function func){
-        // System.out.println("LET");
+        System.out.println("LET");
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
@@ -170,9 +182,9 @@ public void visit(Let e, Function func){
                 func.addInstruction(inst);
         }
         else if (e.e1 instanceof Sub) {
-                InstructionSUB instadd = (InstructionSUB) visit(e.e1, func);
+                InstructionSUB instsub = (InstructionSUB) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, instsub);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
         }
@@ -182,6 +194,13 @@ public void visit(Let e, Function func){
                 func.getVariables().add(var);
                 func.addInstruction(inst);
                 //func.showVariables();
+        }
+        else if (e.e1 instanceof If) {
+                InstructionIF instif = (InstructionIF) visit(e.e1, func);
+                VInteger var = new VInteger(e.id.id, 0, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, instif);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
         }
         else {
                 visit(e.e1, func);
@@ -213,7 +232,7 @@ public Integer visit(Neg e, Function func){
 }
 
 public void visit(App e, Function func){
-        // System.out.println("APP");
+        System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
 
         // if (!(e.es.get(0) instanceof Let)) {
@@ -234,7 +253,7 @@ public void visit(App e, Function func){
                 vars.add(var);
         }
 
-        func.getParameters().add(vars);
+        // func.getParameters().add(vars);
         for (Object o : vars) {
                 if (o instanceof Variable) {
                         ((Variable)o).allocParametersRegister();
@@ -319,9 +338,34 @@ public BooleanLE visit(LE e, Function func){
         return exp;
 }
 
+public InstructionIF visit(If e, Function func) {
+        // System.out.println("IF");
+        VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
+        Function branch_then = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        visit(e.e2, branch_then);
+        Function branch_else = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        visit(e.e3, branch_else);
+        InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
+        func.addInstruction(inst);
+        return inst;
+}
+
 public void visit(LetRec e, Function func){
+        System.out.println("LETREC");
+
+        ArrayList<Variable> args = new ArrayList<Variable>();
+        ArrayList<Register> newRegisters = new ArrayList<Register>(9);
+        ArrayList<Register> newParametersRegisters = new ArrayList<Register>(2);
+        RegisterUtils.initRegisters(newRegisters, newParametersRegisters);
+
+        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters);
+
+        for (Id id : e.fd.args) {
+                Variable arg = new Variable(id.id, newFunc);
+                args.add(arg);
+        }
+        visit(e.fd.e, newFunc);
         visit(e.e, func);
-        return;
 }
 
 public Instruction visit(Unit e, Function func){
@@ -349,10 +393,6 @@ public Instruction visit(FMul e, Function func){
 }
 
 public Instruction visit(FDiv e, Function func){
-        return null;
-}
-
-public Instruction visit(If e, Function func){
         return null;
 }
 
