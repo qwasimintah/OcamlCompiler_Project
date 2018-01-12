@@ -25,7 +25,7 @@ static public void main(String argv[]) {
                 // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                System.out.println(expression);
+                //System.out.println(expression);
                 // assert (expression != null);
 
                 if (ihm.given_output) {
