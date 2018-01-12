@@ -14,6 +14,10 @@ public class ReductionNestedExpression implements ObjVisitor<Exp> {
       LetRec new_let_rec =  (LetRec) exp;
       return (new LetRec(new_let_rec.fd, insert(e, new_let_rec.e)));
     }
+    else if (exp instanceof LetTuple) {
+      LetTuple new_let_tuple = (LetTuple) exp;
+      return (new LetTuple(new_let_tuple.ids, new_let_tuple.ts, new_let_tuple.e1, insert(e, new_let_tuple.e2)));
+    }
     else {
       return (new Let(e.id, e.t, exp, e.e2.accept(this)));
     }
