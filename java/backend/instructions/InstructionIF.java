@@ -7,9 +7,9 @@ import backend.instructions.*;
 
 public class InstructionIF implements Instruction {
 
-private VBoolean cond;
-private Function branch_then;
-private Function branch_else;
+public VBoolean cond;
+public Function branch_then;
+public Function branch_else;
 
 public InstructionIF(VBoolean cond, Function branch_then, Function branch_else) {
         this.cond = cond;
