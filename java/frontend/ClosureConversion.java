@@ -29,7 +29,9 @@ public class ClosureConversion implements ObjVisitor<Exp>{
 
   public Exp visit(Let e){
     if (!current_functions.empty()){
-      String current_function = (String) current_functions.peek();
+      //String current_function = (String) current_functions.peek();
+      LetRec function = (LetRec) current_functions.peek();
+      String current_function = function.fd.id.toString();
       HashSet set = current_variables.get(current_function);
       if (set == null){
         set = new HashSet();
@@ -44,21 +46,27 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Var e){
-    String current_function = (String) current_functions.peek();
+    //String current_function = (String) current_functions.peek();
+    LetRec function = (LetRec) current_functions.peek();
+    String current_function = function.fd.id.toString();
     HashSet set = current_variables.get(current_function);
     boolean in_set = set.contains(e.id.toString());
-    System.out.println("current_function: " + current_function);
-    System.out.println("var: " + e.id.toString());
-    System.out.println("in_set: " + in_set);
-    if (!in_set && !current_functions.contains(e.id.toString())){
-      HashSet set_free_variables = free_variables.get(e.id.toString());
-      if (set_free_variables == null){
-        set_free_variables = new HashSet();
+    //System.out.println("current_function: " + current_function);
+    //System.out.println("var: " + e.id.toString());
+    //System.out.println("in_set: " + in_set);
+    //if (!in_set && !current_functions.contains(e.id.toString())){
+    for (int i = 0; i < current_functions.size(); i++){
+      LetRec func = (LetRec) current_functions.get(i);
+      if (!in_set && !func.fd.id.toString().equals(e.id.toString())){
+        HashSet set_free_variables = free_variables.get(e.id.toString());
+        if (set_free_variables == null){
+          set_free_variables = new HashSet();
+        }
+        set_free_variables.add(e.id.toString());
+        free_variables.put(current_function, set_free_variables);
+        //System.out.println(free_variables.get(e.id.toString()));
+        //System.out.println(free_variables);
       }
-      set_free_variables.add(e.id.toString());
-      free_variables.put(current_function, set_free_variables);
-      //System.out.println(free_variables.get(e.id.toString()));
-      //System.out.println(free_variables);
     }
     return e;
   }
@@ -136,7 +144,8 @@ public Exp visit(Not not){
       in_known = known.contains(let_rec.fd.id.toString());
       return let_rec;
     } else {
-      current_functions.push(let_rec.fd.id.toString());
+      //current_functions.push(let_rec.fd.id.toString());
+      current_functions.push(let_rec);
       known.add(let_rec.fd.id.toString());
       HashSet set = current_variables.get(let_rec.fd.id.toString());
       if (set == null){
@@ -170,10 +179,16 @@ public Exp visit(Not not){
         list_args.addAll(let_rec.fd.args);
         //System.out.println(list_args);
         FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, let_rec.fd.e);
-        /*Exp new_rec_e = let_rec.e.accept(this);
-        System.out.println("free_variables ap2: " + free_variables.get(let_rec.fd.id.toString()));
-        LetRec new_let_rec = new LetRec(new_fd, new_rec_e);*/
-        LetRec new_let_rec = new LetRec(new_fd, let_rec.e);
+        /*if (current_functions.size() > 1){
+          //Experience
+          LetRec prev_func = (LetRec) current_functions.get(current_functions.size() - 2);
+          FunDef prev_fd = new FunDef()
+          LetRec new_prev_func = new LetRec()
+          LetRec new_let_rec = new LetRec(new_fd, prev_func);
+        }*/
+        Exp new_e = let_rec.e.accept(this);
+        //LetRec new_let_rec = new LetRec(new_fd, let_rec.e);
+        LetRec new_let_rec = new LetRec(new_fd, new_e);
         //new_let_rec.accept(new PrintVisitor());
         current_functions.pop();
         //System.out.println("current_functions: " + current_functions);
@@ -210,22 +225,50 @@ public Exp visit(Not not){
   }
 
   public Exp visit(Tuple e){
-    return e;
+    List<Exp> new_list = new LinkedList<Exp>();
+    for (Exp exp: e.es){
+      Exp new_exp = exp.accept(this);
+      new_list.add(new_exp);
+    }
+    Tuple new_tuple = new Tuple(new_list);
+    return new_tuple;
   }
 
   public Exp visit(LetTuple e){
+    //TODO
+    /*for (Id id: e.ids){
+      HashSet set = current_variables.get(id.toString());
+      if (set == null){
+        set = new Stack();
+        current_variables.put(id.toString(), set);
+      }
+      set.add(id.toString());
+    }*/
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    LetTuple new_e = new LetTuple(e.ids, e.ts, new_e1, new_e2);
     return e;
   }
 
   public Exp visit(Array e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Array new_e = new Array(new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Get e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Get new_e = new Get(new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Put e){
-    return e;
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Exp new_e3 = e.e3.accept(this);
+    Put new_e = new Put(new_e1, new_e2, new_e3);
+    return new_e;
   }
 }

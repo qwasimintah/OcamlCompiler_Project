@@ -56,7 +56,7 @@ public void spill() {
 public void spillParameter() {
         Integer spillOffset = this.func.getOffsetParameters();
         this.func.setOffsetParameters(spillOffset + 4);
-        this.setOffset(spillOffset);
+        this.setParametersOffset(spillOffset);
 }
 
 public void setRegister(Register reg) {
