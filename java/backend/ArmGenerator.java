@@ -49,7 +49,7 @@ public ArmGenerator(){
 public void generate_code(List<Function>  functions){
         //loop through all the available functions
         for(Function fun : functions) {
-                List<Parameter> arguments = fun.getArguments();
+                List<Variable> arguments = fun.getArguments();
                 List<Instruction> intr = fun.getInstructions();
                 HashSet<Variable> locals = fun.getVariables();
                 //process all intructions of functions
@@ -180,14 +180,14 @@ public void generate_addition(InstructionADD instr){
         String operand1="";
         String operand2="";
 
-  
+
         if(op1 instanceof Variable) {
                 //VARIABLE WITH REGISTER
                 if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 //VARIABLE WITH OFFSET
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
 
                         operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
@@ -196,18 +196,18 @@ public void generate_addition(InstructionADD instr){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
 
-                    operand1=((Variable)op1).getParametersRegister().getName();
+                        operand1=((Variable)op1).getParametersRegister().getName();
                 }
 
-                
-                // if its a paramter with an offset
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ){
 
-                    operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                    textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                    operand1="r0";
+                // if its a paramter with an offset
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+
+                        operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
                 }
                 //SHOULD NOT FIRE
                 else{
@@ -219,13 +219,13 @@ public void generate_addition(InstructionADD instr){
         }
 
         if(op2 instanceof Variable) {
-                
+
                 // case where variable has a register and not use as a paramter (VARIABLE WITH REGISTER)
                 if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
                         operand2=((Variable)op2).getRegister().getName();
                 }
                 // case where variable has no register, no local vaiable offset and no parameter register(PARAMETER WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
 
                         operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -234,18 +234,18 @@ public void generate_addition(InstructionADD instr){
                 }
 
                 //case where vaiable has no register , no local variable offset and no parameter offset(PARAMATER WITH REGISTER)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
 
-                    operand2=((Variable)op2).getParametersRegister().getName();
+                        operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
-                
-                // case where variable has offset(VARIABLE WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ){
 
-                    operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-                    textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-                    operand2="r1";
+                // case where variable has offset(VARIABLE WITH OFFSET)
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ) {
+
+                        operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
                 }
                 //case SHOULD NOT FIRE
                 else{
@@ -292,7 +292,7 @@ public void generate_mult(InstructionMULT instr){
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 //VARIABLE WITH OFFSET
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
 
                         operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
@@ -301,18 +301,18 @@ public void generate_mult(InstructionMULT instr){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
 
-                    operand1=((Variable)op1).getParametersRegister().getName();
+                        operand1=((Variable)op1).getParametersRegister().getName();
                 }
 
-                
-                // if its a paramter with an offset
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ){
 
-                    operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                    textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                    operand1="r0";
+                // if its a paramter with an offset
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+
+                        operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
                 }
                 //SHOULD NOT FIRE
                 else{
@@ -324,13 +324,13 @@ public void generate_mult(InstructionMULT instr){
         }
 
         if(op2 instanceof Variable) {
-                
+
                 // case where variable has a register and not use as a paramter (VARIABLE WITH REGISTER)
                 if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
                         operand2=((Variable)op2).getRegister().getName();
                 }
                 // case where variable has no register, no local vaiable offset and no parameter register(PARAMETER WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
 
                         operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -339,18 +339,18 @@ public void generate_mult(InstructionMULT instr){
                 }
 
                 //case where vaiable has no register , no local variable offset and no parameter offset(PARAMATER WITH REGISTER)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
 
-                    operand2=((Variable)op2).getParametersRegister().getName();
+                        operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
-                
-                // case where variable has offset(VARIABLE WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ){
 
-                    operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-                    textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-                    operand2="r1";
+                // case where variable has offset(VARIABLE WITH OFFSET)
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ) {
+
+                        operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
                 }
                 //case SHOULD NOT FIRE
                 else{
@@ -362,7 +362,7 @@ public void generate_mult(InstructionMULT instr){
         }
 
 
- 
+
 
         if(op1 instanceof Integer && op2 instanceof Variable) {
 
@@ -405,7 +405,7 @@ public void generate_sub(InstructionSUB instr){
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 //VARIABLE WITH OFFSET
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
 
                         operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
@@ -414,18 +414,18 @@ public void generate_sub(InstructionSUB instr){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null){
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
 
-                    operand1=((Variable)op1).getParametersRegister().getName();
+                        operand1=((Variable)op1).getParametersRegister().getName();
                 }
 
-                
-                // if its a paramter with an offset
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()==null && ((Variable)op1).getOffset()==null ){
 
-                    operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                    textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                    operand1="r0";
+                // if its a paramter with an offset
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()==null && ((Variable)op1).getOffset()==null ) {
+
+                        operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
                 }
                 //SHOULD NOT FIRE
                 else{
@@ -437,13 +437,13 @@ public void generate_sub(InstructionSUB instr){
         }
 
         if(op2 instanceof Variable) {
-                
+
                 // case where variable has a register and not use as a paramter (VARIABLE WITH REGISTER)
                 if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
                         operand2=((Variable)op2).getRegister().getName();
                 }
                 // case where variable has no register, no local vaiable offset and no parameter register(PARAMETER WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
 
                         operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -452,18 +452,18 @@ public void generate_sub(InstructionSUB instr){
                 }
 
                 //case where vaiable has no register , no local variable offset and no parameter offset(PARAMATER WITH REGISTER)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
 
-                    operand2=((Variable)op2).getParametersRegister().getName();
+                        operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
-                
-                // case where variable has offset(VARIABLE WITH OFFSET)
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ){
 
-                    operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-                    textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-                    operand2="r1";
+                // case where variable has offset(VARIABLE WITH OFFSET)
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()==null && ((Variable)op2).getOffset()!=null ) {
+
+                        operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
                 }
                 //case SHOULD NOT FIRE
                 else{
@@ -552,10 +552,10 @@ public void  generate_assign(InstructionASSIGN instr){
                 //op2=(Variable)op2;
                 // if its a local variable with a register
                 if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
-                    operand2=((Variable)op2).getRegister().getName();
+                        operand2=((Variable)op2).getRegister().getName();
                 }
                 // it its a local variable with an offset
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
 
                         operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -564,18 +564,18 @@ public void  generate_assign(InstructionASSIGN instr){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null){
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
 
-                    operand2=((Variable)op2).getParametersRegister().getName();
+                        operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
-                
-                // if its a paramter with an offset
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ){
 
-                    operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                    textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-                    operand2="r1";
+                // if its a paramter with an offset
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+
+                        operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
                 }
                 // else{
                 //         operand2="[fp ,#" + ((Variable)op2).getOffset().toString()+"]";
@@ -607,7 +607,7 @@ public void  generate_assign(InstructionASSIGN instr){
                 //System.out.println("fire");
                 assign(operand1, operand2);
                 if(offset1!="") {
-                   textSection.text.append("\tSTR r0 , ").append(offset1).append("\n");
+                        textSection.text.append("\tSTR r0 , ").append(offset1).append("\n");
                 }
         }
 
@@ -642,7 +642,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 else if(op2 instanceof InstructionMULT) {
 
-                         generate_mult((InstructionMULT) op2);
+                        generate_mult((InstructionMULT) op2);
                         assign(reg, "r0");
 
                 }
@@ -650,13 +650,13 @@ public void  generate_assign(InstructionASSIGN instr){
                 else if(op2 instanceof InstructionCALL) {
                         generate_function_call((InstructionCALL) op2);
 
-                        if(offset1!=""){
-                          textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
-                          textSection.text.append("\tSTR r1 , ").append(offset1).append("\n");
+                        if(offset1!="") {
+                                textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
+                                textSection.text.append("\tSTR r1 , ").append(offset1).append("\n");
                         }
                         else{
-                          assign(reg, ((InstructionCALL)op2).getReturn());
-                      }
+                                assign(reg, ((InstructionCALL)op2).getReturn());
+                        }
                 }
 
 
@@ -848,139 +848,139 @@ public void generate_function_call(InstructionCALL instr) {
         if(instr.getFname().equals("print_int")) {
                 //Parameter param = (Parameter)params.get(0);
                 if(params.size() != 0) {
-                      if(!(params.get(0) instanceof Integer)) {
-                          Variable param = (Variable)params.get(0);
-                          //assign("r0", param.getRegister().getName());
+                        if(!(params.get(0) instanceof Integer)) {
+                                Variable param = (Variable)params.get(0);
+                                //assign("r0", param.getRegister().getName());
 
-                          //VARIABLE WITH A PARAMETER REGISTER
-                          if(param.getRegister()!= null ) {
-                              assign("r0", param.getRegister().getName());
-                          }
-                          
-                          // case where local variable has an offset but the paramter has a register
-                          //VAIABLE WITH AN OFFSET
-                          else if(param.getRegister()==null ){
-                                //System.out.println("case2");
-                            // load variable from the stack
-                                String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
-                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                                
-                          }
+                                //VARIABLE WITH A PARAMETER REGISTER
+                                if(param.getRegister() != null ) {
+                                        assign("r0", param.getRegister().getName());
+                                }
 
-                        
-                          // case where both local and parameters have and offset
+                                // case where local variable has an offset but the paramter has a register
+                                //VAIABLE WITH AN OFFSET
+                                else if(param.getRegister() == null ) {
+                                        //System.out.println("case2");
+                                        // load variable from the stack
+                                        String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
+                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
 
-                          else {
-                                //System.out.println("case3");
-                                String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
-                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                          }
+                                }
 
-                  
+
+                                // case where both local and parameters have and offset
+
+                                else {
+                                        //System.out.println("case3");
+                                        String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
+                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                }
+
+
+
+                        }
 
                 }
-
-              }
                 textSection.text.append("\tBL min_caml_print_int\n");
                 textSection.text.append("\tBL min_caml_print_newline\n");
                 return;
         }
 
         stash_locals();
-        
+
         //check if function has parameters
-        if(params.size()!=0){
+        if(params.size()!=0) {
 
-          //get first parameter
-          Object par = params.get(0);
+                //get first parameter
+                Object par = params.get(0);
 
-          if(par instanceof Variable){
+                if(par instanceof Variable) {
 
-              for(int i=0; i<num_params; i++) {
-                  Variable param = (Variable)params.get(i);
-                  // case where the local var has a register and the paramter has a register
-                  if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                      //System.out.println("1");
-                      assign(param.getParametersRegister().getName(), param.getRegister().getName());
-                  }
-                  // case where pushing the local variable has a register but the parameter must be pushed on the stack
-                  else if (param.getRegister()!= null && param.getParametersRegister()==null){
-                    //System.out.println("2");
-                    String value =param.getRegister().getName();
-                    //reserve_space_param(4);
-                    textSection.text.append("\tSUB sp, #4\n");
-                    assign("r0", value);
-                    textSection.text.append("\tSTR r0, [sp]\n");
-                  }
+                        for(int i=0; i<num_params; i++) {
+                                Variable param = (Variable)params.get(i);
+                                // case where the local var has a register and the paramter has a register
+                                if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                        //System.out.println("1");
+                                        assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                                }
+                                // case where pushing the local variable has a register but the parameter must be pushed on the stack
+                                else if (param.getRegister()!= null && param.getParametersRegister()==null) {
+                                        //System.out.println("2");
+                                        String value =param.getRegister().getName();
+                                        //reserve_space_param(4);
+                                        textSection.text.append("\tSUB sp, #4\n");
+                                        assign("r0", value);
+                                        textSection.text.append("\tSTR r0, [sp]\n");
+                                }
 
-                  // case where local variable has an offset but the paramter has a register
+                                // case where local variable has an offset but the paramter has a register
 
-                  else if(param.getRegister()==null && param.getParametersRegister()!=null ){
-                        //System.out.println("3");
-                    // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
+                                        //System.out.println("3");
+                                        // load variable from the stack
+                                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
 
-                        String value =param.getParametersRegister().getName();
-                        assign(value, "r0");                       
-                  }
+                                        String value =param.getParametersRegister().getName();
+                                        assign(value, "r0");
+                                }
 
-                  // case where local var has an offset and the parameter has an offset
+                                // case where local var has an offset and the parameter has an offset
 
-                  else if(param.getRegister()==null && param.getParametersRegister()==null){
-                        //System.out.println("3");
-                    // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                        textSection.text.append("\tSUB sp, #4\n");
-                        textSection.text.append("\tSTR r0, [sp]\n");
-                        
-                  }
+                                else if(param.getRegister()==null && param.getParametersRegister()==null) {
+                                        //System.out.println("3");
+                                        // load variable from the stack
+                                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                        textSection.text.append("\tSUB sp, #4\n");
+                                        textSection.text.append("\tSTR r0, [sp]\n");
 
-
-                  // case where both local and parameters have and offset
-
-                  else {
-
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r1 , ").append(localoffset).append("\n");
-
-                        //reserve_space_param(4);
-                        textSection.text.append("\tSUB sp, #4\n");
-                        assign("r1","r0");
-                        textSection.text.append("\tSTR r0, [sp]\n");
-
-                  }
+                                }
 
 
+                                // case where both local and parameters have and offset
 
-              }
+                                else {
 
-             
+                                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                        textSection.text.append("\tLDR r1 , ").append(localoffset).append("\n");
 
-          }
+                                        //reserve_space_param(4);
+                                        textSection.text.append("\tSUB sp, #4\n");
+                                        assign("r1","r0");
+                                        textSection.text.append("\tSTR r0, [sp]\n");
 
-          // else if(par instanceof Parameter){
-          //     for(int i=0; i<num_params; i++) {
-          //             Parameter param = (Parameter)params.get(i);
+                                }
 
-          //             if(param.getRegister()!= null) {
-          //                 assign(param.getRegister().getName(), param.getVReg());
-          //             }
-          //     }
 
-          //     if(num_params >= available_reg_param) {
-          //       //stash_parameters();stash
-          //       for(int i =2; i< num_params; i++) {
-          //         //System.out.println("came here\n");
-          //         String value =((Parameter)params.get(i)).getVReg();
-          //         reserve_space_param(4);
-          //         textSection.text.append("\tSUB sp, #4\n");
-          //         assign("r0", value);
-          //         textSection.text.append("\tSTR r0, [sp]\n");
-          //       }
-          //     }
-          // }
+
+                        }
+
+
+
+                }
+
+                // else if(par instanceof Parameter){
+                //     for(int i=0; i<num_params; i++) {
+                //             Parameter param = (Parameter)params.get(i);
+
+                //             if(param.getRegister()!= null) {
+                //                 assign(param.getRegister().getName(), param.getVReg());
+                //             }
+                //     }
+
+                //     if(num_params >= available_reg_param) {
+                //       //stash_parameters();stash
+                //       for(int i =2; i< num_params; i++) {
+                //         //System.out.println("came here\n");
+                //         String value =((Parameter)params.get(i)).getVReg();
+                //         reserve_space_param(4);
+                //         textSection.text.append("\tSUB sp, #4\n");
+                //         assign("r0", value);
+                //         textSection.text.append("\tSTR r0, [sp]\n");
+                //       }
+                //     }
+                // }
         }
 
         textSection.text.append("\tBL ").append(fname).append("\n");
@@ -989,7 +989,7 @@ public void generate_function_call(InstructionCALL instr) {
                 //restore_parameters();
 
         }
-        
+
 
 }
 

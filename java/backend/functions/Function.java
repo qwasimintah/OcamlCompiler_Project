@@ -9,7 +9,7 @@ public class Function {
 
 private String name;
 private List<Instruction> instructions;
-private List<Parameter> arguments;
+private List<Variable> arguments;
 private Integer spillOffset = 4;
 private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
@@ -17,7 +17,7 @@ private HashSet<Variable> variables = new HashSet<Variable>();
 public ArrayList<Register> registers;
 public ArrayList<Register> parametersRegisters;
 
-public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
+public Function(String name, List<Variable> arguments, List<Instruction> instructions,
                 ArrayList<Register> registers,
                 ArrayList<Register> parametersRegisters) {
         this.name = name;
@@ -43,7 +43,7 @@ public Iterator<Instruction> iterator() {
         return instructions.iterator();
 }
 
-public List<Parameter> getArguments() {
+public List<Variable> getArguments() {
         return arguments;
 }
 
@@ -71,10 +71,9 @@ public void setVariables (HashSet<Variable> locals){
         variables = locals;
 }
 
-public void setParameters(ArrayList<Object> params){
-
-        parameters = params;
-}
+// public void setParameters(ArrayList<Object> params){
+//         parameters = params;
+// }
 
 public void show() {
         for (Instruction i : instructions) {

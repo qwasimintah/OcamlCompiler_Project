@@ -358,13 +358,13 @@ public void visit(LetRec e, Function func){
         ArrayList<Register> newParametersRegisters = new ArrayList<Register>(2);
         RegisterUtils.initRegisters(newRegisters, newParametersRegisters);
 
-        Function newFunc = new Function(e.fd.id.id, new ArrayList<Variable>(), new ArrayList<Instruction>(), newRegisters, newParametersRegisters);
+        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters);
 
         for (Id id : e.fd.args) {
                 Variable arg = new Variable(id.id, newFunc);
                 args.add(arg);
         }
-
+        visit(e.fd.e, newFunc);
         visit(e.e, func);
 }
 
