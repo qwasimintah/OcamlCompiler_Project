@@ -200,11 +200,7 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File(ihm.output_file))) {
-                                oS.write(text.toString().getBytes());
-                        } catch (IOException e) {
-                                e.printStackTrace();
-                        }
+                        
                 }
 
         } catch (Exception e) {
