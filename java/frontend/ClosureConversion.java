@@ -17,7 +17,9 @@ public class ClosureConversion implements ObjVisitor<Exp>{
 
   private Stack current_functions = new Stack();
 
-  private HashSet set_of_functions = new HashSet();
+  private HashSet set_of_functions = new HashSet(); {{
+    set_of_functions.add("print_int");
+  }}
 
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
@@ -173,6 +175,12 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       }
       for (Id arg: let_rec.fd.args){
         set.add(arg.toString());
+        for (int i = 0; i < current_functions.size(); i++){
+          LetRec tmp_func = (LetRec) current_functions.get(i);
+          String tmp_id = tmp_func.fd.id.toString();
+          HashSet tmp_set = current_variables.get(tmp_id);
+          tmp_set.add(arg.toString());
+        }
       }
       System.out.println("let_rec: " + let_rec.fd.id.toString());
       System.out.println("free_variables av: " + free_variables.get(let_rec.fd.id.toString()));
@@ -224,17 +232,27 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(App app){
-    test_app = true;
-    app.e.accept(this);
-    test_app = false;
-    if (in_known){
-      //TODO
-      //System.out.println("Known");
-      return app;
+    if (current_functions.size() > 1){
+      Exp new_e = app.e.accept(this);
+      List<Exp> new_es = new LinkedList<Exp> ();
+      for (Exp tmp_exp: app.es){
+        new_es.add(tmp_exp.accept(this));
+      }
+      App new_app = new App(new_e, new_es);
+      return new_app;
     } else {
-      //TODO
-      //System.out.println("Unknown");
-      return app;
+      test_app = true;
+      app.e.accept(this);
+      test_app = false;
+      if (in_known){
+        //TODO
+        //System.out.println("Known");
+        return app;
+      } else {
+        //TODO
+        //System.out.println("Unknown");
+        return app;
+      }
     }
   }
 
