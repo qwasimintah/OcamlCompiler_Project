@@ -567,10 +567,11 @@ public void  generate_assign(InstructionASSIGN instr){
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 else{
-
-                        offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
-                        //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
-                        operand1="r0";
+                    System.out.println("var name");
+                    System.out.println(((Variable)op1).getName());
+                    offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
+                    //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
+                    operand1="r0";
                 }
         }
 
@@ -844,6 +845,8 @@ public void generate_branch_label(String fname){
 }
 
 
+
+
 public void output_terminal(){
 
         textSection.text.append("\tMOV r7, #1\n");
@@ -855,6 +858,7 @@ public String get_label(String name){
         return "_"+name;
 
 }
+
 
 public void generate_if(InstructionIF inst){
 
@@ -871,25 +875,158 @@ public void generate_if(InstructionIF inst){
       generate_branch(else_branch);
 
 
-      BooleanExpression cond = inst.cond.getExp();
+      BooleanExpression exp = inst.cond.getExp();
 
-      if(cond instanceof BooleanEQ){
+      String operand1="";
+      String operand2 = "";
+      String offset1 = "";
+
+      if(exp instanceof BooleanEQ){
+         Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
+         Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(0));
+
+
+          //VARIABLE WITH REGISTER
+        if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
+                operand1=((Variable)op1).getRegister().getName();
+        }
+        //VARIABLE WITH OFFSET
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
+
+                operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                operand1="r0";
+
+        }
+
+        // if its a parameter with a register
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+
+                operand1=((Variable)op1).getParametersRegister().getName();
+        }
+
+
+        // if its a paramter with an offset
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+
+                operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                operand1="r0";
+        }
+
+        if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
+            operand2=((Variable)op2).getRegister().getName();
+        }
+        // it its a local variable with an offset
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
+
+            operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+            operand2="r1";
+
+        }
+
+        // if its a parameter with a register
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+
+            operand2=((Variable)op2).getParametersRegister().getName();
+        }
+
+
+        // if its a paramter with an offset
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+
+            operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+            operand2="r1";
+        }
+
+
+        textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
+        textSection.text.append("\tBEQ ").append(inst.branch_then.getName());
+        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+
+      }
+
+      else if (exp instanceof BooleanLE){
+
+        Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
+         Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
+
+
+          //VARIABLE WITH REGISTER
+        if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
+                operand1=((Variable)op1).getRegister().getName();
+        }
+        //VARIABLE WITH OFFSET
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
+
+                operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                operand1="r0";
+
+        }
+
+        // if its a parameter with a register
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+
+                operand1=((Variable)op1).getParametersRegister().getName();
+        }
+
+
+        // if its a paramter with an offset
+        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+
+                operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                operand1="r0";
+        }
+
+        if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
+            operand2=((Variable)op2).getRegister().getName();
+        }
+        // it its a local variable with an offset
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
+
+            operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+            operand2="r1";
+
+        }
+
+        // if its a parameter with a register
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+
+            operand2=((Variable)op2).getParametersRegister().getName();
+        }
+
+
+        // if its a paramter with an offset
+        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+
+            operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+            operand2="r1";
+        }
+
+
+        textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
+        textSection.text.append("\tBLE ").append(inst.branch_then.getName());
+        textSection.text.append("\tBA ").append(inst.branch_else.getName());
 
 
       }
 
-      else if (cond instanceof BooleanLE){
+      else if (exp instanceof BooleanTrue){
 
+        textSection.text.append("\tBA ").append(inst.branch_then.getName());
 
-      }
-
-      else if (cond instanceof BooleanTrue){
 
 
       }
 
-      else if(cond instanceof BooleanFalse){
-
+      else if(exp instanceof BooleanFalse){
+        textSection.text.append("\tBA ").append(inst.branch_else.getName());
       }
 
 
