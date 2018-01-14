@@ -61,7 +61,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       //System.out.println("in_set: " + in_set);
       //if (!in_set && !set_of_functions.contains(e.id.toString())){
       if (!set_of_functions.contains(e.id.toString())){
-        for (int i = 1; i < current_functions.size(); i++){
+        for (int i = 0; i < current_functions.size(); i++){
           //System.out.println("current_functions: " + current_functions);
           //HashSet set_free_variables = free_variables.get(current_function);
           LetRec tmp_func = (LetRec) current_functions.get(i);
