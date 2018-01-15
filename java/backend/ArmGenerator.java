@@ -915,8 +915,23 @@ public String generate_if(InstructionIF inst){
 
       Function then_branch = inst.branch_then;
       Function else_branch = inst.branch_else;
+<<<<<<< HEAD
       System.out.println("HERE");
       then_branch.showVariablesState();
+=======
+      // System.out.println("HERE");
+      // then_branch.showVariablesState();
+      // else_branch.showVariablesState();
+      //generate code for branch then
+
+      generate_branch(then_branch);
+
+
+      //generate code for branch then
+
+      generate_branch(else_branch);
+
+>>>>>>> b49c75c481c5de774d697ec16dce7d18d720bf35
 
       BooleanExpression exp = inst.cond.getExp();
       System.out.println(inst.cond);
