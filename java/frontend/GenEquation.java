@@ -11,7 +11,6 @@ public class GenEquation{
   public GenEquation(){
       // Load of the environement
       this.eqt_list = new ArrayList();
-      this.app_id = 0;
       // System.out.println(envr);
   }
   public void generate(Env env, Exp exp, Type exp_type){
@@ -93,43 +92,70 @@ public class GenEquation{
           }
           if (!inside){
             System.out.println("Erreur de typage");
-            System.exit(1);
+            System.out.println(env);
+            System.out.println(((Var)exp).id);
+            // System.exit(1);
           }
 
       } else if (exp instanceof LetRec) {
-        System.out.println("in letrec");
-        FunDef f = (FunDef)(((LetRec)exp).fd);
-        Exp expr1 = (Exp)(((LetRec)exp).e);
-        Exp expr2 = f.e; //Peut être dans l'autre sens.
-        Env env1 = env.hadd(new EnvElem(f.id, new TFun(f.type, exp_type))); // on ajoute la fonction
-        System.out.println(expr2);
-        if (f.args.size() > 0){
-            Env env2 = env.hadd(new EnvElem(f.args.get(0), f.type));
-            for (int i = 1; i < f.args.size(); i++){ // est il possible d'avoir des fonctions sans argument ?
-              env2 = env2.hadd(new EnvElem(f.args.get(i), f.type));
+          // System.out.println("in letrec");
+          FunDef f = (FunDef)(((LetRec)exp).fd);
+          Exp expr1 = f.e; //Peut être dans l'autre sens.
+          Exp expr2 = (Exp)(((LetRec)exp).e);
+          Env env1, env2;
+          Type returnType = Type.gen();
+          // System.out.println(f.id + " : " + f.type);
+          if (f.args.size() == 0){
+            env1 = env.hadd(new EnvElem(f.id, new TFun(returnType)));
+            env2 = env;
+          } else if (f.args.size() == 1){
+            Type t1 = Type.gen();
+            env1 = env.hadd(new EnvElem(f.id, new TFun(t1, returnType)));
+            env2 = env.hadd(new EnvElem(f.args.get(0), t1));
+          } else {
+            List<Type> argsList = new ArrayList();
+            env2 = env;
+            for (int i=0; i < f.args.size(); i++){
+              Type ty = Type.gen();
+              argsList.add(ty);
+              env2 = env2.hadd(new EnvElem(f.args.get(i), ty));
             }
-            generate(env2, expr1, f.type);
-        }
-        else {
-          generate(env, expr1, f.type);
-        }
-        generate(env1, expr2, exp_type);
+            env1 = env.hadd(new EnvElem(f.id, new TFun(argsList, returnType)));
+          }
+          // System.out.println(env1);
+          // System.out.println(env2);
+          // System.out.println(expr1);
+          // System.out.println(returnType);
+          generate(env1, expr2, exp_type);
+          generate(env2, expr1, returnType);
       } else if (exp instanceof App) {
         // Var A = new Var(new Id("app" + this.app_id));
-        // this.app_id++;
-        // generate(env, ((App)exp).e, new TFun(A, exp_type));
-        // for (int i = 0; i < ((App)exp).es.size(); i++){
-        //   generate(env, ((App)exp).es.get(i), new TFun(A, exp_type));
-        // }
-      }
-      //         res++;
+        // System.out.println("size : " + ((App)exp).es.size());
+        // System.out.println(((App)exp).e + " : " + ((App)exp).es.get(0) + "," + ((App)exp).es.get(1));
+        Type t1;
+        if (((App)exp).es.size() == 0) {
+          generate(env, ((App)exp).e, new TFun(exp_type));
+        } else if (((App)exp).es.size() == 1){
+          t1 = Type.gen();
+          generate(env, ((App)exp).e, new TFun(t1, exp_type));
+          generate(env, ((App)exp).es.get(0), t1);
+        } else {
+          List<Type> t = new ArrayList();
+          System.out.println(((App)exp).es.size());
+          for (int i = 0; i < ((App)exp).es.size(); i++){
+            t1 = Type.gen();
+            t.add(t1);
+            generate(env, ((App)exp).es.get(i), t1);
+          }
+          generate(env, ((App)exp).e, new TFun(t, exp_type));
+        }
+      } else if (exp instanceof If) {
+        generate(env, ((If)exp).e1, new TBool());
+        generate(env, ((If)exp).e2, exp_type);
+        generate(env, ((If)exp).e3, exp_type);
+
       // } else if (exp instanceof Tuple) {
-      //         Tuple e = (Tuple) exp;
-      //         res = 0;
-      //         for (Exp e1 : e.es) {
-      //                 res = Math.max(computeHeight(e1), res);
-      //         }
-      //         res++;
+
       // } else if (exp instanceof LetTuple) {
       //         LetTuple e = (LetTuple) exp;
       //         res = Math.max(computeHeight(e.e1), computeHeight(e.e2)) + 1;
@@ -147,6 +173,7 @@ public class GenEquation{
       //         assert (false);
       // }
       // return res;
+      }
   }
 
 }
