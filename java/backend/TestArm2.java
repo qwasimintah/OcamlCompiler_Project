@@ -36,6 +36,23 @@ let _ =
 Expected Result= 3;
 
 
+let _f x y n =
+  let z = add x y in
+  let t = 2 in
+  let q = sub t z in
+  add n t
+
+let _ =
+  let x = 0 in
+  let y = 1 in
+  let w = 2 in
+  let z = call _f x y w in
+  call _min_caml_print_int z
+
+Expected Result= ;
+
+
+
 """
 
 /*/
@@ -93,6 +110,10 @@ public class TestArm2 {
 
 
 
+
+
+
+
         VInteger fz = new VInteger("z", -1, _f);
         VInteger ft = new VInteger("t", 2, _f);
         VInteger fq = new VInteger("q", -1, _f);
@@ -134,8 +155,10 @@ public class TestArm2 {
         params.add(vx);
         params.add(vy);
 
-        RegisterUtils.showRegisters(registers);
-        RegisterUtils.showRegisters(param_registers);
+        RegisterUtils.showRegisters(registers1);
+        RegisterUtils.showRegisters(param_registers1);
+
+
 
         InstructionASSIGN q = new InstructionASSIGN(fundef, vx, 0);
         InstructionASSIGN p = new InstructionASSIGN(fundef, vy, 1);
@@ -154,7 +177,7 @@ public class TestArm2 {
         InstructionADD add_f = new InstructionADD(_f, a, b);
         InstructionASSIGN vz = new InstructionASSIGN(_f, fz, add_f);
         InstructionASSIGN vt = new InstructionASSIGN(_f, ft, 2);
-        InstructionSUB sub_f= new InstructionSUB(_f, ft, fz);
+        InstructionSUB sub_f= new InstructionSUB(_f, fz, ft);
         InstructionASSIGN qass = new InstructionASSIGN(_f, fq, sub_f);
         InstructionADD add_q = new InstructionADD(_f, fq, ft);
 
@@ -192,11 +215,7 @@ public class TestArm2 {
         System.out.println(result);
 
 
-        try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/arm_test2.s"))) {
-	               oS.write(result.toString().getBytes());
-              } catch (IOException e) {
-	                e.printStackTrace();
-        }
+        
 
    }
 

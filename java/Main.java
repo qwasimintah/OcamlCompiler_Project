@@ -25,7 +25,7 @@ static public void main(String argv[]) {
                 // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                System.out.println(expression);
+                //System.out.println(expression);
                 // assert (expression != null);
 
                 if (ihm.given_output) {
@@ -200,11 +200,7 @@ static public void main(String argv[]) {
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File(ihm.output_file))) {
-                                oS.write(text.toString().getBytes());
-                        } catch (IOException e) {
-                                e.printStackTrace();
-                        }
+                        
                 }
 
         } catch (Exception e) {
