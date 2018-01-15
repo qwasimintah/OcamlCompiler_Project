@@ -36,6 +36,7 @@ public ArmGenerator(){
         dataSection=new DataSection();
         dataSection.data.append("\t.data\n");
 
+
         //initialise the .text
         textSection= new TextSection();
         textSection.text.append("\t.text\n");
@@ -46,6 +47,17 @@ public ArmGenerator(){
 }
 
 
+
+public void initialise_heap(){
+      dataSection.data.append("\tbalign 4\n");
+
+}
+
+public void allocate_heap_space(){
+
+  //dataSection.data.append("\t")
+
+}
 
 
 
@@ -128,6 +140,8 @@ public void generate_code(List<Function>  functions){
         }
 
 }
+
+
 
 
 public void generate_branch(Function  fun, String return_label){
@@ -974,8 +988,8 @@ public String generate_if(InstructionIF inst){
 
 
         textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBEQ ").append(inst.branch_then.getName());
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tBEQ ").append(inst.branch_then.getName()).append("\n");;
+        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");;
 
       }
 
@@ -1042,22 +1056,22 @@ public String generate_if(InstructionIF inst){
 
 
         textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBLE ").append(inst.branch_then.getName());
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
+        textSection.text.append("\tBA ").append(inst.branch_else.getName()).append("\n");;
 
 
       }
 
       else if (exp instanceof BooleanTrue){
 
-        textSection.text.append("\tBA ").append(inst.branch_then.getName());
+        textSection.text.append("\tB ").append(inst.branch_then.getName()).append("\n");
 
 
 
       }
 
       else if(exp instanceof BooleanFalse){
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
       }
       else{
 
