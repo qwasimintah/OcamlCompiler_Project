@@ -8,6 +8,7 @@ import backend.functions.*;
 import backend.instructions.*;
 import backend.variables.*;
 import backend.booleans.*;
+import backend.tuples.*;
 import exp.*;
 import ast.*;
 import ast.type.*;
@@ -72,6 +73,9 @@ public Object visit(Exp e, Function func) {
         }
         else if (e instanceof LE) {
                 return (BooleanLE)visit((LE)e, func);
+        }
+        else if (e instanceof Tuple) {
+                return (TupleJerry)visit((Tuple)e, func);
         }
         return null;
 }
@@ -377,6 +381,18 @@ public void visit(LetRec e, Function func){
         visit(e.e, func);
 }
 
+public TupleJerry visit(Tuple e, Function func){
+        System.out.println("TUPLE");
+        ArrayList<Object> obj = new ArrayList<Object>();
+        for (Exp e1 : e.es) {
+                Object o = (Object)visit(e1, func);
+                obj.add(o);
+        }
+        TupleJerry tuple = new TupleJerry(func, obj);
+        tuple.show();
+        return tuple;
+}
+
 public Instruction visit(Unit e, Function func){
         return null;
 }
@@ -402,10 +418,6 @@ public Instruction visit(FMul e, Function func){
 }
 
 public Instruction visit(FDiv e, Function func){
-        return null;
-}
-
-public Instruction visit(Tuple e, Function func){
         return null;
 }
 

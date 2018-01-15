@@ -105,6 +105,5 @@ public void showVariables() {
         for (Variable v : variables) {
                 System.out.println(v.getName());
         }
-
 }
 }
