@@ -81,7 +81,7 @@ public Object visit(Exp e, Function func) {
 }
 
 public InstructionADD visit(Add e, Function func) {
-        System.out.println("ADD");
+        // System.out.println("ADD");
         ArrayList<Variable> vars = new ArrayList<Variable>();
 
         String var1 = ((Var)e.e1).id.id;
@@ -166,7 +166,7 @@ public InstructionSUB visit(Sub e, Function func) {
 }
 
 public void visit(Let e, Function func){
-        System.out.println("LET");
+        // System.out.println("LET");
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
@@ -245,7 +245,7 @@ public Integer visit(Neg e, Function func){
 }
 
 public void visit(App e, Function func){
-        System.out.println("APP");
+        // System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
 
         // if (!(e.es.get(0) instanceof Let)) {
@@ -318,7 +318,7 @@ public BooleanEQ visit(Eq e, Function func){
         }
 
         BooleanEQ exp = new BooleanEQ(getTempBoolExpName(), func, vars.get(0), vars.get(1));
-        System.out.println("came here");
+        // System.out.println("came here");
         return exp;
 }
 
@@ -349,12 +349,12 @@ public BooleanLE visit(LE e, Function func){
         }
 
         BooleanLE exp = new BooleanLE(getTempBoolExpName(), func, vars.get(0), vars.get(1));
-        System.out.println("came here1");
+        // System.out.println("came here1");
         return exp;
 }
 
 public InstructionIF visit(If e, Function func) {
-        System.out.println("IF");
+        // System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
         Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
         visit(e.e2, branch_then);
@@ -367,7 +367,7 @@ public InstructionIF visit(If e, Function func) {
 }
 
 public void visit(LetRec e, Function func){
-        System.out.println("LETREC");
+        // System.out.println("LETREC");
 
         ArrayList<Variable> args = new ArrayList<Variable>();
         ArrayList<Register> newRegisters = new ArrayList<Register>(9);
@@ -385,7 +385,7 @@ public void visit(LetRec e, Function func){
 }
 
 public TupleJerry visit(Tuple e, Function func){
-        System.out.println("TUPLE");
+        // System.out.println("TUPLE");
         ArrayList<Object> obj = new ArrayList<Object>();
         for (Exp e1 : e.es) {
                 Object o = (Object)visit(e1, func);

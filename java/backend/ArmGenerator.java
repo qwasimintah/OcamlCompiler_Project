@@ -49,13 +49,13 @@ public ArmGenerator(){
 
 
 public void initialise_heap(){
-      dataSection.data.append("\tbalign 4\n");
+        dataSection.data.append("\tbalign 4\n");
 
 }
 
 public void allocate_heap_space(){
 
-  //dataSection.data.append("\t")
+        //dataSection.data.append("\t")
 
 }
 
@@ -108,13 +108,13 @@ public void generate_code(List<Function>  functions){
                                 generate_function_call((InstructionCALL) inst);
 
                         }
-                        else if(inst instanceof InstructionIF){
+                        else if(inst instanceof InstructionIF) {
 
                                 String ret=generate_if((InstructionIF) inst);
                                 generate_branch_label(ret);
                         }
-                        else if(inst instanceof InstructionNOTHING){
-                              // DO NOTHING
+                        else if(inst instanceof InstructionNOTHING) {
+                                // DO NOTHING
                         }
                         else{
                                 System.out.println("Instruction Not Supported\n");
@@ -144,54 +144,54 @@ public void generate_code(List<Function>  functions){
 
 
 
-public void generate_branch(Function  fun, String return_label){
+public void generate_branch(Function fun, String return_label){
         //loop through all the available functions
 
-          List<Variable> arguments = fun.getArguments();
-          List<Instruction> intr = fun.getInstructions();
-          HashSet<Variable> locals = fun.getVariables();
-          //process all intructions of functions
-          int size= locals.size();
+        List<Variable> arguments = fun.getArguments();
+        List<Instruction> intr = fun.getInstructions();
+        HashSet<Variable> locals = fun.getVariables();
+        //process all intructions of functions
+        int size= locals.size();
 
 
-          String fname = fun.getName();
-          generate_branch_label(fname);
+        String fname = fun.getName();
+        generate_branch_label(fname);
 
 
-          for (Instruction inst : intr) {
+        for (Instruction inst : intr) {
 
-                  if(inst instanceof InstructionADD) {
-                          generate_addition((InstructionADD) inst);
-                  }
-                  else if (inst instanceof InstructionSUB) {
-                          generate_sub((InstructionSUB) inst);
-                  }
-                  else if (inst instanceof InstructionMULT) {
-                          generate_mult((InstructionMULT) inst);
-                  }
+                if(inst instanceof InstructionADD) {
+                        generate_addition((InstructionADD) inst);
+                }
+                else if (inst instanceof InstructionSUB) {
+                        generate_sub((InstructionSUB) inst);
+                }
+                else if (inst instanceof InstructionMULT) {
+                        generate_mult((InstructionMULT) inst);
+                }
 
-                  else if (inst instanceof InstructionASSIGN) {
-                          generate_assign((InstructionASSIGN) inst);
+                else if (inst instanceof InstructionASSIGN) {
+                        generate_assign((InstructionASSIGN) inst);
 
-                  }
-                  else if (inst instanceof InstructionCALL) {
-                          generate_function_call((InstructionCALL) inst);
+                }
+                else if (inst instanceof InstructionCALL) {
+                        generate_function_call((InstructionCALL) inst);
 
-                  }
-                  else if(inst instanceof InstructionIF){
+                }
+                else if(inst instanceof InstructionIF) {
 
-                          generate_if((InstructionIF) inst);
-                  }
-                  else if(inst instanceof InstructionNOTHING){
-                                
-                          generate_nothing((InstructionNOTHING) inst);
-                  }
-                  else{
-                          System.out.println("Instruction Not Supported\n");
-                  }
-          }
+                        generate_if((InstructionIF) inst);
+                }
+                else if(inst instanceof InstructionNOTHING) {
 
-          textSection.text.append("\tb ").append(return_label).append("\n");
+                        generate_nothing((InstructionNOTHING) inst);
+                }
+                else{
+                        System.out.println("Instruction Not Supported\n");
+                }
+        }
+
+        textSection.text.append("\tb ").append(return_label).append("\n");
 
 
 
@@ -255,10 +255,7 @@ public void pop_params(int size){
 
 
 public void generate_nothing(InstructionNOTHING instr){
-
-        
         assign("r0", ((VInteger)instr.x).getValue());
-
 }
 
 public void generate_addition(InstructionADD instr){
@@ -602,11 +599,11 @@ public void  generate_assign(InstructionASSIGN instr){
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 else{
-                    System.out.println("var name");
-                    System.out.println(((Variable)op1).getName());
-                    offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
-                    //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
-                    operand1="r0";
+                        System.out.println("var name");
+                        System.out.println(((Variable)op1).getName());
+                        offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
+                        //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
+                        operand1="r0";
                 }
         }
 
@@ -707,10 +704,10 @@ public void  generate_assign(InstructionASSIGN instr){
                         }
                 }
 
-                else if(op2 instanceof InstructionIF){
+                else if(op2 instanceof InstructionIF) {
 
-                    //generate_if((InstructionIF) op2);
-                    assign(reg, "r0");
+                        //generate_if((InstructionIF) op2);
+                        assign(reg, "r0");
 
 
 
@@ -904,8 +901,8 @@ public String get_label(String name){
 }
 
 public String gen_temp_label(){
-      label_counter++;
-      return "cont" + String.valueOf(label_counter);
+        label_counter++;
+        return "cont" + String.valueOf(label_counter);
 
 
 }
@@ -913,198 +910,192 @@ public String gen_temp_label(){
 
 public String generate_if(InstructionIF inst){
 
-      Function then_branch = inst.branch_then;
-      Function else_branch = inst.branch_else;
-<<<<<<< HEAD
-      System.out.println("HERE");
-      then_branch.showVariablesState();
-=======
-      // System.out.println("HERE");
-      // then_branch.showVariablesState();
-      // else_branch.showVariablesState();
-      //generate code for branch then
+        Function then_branch = inst.branch_then;
+        Function else_branch = inst.branch_else;
+        // System.out.println("HERE");
+        // then_branch.showVariablesState();
+        // else_branch.showVariablesState();
+        //generate code for branch then
 
-      generate_branch(then_branch);
+        generate_branch(then_branch, then_branch.getName());
 
 
-      //generate code for branch then
+        //generate code for branch then
 
-      generate_branch(else_branch);
+        generate_branch(else_branch, then_branch.getName());
 
->>>>>>> b49c75c481c5de774d697ec16dce7d18d720bf35
+        BooleanExpression exp = inst.cond.getExp();
+        System.out.println(inst.cond);
+        System.out.println(exp);
 
-      BooleanExpression exp = inst.cond.getExp();
-      System.out.println(inst.cond);
-      System.out.println(exp);
+        String operand1="";
+        String operand2 = "";
+        String offset1 = "";
 
-      String operand1="";
-      String operand2 = "";
-      String offset1 = "";
-
-      if(exp instanceof BooleanEQ){
-         Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
-         Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(1));
+        if(exp instanceof BooleanEQ) {
+                Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
+                Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(1));
 
 
-          //VARIABLE WITH REGISTER
-        if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
-                operand1=((Variable)op1).getRegister().getName();
-        }
-        //VARIABLE WITH OFFSET
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
+                //VARIABLE WITH REGISTER
+                if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
+                        operand1=((Variable)op1).getRegister().getName();
+                }
+                //VARIABLE WITH OFFSET
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
 
-                operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                operand1="r0";
+                        operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
 
-        }
+                }
 
-        // if its a parameter with a register
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+                // if its a parameter with a register
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
 
-                operand1=((Variable)op1).getParametersRegister().getName();
-        }
-
-
-        // if its a paramter with an offset
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
-
-                operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                operand1="r0";
-        }
-
-        if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
-            operand2=((Variable)op2).getRegister().getName();
-        }
-        // it its a local variable with an offset
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
-
-            operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-            operand2="r1";
-
-        }
-
-        // if its a parameter with a register
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
-
-            operand2=((Variable)op2).getParametersRegister().getName();
-        }
+                        operand1=((Variable)op1).getParametersRegister().getName();
+                }
 
 
-        // if its a paramter with an offset
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+                // if its a paramter with an offset
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
 
-            operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-            operand2="r1";
-        }
+                        operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
+                }
+
+                if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
+                        operand2=((Variable)op2).getRegister().getName();
+                }
+                // it its a local variable with an offset
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
+
+                        operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
+
+                }
+
+                // if its a parameter with a register
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+
+                        operand2=((Variable)op2).getParametersRegister().getName();
+                }
 
 
-        textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBEQ ").append(inst.branch_then.getName()).append("\n");;
-        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");;
+                // if its a paramter with an offset
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
 
-      }
-
-      else if (exp instanceof BooleanLE){
-
-        Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
-         Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
+                        operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
+                }
 
 
-          //VARIABLE WITH REGISTER
-        if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
-                operand1=((Variable)op1).getRegister().getName();
-        }
-        //VARIABLE WITH OFFSET
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
-
-                operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                operand1="r0";
+                textSection.text.append("\tCMP ").append(operand1).append(" , ").append(operand2).append("\n");
+                textSection.text.append("\tBEQ ").append(inst.branch_then.getName()).append("\n");;
+                textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");;
 
         }
 
-        // if its a parameter with a register
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+        else if (exp instanceof BooleanLE) {
 
-                operand1=((Variable)op1).getParametersRegister().getName();
+                Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
+                Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
+
+
+                //VARIABLE WITH REGISTER
+                if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
+                        operand1=((Variable)op1).getRegister().getName();
+                }
+                //VARIABLE WITH OFFSET
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
+
+                        operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
+
+                }
+
+                // if its a parameter with a register
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+
+                        operand1=((Variable)op1).getParametersRegister().getName();
+                }
+
+
+                // if its a paramter with an offset
+                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+
+                        operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
+                        operand1="r0";
+                }
+
+                if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
+                        operand2=((Variable)op2).getRegister().getName();
+                }
+                // it its a local variable with an offset
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
+
+                        operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
+
+                }
+
+                // if its a parameter with a register
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+
+                        operand2=((Variable)op2).getParametersRegister().getName();
+                }
+
+
+                // if its a paramter with an offset
+                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+
+                        operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
+                        textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
+                        operand2="r1";
+                }
+
+
+                textSection.text.append("\tCMP ").append(operand1).append(" , ").append(operand2).append("\n");
+                textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
+                textSection.text.append("\tBA ").append(inst.branch_else.getName()).append("\n");;
+
+
         }
 
+        else if (exp instanceof BooleanTrue) {
 
-        // if its a paramter with an offset
-        else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+                textSection.text.append("\tB ").append(inst.branch_then.getName()).append("\n");
 
-                operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-                textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
-                operand1="r0";
-        }
 
-        if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
-            operand2=((Variable)op2).getRegister().getName();
-        }
-        // it its a local variable with an offset
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
-
-            operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
-            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-            operand2="r1";
 
         }
 
-        // if its a parameter with a register
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+        else if(exp instanceof BooleanFalse) {
+                textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
+        }
+        else{
 
-            operand2=((Variable)op2).getParametersRegister().getName();
+                System.out.println("Something crazy happenned");
         }
 
+        String return_label = gen_temp_label();
 
-        // if its a paramter with an offset
-        else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+        //generate code for branch then
 
-            operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
-            textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
-            operand2="r1";
-        }
+        generate_branch(then_branch, return_label);
 
 
-        textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
-        textSection.text.append("\tBA ").append(inst.branch_else.getName()).append("\n");;
+        //generate code for branch then
 
+        generate_branch(else_branch, return_label);
 
-      }
-
-      else if (exp instanceof BooleanTrue){
-
-        textSection.text.append("\tB ").append(inst.branch_then.getName()).append("\n");
-
-
-
-      }
-
-      else if(exp instanceof BooleanFalse){
-        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
-      }
-      else{
-
-          System.out.println("Something crazy happenned");
-      }
-
-      String return_label = gen_temp_label();
-
-      //generate code for branch then
-
-      generate_branch(then_branch, return_label);
-
-
-      //generate code for branch then
-
-      generate_branch(else_branch, return_label);
-
-      return return_label;
+        return return_label;
 
 
 }
@@ -1117,39 +1108,39 @@ public void generate_function_call(InstructionCALL instr) {
         int num_params=params.size();
 
         if(instr.getFname().equals("print_int")) {
-                if(params.get(0)!=null){
-                    if(params.size() != 0) {
-                        if(!(params.get(0) instanceof Integer)) {
-                                Variable param = (Variable)params.get(0);
-                                //assign("r0", param.getRegister().getName());
+                if(params.get(0)!=null) {
+                        if(params.size() != 0) {
+                                if(!(params.get(0) instanceof Integer)) {
+                                        Variable param = (Variable)params.get(0);
+                                        //assign("r0", param.getRegister().getName());
 
-                                //VARIABLE WITH A PARAMETER REGISTER
-                                if(param.getRegister() != null ) {
-                                        assign("r0", param.getRegister().getName());
-                                }
+                                        //VARIABLE WITH A PARAMETER REGISTER
+                                        if(param.getRegister() != null ) {
+                                                assign("r0", param.getRegister().getName());
+                                        }
 
-                                // case where local variable has an offset but the paramter has a register
-                                //VAIABLE WITH AN OFFSET
-                                else if(param.getRegister() == null ) {
-                                        //System.out.println("case2");
-                                        // load variable from the stack
-                                        String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
-                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                        // case where local variable has an offset but the paramter has a register
+                                        //VAIABLE WITH AN OFFSET
+                                        else if(param.getRegister() == null ) {
+                                                //System.out.println("case2");
+                                                // load variable from the stack
+                                                String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
+                                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
 
-                                }
+                                        }
 
 
-                                // case where both local and parameters have and offset
+                                        // case where both local and parameters have and offset
 
-                                else {
-                                        //System.out.println("case3");
-                                        String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
-                                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                        else {
+                                                //System.out.println("case3");
+                                                String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
+                                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                        }
+
                                 }
 
                         }
-
-                    }
                 }
                 textSection.text.append("\tBL min_caml_print_int\n");
                 textSection.text.append("\tBL min_caml_print_newline\n");
