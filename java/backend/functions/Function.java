@@ -9,18 +9,15 @@ public class Function {
 
 private String name;
 private List<Instruction> instructions;
-private List<Parameter> arguments;
+private List<Variable> arguments;
 private Integer spillOffset = 4;
+private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-// public LinkedHashMap<Register, Variable> registers;
-// public LinkedHashMap<Register, Variable> parametersRegisters;
+// private ArrayList<Object> parameters = new ArrayList<Object>();
 public ArrayList<Register> registers;
 public ArrayList<Register> parametersRegisters;
 
-// public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
-//                 LinkedHashMap<Register, Variable> registers,
-//                 LinkedHashMap<Register, Variable> parametersRegisters) {
-public Function(String name, List<Parameter> arguments, List<Instruction> instructions,
+public Function(String name, List<Variable> arguments, List<Instruction> instructions,
                 ArrayList<Register> registers,
                 ArrayList<Register> parametersRegisters) {
         this.name = name;
@@ -46,7 +43,7 @@ public Iterator<Instruction> iterator() {
         return instructions.iterator();
 }
 
-public List<Parameter> getArguments() {
+public List<Variable> getArguments() {
         return arguments;
 }
 
@@ -54,8 +51,16 @@ public Integer getOffset() {
         return spillOffset;
 }
 
+public Integer getOffsetParameters() {
+        return spillOffsetParameters;
+}
+
 public void setOffset(Integer value) {
         spillOffset = value;
+}
+
+public void setOffsetParameters(Integer value) {
+        spillOffsetParameters = value;
 }
 
 public HashSet<Variable> getVariables(){
@@ -63,8 +68,12 @@ public HashSet<Variable> getVariables(){
 }
 
 public void setVariables (HashSet<Variable> locals){
-        variables =locals;
+        variables = locals;
 }
+
+// public void setParameters(ArrayList<Object> params){
+//         parameters = params;
+// }
 
 public void show() {
         for (Instruction i : instructions) {

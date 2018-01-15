@@ -34,7 +34,7 @@ public static void showRegisters(ArrayList<Register> registers) {
         // }
         // System.out.println("\n");
         for (Register reg : registers) {
-                System.out.print("r" + reg.getIndex() + "contains something");
+                System.out.print("r" + reg.getIndex() + " empty");
         }
 }
 }
