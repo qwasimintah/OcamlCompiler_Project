@@ -90,7 +90,8 @@ static public void main(String argv[]) {
 
                 //For ClosureConversion :
                 else if (ihm.closure_conversion) {
-                        Exp expression_converted = expression.accept(new ClosureConversion());
+                        Exp expression_free = expression.accept(new FreeVariables());
+                        Exp expression_converted = expression_free.accept(new ClosureConversion());
                         System.out.println("------ ClosureConversion ------");
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
