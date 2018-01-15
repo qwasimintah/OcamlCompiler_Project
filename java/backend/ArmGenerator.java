@@ -1230,7 +1230,7 @@ public void generate_function_call(InstructionCALL instr) {
 
         }
 
-        textSection.text.append("\tBL ").append(fname).append("\n");
+        textSection.text.append("\tBL _").append(fname).append("\n");
         restore_locals();
         if(num_params >= available_reg_param) {
                 //restore_parameters();
