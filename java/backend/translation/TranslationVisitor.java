@@ -19,6 +19,8 @@ private static Integer tmpId = 0;
 private static Integer tmpExpId = 0;
 private static Integer label = 0;
 
+private HashMap<String, String> labels = new HashMap<String, String>();
+
 public String getTempVarName() {
         tmpId++;
         return "tmpVar" + tmpId.toString();
@@ -32,6 +34,22 @@ public String getTempBoolExpName() {
 public String getNewLabel() {
         label++;
         return "label" + label.toString();
+}
+
+public String getLabel(String var) {
+        if (var.equals("print_int")) {
+                return "print_int";
+        }
+        for (Map.Entry<String, String> entry : labels.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key == var) {
+                        return value;
+                }
+        }
+        String newLabel = getNewLabel();
+        labels.put(var, newLabel);
+        return newLabel;
 }
 
 public Object visit(Exp e, Function func) {
@@ -277,7 +295,7 @@ public void visit(App e, Function func){
                         ((Variable)o).killParameter();
                 }
         }
-        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.id);
+        InstructionCALL inst = new InstructionCALL(vars, getLabel(((Var)e.e).id.id));
         func.addInstruction(inst);
 }
 
@@ -374,7 +392,7 @@ public void visit(LetRec e, Function func){
         ArrayList<Register> newParametersRegisters = new ArrayList<Register>(2);
         RegisterUtils.initRegisters(newRegisters, newParametersRegisters);
 
-        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters, func.flist);
+        Function newFunc = new Function(getLabel(e.fd.id.id), args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters, func.flist);
 
         for (Id id : e.fd.args) {
                 Variable arg = new Variable(id.id, newFunc);
