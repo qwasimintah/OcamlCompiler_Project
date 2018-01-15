@@ -1135,8 +1135,8 @@ public String generate_if(InstructionIF inst){
 public void generate_function_call(InstructionCALL instr) {
         List<Object> params = instr.getParams();
         String return_reg = instr.getReturn();
-        // String fname = get_label(instr.getFname());
-        String fname = getNewLabel();
+        String fname = get_label(instr.getFname());
+        // String fname = getNewLabel();
         int num_params=params.size();
 
         if(instr.getFname().equals("print_int")) {
@@ -1262,7 +1262,7 @@ public void generate_function_call(InstructionCALL instr) {
 
         }
 
-        textSection.text.append("\tBL _").append(fname).append("\n");
+        textSection.text.append("\tBL ").append(fname).append("\n");
         restore_locals();
         if(num_params >= available_reg_param) {
                 //restore_parameters();
