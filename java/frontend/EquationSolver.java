@@ -8,8 +8,10 @@ import ast.type.*;
 public class EquationSolver{
   public EquationSolver(){}
   // int i, j = 0;
-  public void reduce(GenEquation eq){
-    for (Equation e : eq.eqt_list){
+  public Boolean reduce(GenEquation eq){
+    // for (Equation e : eq.eqt_list)
+    while (! eq.eqt_list.isEmpty()){
+        Equation e = eq.eqt_list.get(0);
         // j = 0;
         if (e.t1 instanceof TVar) {
             TVar e_save = (TVar)e.t1;
@@ -38,8 +40,17 @@ public class EquationSolver{
                 // j++;
               }
         }
+        if (e.t1.toString() == e.t2.toString()){
+          System.out.println("Je supprime" + e);
+          eq.eqt_list.remove(e);
+        } else {
+          break;
+        }
+        System.out.println(eq.eqt_list);
+
     // i++;
     }
+    return eq.eqt_list.isEmpty();
   }
 
   public Boolean solve(GenEquation eq){

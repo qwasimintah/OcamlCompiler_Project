@@ -67,6 +67,12 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof If) {
                 return (InstructionIF) visit((If)e, func);
         }
+        else if (e instanceof Eq) {
+                return (BooleanEQ)visit((Eq)e, func);
+        }
+        else if (e instanceof LE) {
+                return (BooleanLE)visit((LE)e, func);
+        }
         return null;
 }
 
