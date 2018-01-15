@@ -30,6 +30,12 @@ private int available_reg=9;
 private int available_reg_param=2;
 private int label_counter=1;
 
+private Integer labelNumber = 0;
+
+public String getNewLabel() {
+        labelNumber++;
+        return "label" + labelNumber.toString();
+}
 
 public ArmGenerator(){
         //initialise the .data=new ArrayList<Object>();
@@ -1104,7 +1110,8 @@ public String generate_if(InstructionIF inst){
 public void generate_function_call(InstructionCALL instr) {
         List<Object> params = instr.getParams();
         String return_reg = instr.getReturn();
-        String fname = get_label(instr.getFname());
+        // String fname = get_label(instr.getFname());
+        String fname = getNewLabel();
         int num_params=params.size();
 
         if(instr.getFname().equals("print_int")) {
