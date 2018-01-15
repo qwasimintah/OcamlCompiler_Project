@@ -348,11 +348,11 @@ public BooleanLE visit(LE e, Function func){
 }
 
 public InstructionIF visit(If e, Function func) {
-        // System.out.println("IF");
+        System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
-        Function branch_then = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
         visit(e.e2, branch_then);
-        Function branch_else = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
         visit(e.e3, branch_else);
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
         func.addInstruction(inst);

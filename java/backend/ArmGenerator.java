@@ -864,8 +864,9 @@ public void generate_if(InstructionIF inst){
 
       Function then_branch = inst.branch_then;
       Function else_branch = inst.branch_else;
-      System.out.println("HERE");
-      then_branch.showVariablesState();
+      // System.out.println("HERE");
+      // then_branch.showVariablesState();
+      // else_branch.showVariablesState();
       //generate code for branch then
 
       generate_branch(then_branch);
