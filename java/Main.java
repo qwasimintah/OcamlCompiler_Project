@@ -117,7 +117,10 @@ static public void main(String argv[]) {
                         tv.visit(expression_reducted, func);
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.LinearScan(func);
+                        for (Function f : flist) {
+                          // f.show();
+                          regalloc.LinearScan(f);
+                        }
                         //System.out.println("------ Register Allocation ------");
                         //func.showVariablesState();
                         //System.out.println("");

@@ -367,7 +367,7 @@ public InstructionIF visit(If e, Function func) {
 }
 
 public void visit(LetRec e, Function func){
-        System.out.println("LETREC");
+        // System.out.println("LETREC");
 
         ArrayList<Variable> args = new ArrayList<Variable>();
         ArrayList<Register> newRegisters = new ArrayList<Register>(9);
@@ -382,11 +382,11 @@ public void visit(LetRec e, Function func){
         }
         visit(e.fd.e, newFunc);
         func.flist.add(newFunc);
-        System.out.println("HERE");
-        for (Function f : func.flist) {
-          f.show();
-        }
-        System.out.println("HERE end");
+        // System.out.println("HERE");
+        // for (Function f : func.flist) {
+        //   f.show();
+        // }
+        // System.out.println("HERE end");
         visit(e.e, func);
 }
 
