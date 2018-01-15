@@ -318,6 +318,7 @@ public BooleanEQ visit(Eq e, Function func){
         }
 
         BooleanEQ exp = new BooleanEQ(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        System.out.println("came here");
         return exp;
 }
 
@@ -348,6 +349,7 @@ public BooleanLE visit(LE e, Function func){
         }
 
         BooleanLE exp = new BooleanLE(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        System.out.println("came here1");
         return exp;
 }
 
@@ -358,6 +360,7 @@ public InstructionIF visit(If e, Function func) {
         visit(e.e2, branch_then);
         Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
         visit(e.e3, branch_else);
+        //System.out.println(cond.getExp());
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
         func.addInstruction(inst);
         return inst;

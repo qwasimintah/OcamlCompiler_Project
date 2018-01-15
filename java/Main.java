@@ -114,7 +114,13 @@ static public void main(String argv[]) {
                         tv.visit(expression_reducted, func);
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.VBA(func);
+                        regalloc.LinearScan(func);
+                        //System.out.println("------ Register Allocation ------");
+                        //func.showVariablesState();
+                        //System.out.println("");
+
+                        //RegisterAllocation regalloc = new RegisterAllocation();
+                        //regalloc.VBA(func);
 
 
                         System.out.println("@------ ARM------");

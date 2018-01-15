@@ -28,6 +28,7 @@ private int HEAP_SIZE=1024*4;     // Heap size in bytes
 //private HashMap<String, Integer> fun_arg_locations;
 private int available_reg=9;
 private int available_reg_param=2;
+private int label_counter=1;
 
 
 public ArmGenerator(){
@@ -35,12 +36,26 @@ public ArmGenerator(){
         dataSection=new DataSection();
         dataSection.data.append("\t.data\n");
 
+
         //initialise the .text
         textSection= new TextSection();
         textSection.text.append("\t.text\n");
         textSection.text.append("\t.global _start\n");
         textSection.text.append("_start:\n");
         textSection.text.append("\tBL _main\n");
+
+}
+
+
+
+public void initialise_heap(){
+      dataSection.data.append("\tbalign 4\n");
+
+}
+
+public void allocate_heap_space(){
+
+  //dataSection.data.append("\t")
 
 }
 
@@ -88,13 +103,18 @@ public void generate_code(List<Function>  functions){
                                 generate_assign((InstructionASSIGN) inst);
 
                         }
+
                         else if (inst instanceof InstructionCALL) {
                                 generate_function_call((InstructionCALL) inst);
 
                         }
                         else if(inst instanceof InstructionIF){
 
-                                generate_if((InstructionIF) inst);
+                                String ret=generate_if((InstructionIF) inst);
+                                generate_branch_label(ret);
+                        }
+                        else if(inst instanceof InstructionNOTHING){
+                              // DO NOTHING
                         }
                         else{
                                 System.out.println("Instruction Not Supported\n");
@@ -122,7 +142,9 @@ public void generate_code(List<Function>  functions){
 }
 
 
-public void generate_branch(Function  fun){
+
+
+public void generate_branch(Function  fun, String return_label){
         //loop through all the available functions
 
           List<Variable> arguments = fun.getArguments();
@@ -160,10 +182,16 @@ public void generate_branch(Function  fun){
 
                           generate_if((InstructionIF) inst);
                   }
+                  else if(inst instanceof InstructionNOTHING){
+                                
+                          generate_nothing((InstructionNOTHING) inst);
+                  }
                   else{
                           System.out.println("Instruction Not Supported\n");
                   }
           }
+
+          textSection.text.append("\tb ").append(return_label).append("\n");
 
 
 
@@ -225,6 +253,13 @@ public void pop_params(int size){
         }
 }
 
+
+public void generate_nothing(InstructionNOTHING instr){
+
+        
+        assign("r0", ((VInteger)instr.x).getValue());
+
+}
 
 public void generate_addition(InstructionADD instr){
         Object op1= instr.operands.get(0);
@@ -640,7 +675,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 if(op2 instanceof InstructionADD) {
 
-                        generate_addition((InstructionADD) op2);
+                        //generate_addition((InstructionADD) op2);
 
 
                         assign(reg, "r0" );
@@ -648,20 +683,20 @@ public void  generate_assign(InstructionASSIGN instr){
                 }
                 else if(op2 instanceof InstructionSUB) {
 
-                        generate_sub((InstructionSUB) op2);
+                        //generate_sub((InstructionSUB) op2);
                         assign(reg, "r0");
 
                 }
 
                 else if(op2 instanceof InstructionMULT) {
 
-                        generate_mult((InstructionMULT) op2);
+                        //generate_mult((InstructionMULT) op2);
                         assign(reg, "r0");
 
                 }
 
                 else if(op2 instanceof InstructionCALL) {
-                        generate_function_call((InstructionCALL) op2);
+                        //generate_function_call((InstructionCALL) op2);
 
                         if(offset1!="") {
                                 textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
@@ -670,6 +705,15 @@ public void  generate_assign(InstructionASSIGN instr){
                         else{
                                 assign(reg, ((InstructionCALL)op2).getReturn());
                         }
+                }
+
+                else if(op2 instanceof InstructionIF){
+
+                    //generate_if((InstructionIF) op2);
+                    assign(reg, "r0");
+
+
+
                 }
 
 
@@ -859,11 +903,22 @@ public String get_label(String name){
 
 }
 
+public String gen_temp_label(){
+      label_counter++;
+      return "cont" + String.valueOf(label_counter);
 
-public void generate_if(InstructionIF inst){
+
+}
+
+
+public String generate_if(InstructionIF inst){
 
       Function then_branch = inst.branch_then;
       Function else_branch = inst.branch_else;
+<<<<<<< HEAD
+      System.out.println("HERE");
+      then_branch.showVariablesState();
+=======
       // System.out.println("HERE");
       // then_branch.showVariablesState();
       // else_branch.showVariablesState();
@@ -876,8 +931,11 @@ public void generate_if(InstructionIF inst){
 
       generate_branch(else_branch);
 
+>>>>>>> b49c75c481c5de774d697ec16dce7d18d720bf35
 
       BooleanExpression exp = inst.cond.getExp();
+      System.out.println(inst.cond);
+      System.out.println(exp);
 
       String operand1="";
       String operand2 = "";
@@ -945,8 +1003,8 @@ public void generate_if(InstructionIF inst){
 
 
         textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBEQ ").append(inst.branch_then.getName());
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tBEQ ").append(inst.branch_then.getName()).append("\n");;
+        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");;
 
       }
 
@@ -1013,24 +1071,40 @@ public void generate_if(InstructionIF inst){
 
 
         textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
-        textSection.text.append("\tBLE ").append(inst.branch_then.getName());
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
+        textSection.text.append("\tBA ").append(inst.branch_else.getName()).append("\n");;
 
 
       }
 
       else if (exp instanceof BooleanTrue){
 
-        textSection.text.append("\tBA ").append(inst.branch_then.getName());
+        textSection.text.append("\tB ").append(inst.branch_then.getName()).append("\n");
 
 
 
       }
 
       else if(exp instanceof BooleanFalse){
-        textSection.text.append("\tBA ").append(inst.branch_else.getName());
+        textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
+      }
+      else{
+
+          System.out.println("Something crazy happenned");
       }
 
+      String return_label = gen_temp_label();
+
+      //generate code for branch then
+
+      generate_branch(then_branch, return_label);
+
+
+      //generate code for branch then
+
+      generate_branch(else_branch, return_label);
+
+      return return_label;
 
 
 }
