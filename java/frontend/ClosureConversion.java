@@ -8,11 +8,11 @@ import java.util.*;
 public class ClosureConversion implements ObjVisitor<Exp>{
   private HashSet<String> known = FreeVariables.getKnown();
 
-  private boolean test_app = false;
+  private List<Closure> func_list= new LinkedList<Closure> ();
 
   private HashMap<String, HashSet<String> > free_variables = FreeVariables.getFree_variables();
 
-  private Stack current_functions = new Stack();
+  private Stack current_let = new Stack();
 
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
@@ -26,14 +26,16 @@ public class ClosureConversion implements ObjVisitor<Exp>{
 
   public Exp visit(Let e){
     //TODO
-    e.e1.accept(this);
-    e.e2.accept(this);
-    return e;
+    current_let.push(e);
+    Exp new_e1 = e.e1.accept(this);
+    Exp new_e2 = e.e2.accept(this);
+    Let new_e = new Let(e.id, e.t, new_e1, new_e2);
+    return new_e;
   }
 
   public Exp visit(Var e){
     //TODO
-    System.out.println("Var: " + e.id.toString());
+    //System.out.println("Var: " + e.id.toString());
     return e;
   }
 
@@ -108,34 +110,13 @@ public class ClosureConversion implements ObjVisitor<Exp>{
 
   public Exp visit(LetRec let_rec){
     //TODO
-    current_functions.push(let_rec);
-    if (current_functions.size() > 1 && known.contains(let_rec.fd.id.toString())){
-      LetRec prev_func = (LetRec) current_functions.get(current_functions.size() - 2);
-      List<Exp> list = new LinkedList<Exp> ();
-      list.add(new Var(let_rec.fd.id));
-      for (String id: free_variables.get(let_rec.fd.id.toString())){
-        list.add(new Var(new Id(id)));
-      }
-      Exp new_prev_fd_e = new Tuple(list);
-      List<Id> list_ids = new LinkedList<Id> ();
-      List<Type> list_type = new LinkedList<Type> ();
-      for (Exp exp: list){
-        Id new_id = new Id("_");
-        new_id = new_id.gen();
-        list_ids.add(new_id);
-        list_type.add(new TVar(new_id.toString()));
-      }
-      //Exp tuple = new Tuple()
-      //LetTuple let_tuple = new LetTuple(list_ids, list_type, );
-    }
-    let_rec.fd.e.accept(this);
-    let_rec.e.accept(this);
+    //if
     return let_rec;
   }
 
   public Exp visit(App app){
     //TODO
-    System.out.println("App");
+    //System.out.println("App");
     app.e.accept(this);
     for (Exp exp: app.es){
       exp.accept(this);
