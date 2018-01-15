@@ -18,14 +18,16 @@ _main:
 	BEQ label1
 	B label2
 label1:
-	LDR r0, =1
-	LDR r9, =2
-	ADD r0, r0, r9
+	MOV r8, r4
+	LDR r9, =1
+	ADD r0, r8, r9
 	b cont2
+
 label2:
-	LDR r0, =1
-	LDR r12, =1
-	ADD r0, r0, r12
+	LDR r6, =1
+	ADD r0, r10, r6
+	BL min_caml_print_int
+	BL min_caml_print_newline
 	b cont2
 cont2:
 	MOV r4, r0

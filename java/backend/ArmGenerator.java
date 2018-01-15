@@ -24,11 +24,10 @@ public class ArmGenerator {
 
 public DataSection dataSection;
 public TextSection textSection;
-private int HEAP_SIZE=1024*4;     // Heap size in bytes
-//private HashMap<String, Integer> fun_arg_locations;
 private int available_reg=9;
 private int available_reg_param=2;
-private int label_counter=1;
+private int label_counter=0;
+
 
 private Integer labelNumber = 0;
 
@@ -56,7 +55,6 @@ public ArmGenerator(){
 
 public void initialise_heap(){
         dataSection.data.append("\tbalign 4\n");
-
 }
 
 public void allocate_heap_space(){
@@ -270,6 +268,20 @@ public void generate_addition(InstructionADD instr){
         String rd="r0";
         String operand1="";
         String operand2="";
+        System.out.println("begin");
+        System.out.println(((Variable)op1).getRegister());
+        System.out.println(((Variable)op1).getParametersRegister());
+
+        System.out.println(((Variable)op2).getRegister());
+        System.out.println(((Variable)op2).getParametersRegister());
+        System.out.println("end");
+
+
+
+
+
+
+
 
 
         if(op1 instanceof Variable) {
@@ -308,6 +320,11 @@ public void generate_addition(InstructionADD instr){
                         operand1="r0";
                 }
         }
+        // surely a parameter resulting from an add
+        else if(op1==null){
+
+              operand1="r2";
+        }
 
         if(op2 instanceof Variable) {
 
@@ -345,6 +362,12 @@ public void generate_addition(InstructionADD instr){
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
                         operand2="r1";
                 }
+        }
+
+        // surely a parameter resulting from an add
+        else if(op2==null){
+
+              operand1="r2";
         }
 
         if(op1 instanceof Integer && op2 instanceof Variable) {
@@ -592,8 +615,13 @@ public void generate_sub(InstructionSUB instr){
 
 public void  generate_assign(InstructionASSIGN instr){
 
+
+
+
         Object op1= instr.operands.get(0);
         Object op2= instr.operands.get(1);
+
+        System.out.println(op2);
 
         String operand1="";
         String offset1="";
@@ -652,6 +680,7 @@ public void  generate_assign(InstructionASSIGN instr){
                 // }
         }
 
+        
 
 
         if((op1 instanceof VInteger || op1 instanceof Variable)&& op2 instanceof Variable) {
@@ -723,6 +752,10 @@ public void  generate_assign(InstructionASSIGN instr){
 
 
 
+        }
+
+        else if(op2 == null){
+          assign(operand1, "r2");
         }
 
 
@@ -918,17 +951,6 @@ public String generate_if(InstructionIF inst){
 
         Function then_branch = inst.branch_then;
         Function else_branch = inst.branch_else;
-        // System.out.println("HERE");
-        // then_branch.showVariablesState();
-        // else_branch.showVariablesState();
-        //generate code for branch then
-
-        generate_branch(then_branch, then_branch.getName());
-
-
-        //generate code for branch then
-
-        generate_branch(else_branch, then_branch.getName());
 
         BooleanExpression exp = inst.cond.getExp();
         System.out.println(inst.cond);
@@ -937,6 +959,7 @@ public String generate_if(InstructionIF inst){
         String operand1="";
         String operand2 = "";
         String offset1 = "";
+
 
         if(exp instanceof BooleanEQ) {
                 Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
@@ -1067,9 +1090,11 @@ public String generate_if(InstructionIF inst){
                 }
 
 
-                textSection.text.append("\tCMP ").append(operand1).append(" , ").append(operand2).append("\n");
-                textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
-                textSection.text.append("\tBA ").append(inst.branch_else.getName()).append("\n");;
+
+              textSection.text.append("\tCMP ").append(operand1).append(" , "). append(operand2).append("\n");
+              textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
+              textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
+
 
 
         }
@@ -1116,38 +1141,38 @@ public void generate_function_call(InstructionCALL instr) {
 
         if(instr.getFname().equals("print_int")) {
                 if(params.get(0)!=null) {
-                        if(params.size() != 0) {
-                                if(!(params.get(0) instanceof Integer)) {
-                                        Variable param = (Variable)params.get(0);
-                                        //assign("r0", param.getRegister().getName());
+                    if(params.size() != 0) {
+                      if(!(params.get(0) instanceof Integer)) {
+                          Variable param = (Variable)params.get(0);
+                          //assign("r0", param.getRegister().getName());
 
-                                        //VARIABLE WITH A PARAMETER REGISTER
-                                        if(param.getRegister() != null ) {
-                                                assign("r0", param.getRegister().getName());
-                                        }
+                          //VARIABLE WITH A PARAMETER REGISTER
+                          if(param.getRegister() != null ) {
+                                  assign("r0", param.getRegister().getName());
+                          }
 
-                                        // case where local variable has an offset but the paramter has a register
-                                        //VAIABLE WITH AN OFFSET
-                                        else if(param.getRegister() == null ) {
-                                                //System.out.println("case2");
-                                                // load variable from the stack
-                                                String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
-                                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                          // case where local variable has an offset but the paramter has a register
+                          //VAIABLE WITH AN OFFSET
+                          else if(param.getRegister() == null ) {
+                                  //System.out.println("case2");
+                                  // load variable from the stack
+                                  String localoffset="[fp ,#-" + ((Variable)param).getOffset().toString()+"]";
+                                  textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
 
-                                        }
+                          }
 
 
-                                        // case where both local and parameters have and offset
+                          // case where both local and parameters have and offset
 
-                                        else {
-                                                //System.out.println("case3");
-                                                String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
-                                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                                        }
+                          else {
+                                  //System.out.println("case3");
+                                  String localoffset="[fp ,#-" + ((Variable)param).getParametersOffset().toString()+"]";
+                                  textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                          }
 
-                                }
+                      }
 
-                        }
+                    }
                 }
                 textSection.text.append("\tBL min_caml_print_int\n");
                 textSection.text.append("\tBL min_caml_print_newline\n");
@@ -1226,6 +1251,13 @@ public void generate_function_call(InstructionCALL instr) {
 
 
 
+
+
+                }
+
+                else if(par ==null){
+
+                    textSection.text.append("\tMOV r2, r0").append("\n");
                 }
 
         }
