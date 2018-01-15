@@ -1,1 +1,1 @@
-let x = 3 in x + 1
+let x = 3 in print_int (x + 1)
