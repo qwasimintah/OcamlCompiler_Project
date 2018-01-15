@@ -9,9 +9,9 @@ public class AlphaConversion implements ObjVisitor<Exp>{
 
   private boolean sec_exp_let = false;
 
-  private Stack used_in_let = new Stack();
+  private HashMap<String, Stack> used_in_let = new HashMap<String, Stack> ();
 
-  private HashSet functions = new HashSet();
+  private HashSet<String> functions = new HashSet();
 
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
@@ -36,8 +36,13 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     Exp new_e2 = e.e2.accept(this);
     Let new_let = new Let(new_var.id, e.t, new_e1, new_e2);
     HashSet set = new HashSet();
-    while (!used_in_let.empty()){
-      String key = (String) used_in_let.pop();
+    Stack used_vars = used_in_let.get(e.id.toString());
+    if (used_vars == null){
+      used_vars = new Stack();
+      used_in_let.put(e.id.toString(), used_vars);
+    }
+    while (!used_vars.empty()){
+      String key = (String) used_vars.pop();
       if (!functions.contains(key)){
         Stack tmp_stack = epsilon.get(key);
         if (!tmp_stack.empty() && !set.contains(key)) {
@@ -46,7 +51,6 @@ public class AlphaConversion implements ObjVisitor<Exp>{
         }
       }
     }
-    sec_exp_let = false;
     return new_let;
   }
 
@@ -59,17 +63,22 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     if (!stack.empty()){
       if (!sec_exp_let){
         if (functions.contains(e.id.toString())){
-          e.id.id = (String) stack.peek();
-          return e;
+          Var new_var = new Var(new Id((String) stack.peek()));
+          return new_var;
         } else {
           Var new_var = new Var(e.id.gen());
           stack.push(new_var.id.toString());
           return new_var;
         }
       } else {
-        used_in_let.push(e.id.toString());
-        e.id.id = (String) stack.peek();
-        return e;
+        Stack used_vars = used_in_let.get(e.id.toString());
+        if (used_vars == null){
+          used_vars = new Stack();
+          used_in_let.put(e.id.toString(), used_vars);
+        }
+        used_vars.push(e.id.toString());
+        Var new_var = new Var(new Id((String) stack.peek()));
+        return new_var;
       }
     } else {
       return e;

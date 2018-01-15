@@ -33,6 +33,11 @@ public ArrayList<Object> getOperands() {
                         ops.add(o);
                 }
         }
+        // System.out.println("getOps IF");
+        // for (Object o : ops) {
+        //         System.out.print(((Variable)o).getName() + " ");
+        //         System.out.println(o);
+        // }
         return ops;
 }
 

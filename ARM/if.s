@@ -1,4 +1,3 @@
-@------ ARM------
 	.text
 	.global _start
 _start:
@@ -11,7 +10,25 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r4, =42
+	LDR r4, =2
+	LDR r5, =2
+	MOV r6, r4
+	MOV r7, r5
+	CMP r6 , r7
+	BEQ label1
+	B label2
+label1:
+	LDR r0, =1
+	LDR r9, =2
+	ADD r0, r0, r9
+	b cont2
+label2:
+	LDR r0, =1
+	LDR r12, =1
+	ADD r0, r0, r12
+	b cont2
+cont2:
+	MOV r4, r0
 	MOV r0, r4
 	BL min_caml_print_int
 	BL min_caml_print_newline
@@ -24,4 +41,3 @@ _main:
 
 	MOV r7, #1
 	swi 0
-

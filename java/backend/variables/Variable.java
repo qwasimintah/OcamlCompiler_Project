@@ -100,21 +100,43 @@ public Integer getParametersOffset() {
 }
 
 public void getSaveState() {
-        if (this.getRegister() != null) {
-                System.out.println("Variable " + this.getName() + " stored in register " + this.getRegister().getName());
-        } else if (this.getOffset() != null) {
-                System.out.println("Variable " + this.getName() + " stored in memory at [fp + " + this.getOffset() + "]");
+        Register regVar = this.getRegister();
+        Register regArg = this.getParametersRegister();
+        Integer offVar = this.getOffset();
+        Integer offArg = this.getParametersOffset();
+        String storeVar;
+        String storeArg;
+        if (regVar != null) {
+                storeVar = regVar.getName();
+        } else if (offVar != null) {
+                storeVar = "[fp + " + this.getOffset() + "]";
         } else {
-                System.out.println("Variable " + this.getName() + " not saved !");
+                storeVar = "-";
         }
+        if (regArg != null) {
+                storeArg = regArg.getName();
+        } else if (offArg != null) {
+                storeArg = "[fp + " + offArg + "]";
+        } else {
+                storeArg = "-";
+        }
+        System.out.println("Var/Arg " + this.getName() + " : " + storeVar + "/" + storeArg);
 
-        if (this.getParametersRegister() != null) {
-                System.out.println("Parameter " + this.getName() + " stored in register " + this.getParametersRegister().getName());
-        } else if (this.getParametersOffset() != null) {
-                System.out.println("Parameter " + this.getName() + " stored in memory at [fp + " + this.getParametersOffset() + "]");
-        } else {
-                System.out.println("Parameter " + this.getName() + " not saved !");
-        }
+        // if (this.getRegister() != null) {
+        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "stored in register " + this.getRegister().getName());
+        // } else if (this.getOffset() != null) {
+        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "stored in memory at [fp + " + this.getOffset() + "]");
+        // } else {
+        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "not saved !");
+        // }
+        //
+        // if (this.getParametersRegister() != null) {
+        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "stored in register " + this.getParametersRegister().getName());
+        // } else if (this.getParametersOffset() != null) {
+        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "stored in memory at [fp + " + this.getParametersOffset() + "]");
+        // } else {
+        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "not saved !");
+        // }
 }
 
 public Interval getInterval() {

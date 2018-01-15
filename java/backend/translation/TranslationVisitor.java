@@ -8,6 +8,7 @@ import backend.functions.*;
 import backend.instructions.*;
 import backend.variables.*;
 import backend.booleans.*;
+import backend.tuples.*;
 import exp.*;
 import ast.*;
 import ast.type.*;
@@ -17,6 +18,8 @@ public class TranslationVisitor {
 private static Integer tmpId = 0;
 private static Integer tmpExpId = 0;
 private static Integer label = 0;
+
+private HashMap<String, String> labels = new HashMap<String, String>();
 
 public String getTempVarName() {
         tmpId++;
@@ -31,6 +34,22 @@ public String getTempBoolExpName() {
 public String getNewLabel() {
         label++;
         return "label" + label.toString();
+}
+
+public String getLabel(String var) {
+        if (var.equals("print_int")) {
+                return "print_int";
+        }
+        for (Map.Entry<String, String> entry : labels.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key == var) {
+                        return value;
+                }
+        }
+        String newLabel = getNewLabel();
+        labels.put(var, newLabel);
+        return newLabel;
 }
 
 public Object visit(Exp e, Function func) {
@@ -67,11 +86,20 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof If) {
                 return (InstructionIF) visit((If)e, func);
         }
+        else if (e instanceof Eq) {
+                return (BooleanEQ)visit((Eq)e, func);
+        }
+        else if (e instanceof LE) {
+                return (BooleanLE)visit((LE)e, func);
+        }
+        else if (e instanceof Tuple) {
+                return (TupleJerry)visit((Tuple)e, func);
+        }
         return null;
 }
 
 public InstructionADD visit(Add e, Function func) {
-        System.out.println("ADD");
+        // System.out.println("ADD");
         ArrayList<Variable> vars = new ArrayList<Variable>();
 
         String var1 = ((Var)e.e1).id.id;
@@ -156,7 +184,7 @@ public InstructionSUB visit(Sub e, Function func) {
 }
 
 public void visit(Let e, Function func){
-        System.out.println("LET");
+        // System.out.println("LET");
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
@@ -235,7 +263,7 @@ public Integer visit(Neg e, Function func){
 }
 
 public void visit(App e, Function func){
-        System.out.println("APP");
+        // System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
 
         // if (!(e.es.get(0) instanceof Let)) {
@@ -267,7 +295,7 @@ public void visit(App e, Function func){
                         ((Variable)o).killParameter();
                 }
         }
-        InstructionCALL inst = new InstructionCALL(vars, ((Var)e.e).id.id);
+        InstructionCALL inst = new InstructionCALL(vars, getLabel(((Var)e.e).id.id));
         func.addInstruction(inst);
 }
 
@@ -308,6 +336,7 @@ public BooleanEQ visit(Eq e, Function func){
         }
 
         BooleanEQ exp = new BooleanEQ(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        // System.out.println("came here");
         return exp;
 }
 
@@ -338,37 +367,57 @@ public BooleanLE visit(LE e, Function func){
         }
 
         BooleanLE exp = new BooleanLE(getTempBoolExpName(), func, vars.get(0), vars.get(1));
+        // System.out.println("came here1");
         return exp;
 }
 
 public InstructionIF visit(If e, Function func) {
         // System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
-        Function branch_then = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e2, branch_then);
-        Function branch_else = new Function(getNewLabel(), new ArrayList(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters);
+        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e3, branch_else);
+        //System.out.println(cond.getExp());
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
         func.addInstruction(inst);
         return inst;
 }
 
 public void visit(LetRec e, Function func){
-        System.out.println("LETREC");
+        // System.out.println("LETREC");
 
         ArrayList<Variable> args = new ArrayList<Variable>();
         ArrayList<Register> newRegisters = new ArrayList<Register>(9);
         ArrayList<Register> newParametersRegisters = new ArrayList<Register>(2);
         RegisterUtils.initRegisters(newRegisters, newParametersRegisters);
 
-        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters);
+        Function newFunc = new Function(getLabel(e.fd.id.id), args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters, func.flist);
 
         for (Id id : e.fd.args) {
                 Variable arg = new Variable(id.id, newFunc);
                 args.add(arg);
         }
         visit(e.fd.e, newFunc);
+        func.flist.add(newFunc);
+        // System.out.println("HERE");
+        // for (Function f : func.flist) {
+        //   f.show();
+        // }
+        // System.out.println("HERE end");
         visit(e.e, func);
+}
+
+public TupleJerry visit(Tuple e, Function func){
+        // System.out.println("TUPLE");
+        ArrayList<Object> obj = new ArrayList<Object>();
+        for (Exp e1 : e.es) {
+                Object o = (Object)visit(e1, func);
+                obj.add(o);
+        }
+        TupleJerry tuple = new TupleJerry(func, obj);
+        tuple.show();
+        return tuple;
 }
 
 public Instruction visit(Unit e, Function func){
@@ -396,10 +445,6 @@ public Instruction visit(FMul e, Function func){
 }
 
 public Instruction visit(FDiv e, Function func){
-        return null;
-}
-
-public Instruction visit(Tuple e, Function func){
         return null;
 }
 
