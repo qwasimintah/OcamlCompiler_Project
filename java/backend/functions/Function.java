@@ -27,6 +27,18 @@ public Function(String name, List<Variable> arguments, List<Instruction> instruc
         this.parametersRegisters = parametersRegisters;
 }
 
+public Function(String name, List<Variable> arguments, List<Instruction> instructions,
+                ArrayList<Register> registers,
+                ArrayList<Register> parametersRegisters,
+                HashSet<Variable> variables) {
+        this.name = name;
+        this.instructions = instructions;
+        this.arguments = arguments;
+        this.registers = registers;
+        this.parametersRegisters = parametersRegisters;
+        this.variables = variables;
+}
+
 public List<Instruction> getInstructions() {
         return instructions;
 }
@@ -82,15 +94,16 @@ public void show() {
 }
 
 public void showVariablesState() {
+        // System.out.println("***" + this.getName() + " : Variables state***");
         for (Variable v : variables) {
                 v.getSaveState();
         }
+        // System.out.println("******");
 }
 
 public void showVariables() {
         for (Variable v : variables) {
                 System.out.println(v.getName());
         }
-
 }
 }

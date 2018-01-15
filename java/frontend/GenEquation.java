@@ -7,9 +7,11 @@ import ast.type.*;
 
 public class GenEquation{
   public List<Equation> eqt_list;
+  public int app_id;
   public GenEquation(){
       // Load of the environement
       this.eqt_list = new ArrayList();
+      this.app_id = 0;
       // System.out.println(envr);
   }
   public void generate(Env env, Exp exp, Type exp_type){
@@ -73,6 +75,7 @@ public class GenEquation{
           Env env1 = env.hadd(new EnvElem(((Let)exp).id, ((Let)exp).t));
           // System.out.println(env + " size : " + env.size);
           // System.out.println(env1 + " size : " + env1.size);
+          // System.out.println(((Let)exp).e2);
           generate(env1, ((Let)exp).e2, exp_type);
           generate(env, ((Let)exp).e1, ((Let)exp).t);
       } else if (exp instanceof Var) {
@@ -93,16 +96,32 @@ public class GenEquation{
             System.exit(1);
           }
 
+      } else if (exp instanceof LetRec) {
+        System.out.println("in letrec");
+        FunDef f = (FunDef)(((LetRec)exp).fd);
+        Exp expr1 = (Exp)(((LetRec)exp).e);
+        Exp expr2 = f.e; //Peut être dans l'autre sens.
+        Env env1 = env.hadd(new EnvElem(f.id, new TFun(f.type, exp_type))); // on ajoute la fonction
+        System.out.println(expr2);
+        if (f.args.size() > 0){
+            Env env2 = env.hadd(new EnvElem(f.args.get(0), f.type));
+            for (int i = 1; i < f.args.size(); i++){ // est il possible d'avoir des fonctions sans argument ?
+              env2 = env2.hadd(new EnvElem(f.args.get(i), f.type));
+            }
+            generate(env2, expr1, f.type);
+        }
+        else {
+          generate(env, expr1, f.type);
+        }
+        generate(env1, expr2, exp_type);
+      } else if (exp instanceof App) {
+        // Var A = new Var(new Id("app" + this.app_id));
+        // this.app_id++;
+        // generate(env, ((App)exp).e, new TFun(A, exp_type));
+        // for (int i = 0; i < ((App)exp).es.size(); i++){
+        //   generate(env, ((App)exp).es.get(i), new TFun(A, exp_type));
+        // }
       }
-      // } else if (exp instanceof LetRec) {
-      //         LetRec e = (LetRec) exp;
-      //         res = Math.max(computeHeight(e.e), computeHeight(e.fd.e)) + 1;
-      // } else if (exp instanceof App) {
-      //         App e = (App) exp;
-      //         res = computeHeight(e.e);
-      //         for (Exp e1 : e.es) {
-      //                 res = Math.max(computeHeight(e1), res);
-      //         }
       //         res++;
       // } else if (exp instanceof Tuple) {
       //         Tuple e = (Tuple) exp;

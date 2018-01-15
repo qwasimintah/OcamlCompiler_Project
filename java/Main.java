@@ -56,12 +56,12 @@ static public void main(String argv[]) {
                       Env predef = new Env(env);
                       System.out.println(predef);
                       GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TUnit());
-                      System.out.println(expression_typechecked.eqt_list);
+                      expression_typechecked.generate(predef, expression, new TInt()); // A CHANGER
+                      System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
                       EquationSolver solved = new EquationSolver();
-                      solved.reduce(expression_typechecked);
+                      System.out.println(solved.reduce(expression_typechecked));
                       System.out.println(expression_typechecked.eqt_list);
-                      // System.out.println(solved.solve(expression_typechecked));
+                      System.out.println(solved.solve(expression_typechecked));
                  }
 
                 // For KNormalization :
@@ -115,7 +115,13 @@ static public void main(String argv[]) {
                         tv.visit(expression_reducted, func);
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.VBA(func);
+                        regalloc.LinearScan(func);
+                        //System.out.println("------ Register Allocation ------");
+                        //func.showVariablesState();
+                        //System.out.println("");
+
+                        //RegisterAllocation regalloc = new RegisterAllocation();
+                        //regalloc.VBA(func);
 
 
                         System.out.println("@------ ARM------");

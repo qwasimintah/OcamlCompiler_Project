@@ -14,7 +14,6 @@ _main:
 	LDR r5, =1
 	LDR r4, =2
 	ADD r0, r5, r4
-	MOV r6, r0
 
 	@MAIN EPILOGUE
 	ADD sp, #4
