@@ -11,13 +11,9 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	LDR r4, =3
-	MOV r5, r4
-	LDR r6, =2
-	ADD r0, r5, r6
-	STMFD sp!,{r4-r12}
-	BL _?v4
-	LDMFD sp!, {r4-r12}
+	LDR r4, =1
+	LDR r5, =2
+	ADD r0, r4, r5
 
 	@MAIN EPILOGUE
 	ADD sp, #4

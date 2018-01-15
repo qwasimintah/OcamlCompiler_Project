@@ -109,7 +109,9 @@ static public void main(String argv[]) {
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
 
@@ -124,8 +126,6 @@ static public void main(String argv[]) {
 
 
                         System.out.println("@------ ARM------");
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
@@ -145,11 +145,11 @@ static public void main(String argv[]) {
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         AsmlConverter asml = new AsmlConverter();
                         StringBuilder text1 = asml.convert(flist);
                         System.out.println(text1);
@@ -184,7 +184,9 @@ static public void main(String argv[]) {
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         System.out.println("------ Translation to Jerry ------");
@@ -192,21 +194,22 @@ static public void main(String argv[]) {
                         System.out.println("");
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.LinearScan(func);
+                        for (Function f : flist) {
+                          f.show();
+                          regalloc.LinearScan(f);
+                        }
                         System.out.println("------ Register Allocation ------");
                         func.showVariablesState();
                         System.out.println("");
 
                         System.out.println("------ ARM code generation ------");
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
 
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        
+
                 }
 
         } catch (Exception e) {

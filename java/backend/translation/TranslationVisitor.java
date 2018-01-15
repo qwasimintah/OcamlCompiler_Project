@@ -356,9 +356,9 @@ public BooleanLE visit(LE e, Function func){
 public InstructionIF visit(If e, Function func) {
         // System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
-        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
+        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e2, branch_then);
-        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables());
+        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e3, branch_else);
         //System.out.println(cond.getExp());
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
@@ -367,20 +367,26 @@ public InstructionIF visit(If e, Function func) {
 }
 
 public void visit(LetRec e, Function func){
-        // System.out.println("LETREC");
+        System.out.println("LETREC");
 
         ArrayList<Variable> args = new ArrayList<Variable>();
         ArrayList<Register> newRegisters = new ArrayList<Register>(9);
         ArrayList<Register> newParametersRegisters = new ArrayList<Register>(2);
         RegisterUtils.initRegisters(newRegisters, newParametersRegisters);
 
-        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters);
+        Function newFunc = new Function(e.fd.id.id, args, new ArrayList<Instruction>(), newRegisters, newParametersRegisters, func.flist);
 
         for (Id id : e.fd.args) {
                 Variable arg = new Variable(id.id, newFunc);
                 args.add(arg);
         }
         visit(e.fd.e, newFunc);
+        func.flist.add(newFunc);
+        System.out.println("HERE");
+        for (Function f : func.flist) {
+          f.show();
+        }
+        System.out.println("HERE end");
         visit(e.e, func);
 }
 
