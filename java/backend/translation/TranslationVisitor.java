@@ -222,6 +222,9 @@ public Variable visit(Var e, Function func){
 
 public Integer visit(Int e, Function func){
         // System.out.println("INT");
+        VInteger i = new VInteger(getTempVarName(), e.i, func);
+        InstructionNOTHING inst = new InstructionNOTHING(i);
+        func.addInstruction(inst);
         return e.i;
 }
 

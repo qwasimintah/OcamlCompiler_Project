@@ -22,7 +22,18 @@ public void show() {
 }
 
 public ArrayList<Object> getOperands() {
-        return new ArrayList<Object>();
+        ArrayList<Object> ops = new ArrayList<Object>();
+        for (Instruction inst : this.branch_then.getInstructions()) {
+                for (Object o : inst.getOperands()) {
+                        ops.add(o);
+                }
+        }
+        for (Instruction inst : this.branch_else.getInstructions()) {
+                for (Object o : inst.getOperands()) {
+                        ops.add(o);
+                }
+        }
+        return ops;
 }
 
 }

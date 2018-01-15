@@ -135,7 +135,7 @@ public void generate_branch(Function  fun){
           String fname = fun.getName();
           generate_branch_label(fname);
 
-        
+
           for (Instruction inst : intr) {
 
                   if(inst instanceof InstructionADD) {
@@ -165,7 +165,7 @@ public void generate_branch(Function  fun){
                   }
           }
 
-        
+
 
 }
 
@@ -864,7 +864,8 @@ public void generate_if(InstructionIF inst){
 
       Function then_branch = inst.branch_then;
       Function else_branch = inst.branch_else;
-
+      System.out.println("HERE");
+      then_branch.showVariablesState();
       //generate code for branch then
 
       generate_branch(then_branch);
@@ -883,7 +884,7 @@ public void generate_if(InstructionIF inst){
 
       if(exp instanceof BooleanEQ){
          Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
-         Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(0));
+         Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(1));
 
 
           //VARIABLE WITH REGISTER
