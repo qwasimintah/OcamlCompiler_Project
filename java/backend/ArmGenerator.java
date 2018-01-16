@@ -201,7 +201,7 @@ public void generate_branch(Function fun, String return_label){
 public void pushing_local_params(HashSet<Variable> locals,int size){
 
         int num_of_args = size;
-        System.out.println(num_of_args);
+        // System.out.println(num_of_args);
 
         if (num_of_args>1) {
                 int off=1;
