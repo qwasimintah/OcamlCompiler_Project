@@ -35,7 +35,7 @@ static public void main(String argv[]) {
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
-                        System.out.println();
+                        System.out.println("");
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
