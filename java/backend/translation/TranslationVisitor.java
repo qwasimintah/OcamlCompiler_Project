@@ -60,7 +60,7 @@ public Object visit(Exp e, Function func) {
                 return (InstructionSUB) visit((Sub)e, func);
         }
         else if (e instanceof Let) {
-                visit((Let)e, func);
+                return (Instruction)visit((Let)e, func);
         }
         else if (e instanceof LetRec) {
                 visit((LetRec)e, func);
@@ -198,22 +198,27 @@ public InstructionSUB visit(Sub e, Function func) {
         }
 }
 
-public void visit(Let e, Function func){
+public Instruction visit(Let e, Function func){
         // System.out.println("LET");
         // System.out.println(e.e1.getClass());
+        InstructionASSIGN inst = new InstructionASSIGN(func, null, null);
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof Neg) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof App) {
                 InstructionCALL value = (InstructionCALL) visit(e.e1, func);
@@ -222,45 +227,65 @@ public void visit(Let e, Function func){
                         func.getInstructions().remove(value);
                 }
                 Variable var = new Variable(e.id.id, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof Add) {
                 InstructionADD instadd = (InstructionADD) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, instadd);
+                inst = new InstructionASSIGN(func, var, instadd);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof Sub) {
                 InstructionSUB instsub = (InstructionSUB) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, instsub);
+                inst = new InstructionASSIGN(func, var, instsub);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof Var) {
                 Variable var = new Variable(e.id.id, func);
                 Variable var2 = (Variable)visit(e.e1, func);
                 // System.out.print("var2 : ");
                 // System.out.println(var2);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, var2);
+                inst = new InstructionASSIGN(func, var, var2);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
                 //func.showVariables();
+                visit(e.e2, func);
+                return inst;
         }
         else if (e.e1 instanceof If) {
                 InstructionIF instif = (InstructionIF) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, instif);
+                inst = new InstructionASSIGN(func, var, instif);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
-        else {
-                visit(e.e1, func);
+        else if (e.e1 instanceof Let) {
+                InstructionASSIGN value = (InstructionASSIGN) visit(e.e1, func);
+                Variable var = new Variable(e.id.id, func);
+                inst = new InstructionASSIGN(func, var, value);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
         }
-        visit(e.e2, func);
+        // else {
+        //         visit(e.e1, func);
+        //         return inst;
+        // }
+        return inst;
 }
 
 public Variable visit(Var e, Function func){
@@ -324,16 +349,16 @@ public InstructionCALL visit(App e, Function func){
         }
 
         // func.getParameters().add(vars);
-        for (Object o : vars) {
-                if (o instanceof Variable) {
-                        ((Variable)o).allocParametersRegister();
-                }
-        }
-        for (Object o : vars) {
-                if (o instanceof Variable) {
-                        ((Variable)o).killParameter();
-                }
-        }
+        // for (Object o : vars) {
+        //         if (o instanceof Variable) {
+        //                 ((Variable)o).allocParametersRegister();
+        //         }
+        // }
+        // for (Object o : vars) {
+        //         if (o instanceof Variable) {
+        //                 ((Variable)o).killParameter();
+        //         }
+        // }
         InstructionCALL inst = new InstructionCALL(vars, getLabel(((Var)e.e).id.id));
         func.addInstruction(inst);
         return inst;
