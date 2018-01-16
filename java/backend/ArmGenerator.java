@@ -805,22 +805,34 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 else if(op2 instanceof InstructionCALL) {
                         //generate_function_call((InstructionCALL) op2);
+                        System.out.println("Should fire");
+                        System.out.println(((InstructionCALL)op2).getFname());
 
                         if(offset1!="") {
                                 textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
                                 textSection.text.append("\tSTR r1 , ").append(offset1).append("\n");
                         }
-                        else{
+                        else{   
+
                                 assign(reg, ((InstructionCALL)op2).getReturn());
                         }
+                }
+
+                else if (op2 instanceof InstructionASSIGN){
+
+                        InstructionASSIGN ass = (InstructionASSIGN)op2;
+
+                        generate_assign(ass);
+
+                        Variable v = (Variable)(ass.operands.get(0));
+
+                        assign(reg, v.getRegister().getName());
                 }
 
                 else if(op2 instanceof InstructionIF) {
 
                         //generate_if((InstructionIF) op2);
                         assign(reg, "r0");
-
-
 
                 }
 
