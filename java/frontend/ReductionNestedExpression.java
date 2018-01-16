@@ -75,7 +75,9 @@ public Exp visit(App e) {
 }
 
 public Exp visit(LetRec e) {
-        return e;
+    FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
+    LetRec new_let_rec = new LetRec(new_fun, e.e.accept(this)) ;
+    return new_let_rec;
 }
 
 public Exp visit(Unit e) {
