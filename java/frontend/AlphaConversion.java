@@ -167,6 +167,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
 
   public Exp visit(Tuple e){
     List<Exp> new_list = new LinkedList<Exp>();
+    sec_exp_let = true;
     for (Exp exp: e.es){
       Exp new_exp = exp.accept(this);
       new_list.add(new_exp);
@@ -187,7 +188,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
       stack.push(new_id.toString());
       new_ids.add(new_id);
     }
-    Exp new_e1 = e.e1.accept(this); 
+    Exp new_e1 = e.e1.accept(this);
     Exp new_e2 = e.e2.accept(this);
     LetTuple new_e = new LetTuple(new_ids, e.ts, new_e1, new_e2);
     return new_e;
