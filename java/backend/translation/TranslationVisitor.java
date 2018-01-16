@@ -262,14 +262,20 @@ public Variable visit(Var e, Function func){
 
         for (Variable var : func.getVariables()) {
                 if (varName == var.getName()) {
+                        InstructionNOTHING inst = new InstructionNOTHING(var);
+                        func.addInstruction(inst);
                         return var;
                 }
         }
         for (Variable var : func.getArguments()) {
                 if (varName == var.getName()) {
+                        InstructionNOTHING inst = new InstructionNOTHING(var);
+                        func.addInstruction(inst);
                         return var;
                 }
         }
+        InstructionNOTHING inst = new InstructionNOTHING(null);
+        func.addInstruction(inst);
         return null;
 }
 
@@ -399,9 +405,9 @@ public BooleanLE visit(LE e, Function func){
 public InstructionIF visit(If e, Function func) {
         // System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
-        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
+        Function branch_then = new Function(getNewLabel(), func.getArguments(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e2, branch_then);
-        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
+        Function branch_else = new Function(getNewLabel(), func.getArguments(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e3, branch_else);
         //System.out.println(cond.getExp());
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
@@ -441,12 +447,12 @@ public TupleJerry visit(Tuple e, Function func){
 }
 
 public void visit(LetTuple e, Function func){
-        System.out.println("LETTUPLE");
-        System.out.println(e.e1.getClass());
-        System.out.println(e.e2.getClass());
-        for (Id id : e.ids) {
-                System.out.println(id.id);
-        }
+        // System.out.println("LETTUPLE");
+        // System.out.println(e.e1.getClass());
+        // System.out.println(e.e2.getClass());
+        // for (Id id : e.ids) {
+        //         System.out.println(id.id);
+        // }
         // Integer i = 0;
         // Integer size = e.ids.size();
         //

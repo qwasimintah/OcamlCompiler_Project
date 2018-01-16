@@ -49,20 +49,20 @@ static public void main(String argv[]) {
 
                 // For TypeChecking :
 
-                 else if (ihm.typecheck_only) {
-                      LinkedList<EnvElem> env = new LinkedList<EnvElem>();
-                      env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
-                      env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
-                      Env predef = new Env(env);
-                      System.out.println(predef);
-                      GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TInt()); // A CHANGER
-                      System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
-                      EquationSolver solved = new EquationSolver();
-                      System.out.println(solved.reduce(expression_typechecked));
-                      System.out.println(expression_typechecked.eqt_list);
-                      solved.solve(expression_typechecked);
-                 }
+                else if (ihm.typecheck_only) {
+                        LinkedList<EnvElem> env = new LinkedList<EnvElem>();
+                        env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
+                        env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
+                        Env predef = new Env(env);
+                        System.out.println(predef);
+                        GenEquation expression_typechecked = new GenEquation();
+                        expression_typechecked.generate(predef, expression, new TInt()); // A CHANGER
+                        System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
+                        EquationSolver solved = new EquationSolver();
+                        System.out.println(solved.reduce(expression_typechecked));
+                        System.out.println(expression_typechecked.eqt_list);
+                        solved.solve(expression_typechecked);
+                }
 
                 // For KNormalization :
                 else if (ihm.knorm) {
@@ -118,8 +118,8 @@ static public void main(String argv[]) {
 
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          // f.show();
-                          regalloc.LinearScan(f);
+                                // f.show();
+                                regalloc.LinearScan(f);
                         }
                         //System.out.println("------ Register Allocation ------");
                         //func.showVariablesState();
@@ -200,15 +200,15 @@ static public void main(String argv[]) {
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         for (Function f : flist) {
-                          f.show();
+                                f.show();
                         }
                         System.out.println("");
 
                         System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          regalloc.LinearScan(f);
-                          f.showVariablesState();
+                                regalloc.LinearScan(f);
+                                f.showVariablesState();
                         }
                         System.out.println("");
 

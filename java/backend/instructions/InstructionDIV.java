@@ -37,6 +37,6 @@ public List<Object> getOperands () {
 }
 
 public void show() {
-        System.out.println("DIV " + operands.get(0) + " " + operands.get(1));
+        System.out.println("DIV\t" + operands.get(0) + " " + operands.get(1));
 }
 }

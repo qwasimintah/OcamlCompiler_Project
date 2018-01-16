@@ -95,10 +95,11 @@ public void show() {
         for (Instruction i : instructions) {
                 i.show();
         }
+        System.out.println("");
 }
 
 public void showVariablesState() {
-        System.out.println("***" + this.getName() + " : Vaiables state***");
+        System.out.println("***" + this.getName() + " : Variables state***");
         for (Variable v : variables) {
                 v.getSaveState();
         }

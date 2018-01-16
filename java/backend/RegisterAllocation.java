@@ -56,9 +56,7 @@ public static void LinearScan(Function func) {
         Integer i = 0;
 
         for (Variable v : func.getArguments()) {
-          // System.out.println("BLABLABLA");
                 v.allocParametersRegister();
-                // v.getSaveState();
         }
 
         for (Instruction inst : func.getInstructions()) {

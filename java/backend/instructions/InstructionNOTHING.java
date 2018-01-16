@@ -17,7 +17,12 @@ public List<Object> getOperands() {
 }
 
 public void show() {
-        System.out.println("NOTHING TO DO : " + this.x);
+        try {
+                System.out.println("NOTHING\t" + ((Variable)this.x).getName() + " (" + this.x + ")");
+
+        } catch (Exception e) {
+                System.out.println("NOTHING\t" + this.x);
+        }
 }
 
 }
