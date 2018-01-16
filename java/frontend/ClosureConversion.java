@@ -6,8 +6,6 @@ import ast.type.*;
 import java.util.*;
 
 public class ClosureConversion implements ObjVisitor<Exp>{
-  private HashSet<String> known = FreeVariables.getKnown();
-
   private List<Closure> func_list= new LinkedList<Closure> ();
 
   private HashMap<String, HashSet<String> > free_variables = FreeVariables.getFree_variables();
@@ -15,8 +13,6 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   private HashSet<String> set_of_functions = FreeVariables.getSet_of_functions();
 
   private Stack current_let_rec = new Stack();
-
-  //private Stack current_app = new Stack();
 
   private String current_app = null;
 
@@ -67,7 +63,7 @@ public class ClosureConversion implements ObjVisitor<Exp>{
             new_var = new Var(new Id("make_closure"));
             List<Exp> list = new LinkedList<Exp> ();
             list.add(new Var(new Id("_" + e.id.toString())));
-            LetRec prev_fun = (LetRec) current_let_rec.get(current_let_rec.size() - 2);
+            LetRec prev_fun = (LetRec) current_let_rec.peek();
             for (Id arg: prev_fun.fd.args){
               list.add(new Var(arg))  ;
             }
@@ -228,19 +224,15 @@ public class ClosureConversion implements ObjVisitor<Exp>{
       Let new_let = new Let(kyrie_irving.id, kyrie_irving.t, kyrie_irving.e1, new_app);
       kyrie_irving = null;
       return new_let;
+    } else {
+      if (current_app != null){
+        new_list.add(0, new Var(new Id(current_app)));
+        current_app = null;
+      }
+      App new_app = new App(new_e, new_list);
+      in_app = false;
+      return new_app;
     }
-    /*if (!current_app.empty()){
-      String arg = (String) current_app.peek();
-      new_list.add(0, new Var(new Id("_" + arg)));
-      current_app.pop();
-    }*/
-    if (current_app != null){
-      new_list.add(0, new Var(new Id(current_app)));
-      current_app = null;
-    }
-    App new_app = new App(new_e, new_list);
-    in_app = false;
-    return new_app;
   }
 
   public Exp visit(Tuple e){
