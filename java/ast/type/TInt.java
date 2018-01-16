@@ -2,6 +2,6 @@ package ast.type;
 
 public class TInt extends Type {
   public String toString(){
-      return "Tint";
+      return "TInt";
   }
 }

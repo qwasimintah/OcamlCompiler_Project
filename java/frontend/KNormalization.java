@@ -52,6 +52,9 @@ public Exp visit(LetRec e) {
 public Exp visit(App e) {
   List<Let> list_let = new ArrayList<Let>();
   List<Exp> list_var = new ArrayList<Exp>();
+  Var first_var = new Var(id_generator.gen());
+  Type first_t = new TInt();
+  System.out.println(e.es.size());
   for (int j = 0; j < e.es.size(); j++){
     list_var.add(new Var(id_generator.gen()));
     Var new_var = (Var) list_var.get(j);
@@ -65,11 +68,11 @@ public Exp visit(App e) {
       list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
     }
     else {
-      App new_app = new App(e.e, list_var);
+      App new_app = new App(first_var, list_var);
       list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
     }
   }
-  return list_let.get(0);
+  return new Let(first_var.id, first_t, e.e.accept(this), list_let.get(0));
 }
 
 public Exp visit(Tuple e) {
