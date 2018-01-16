@@ -704,6 +704,8 @@ public void  generate_assign(InstructionASSIGN instr){
                 else{
                         System.out.println("var name");
                         System.out.println(((Variable)op1).getName());
+                        System.out.println(((Variable)op1).getParametersOffset());
+                        System.out.println(((Variable)op1).getOffset());
                         offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
                         //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
                         operand1="r0";
