@@ -20,6 +20,12 @@ public class FreeVariables implements ObjVisitor<Exp>{
     external_functions.add("print_int");
     external_functions.add("print_newline");
     external_functions.add("truncate");
+    external_functions.add("sin");
+    external_functions.add("cos");
+    external_functions.add("sqrt");
+    external_functions.add("abs_float");
+    external_functions.add("int_of_float");
+    external_functions.add("float_of_int");
   }}
 
   public static HashSet<String> getKnown(){
@@ -176,11 +182,11 @@ public class FreeVariables implements ObjVisitor<Exp>{
         tmp_set.add(arg.toString());
       }
     }
-    System.out.println("let_rec: " + let_rec.fd.id.toString());
-    System.out.println("free_variables av: " + free_variables.get(let_rec.fd.id.toString()));
+    //System.out.println("let_rec: " + let_rec.fd.id.toString());
+    //System.out.println("free_variables av: " + free_variables.get(let_rec.fd.id.toString()));
     Exp new_exp_fd = let_rec.fd.e.accept(this);
-    System.out.println("let_rec: " + let_rec.fd.id.toString());
-    System.out.println("free_variables ap: " + free_variables.get(let_rec.fd.id.toString()));
+    //System.out.println("let_rec: " + let_rec.fd.id.toString());
+    //System.out.println("free_variables ap: " + free_variables.get(let_rec.fd.id.toString()));
     HashSet set_free_variables = free_variables.get(let_rec.fd.id.toString());
     if (set_free_variables == null){
       set_free_variables = new HashSet();
@@ -192,9 +198,9 @@ public class FreeVariables implements ObjVisitor<Exp>{
     if (set_free_variables.isEmpty()){
       known.remove(let_rec.fd.id.toString());
     }
-    System.out.println("free_variables: " + free_variables);
-    System.out.println("known: " + known);
-    System.out.println("set_of_functions: " + set_of_functions);
+    //System.out.println("free_variables: " + free_variables);
+    //System.out.println("known: " + known);
+    //System.out.println("set_of_functions: " + set_of_functions);
     return new_let_rec;
   }
 
