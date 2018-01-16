@@ -98,11 +98,15 @@ public void show() {
 }
 
 public void showVariablesState() {
-        // System.out.println("***" + this.getName() + " : Variables state***");
+        System.out.println("***" + this.getName() + " : Vaiables state***");
         for (Variable v : variables) {
                 v.getSaveState();
         }
-        // System.out.println("******");
+        System.out.println("***" + this.getName() + " : Arguments state***");
+        for (Variable v : this.getArguments()) {
+                v.getSaveState();
+        }
+        System.out.println("");
 }
 
 public void showVariables() {

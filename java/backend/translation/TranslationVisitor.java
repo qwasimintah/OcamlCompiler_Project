@@ -65,6 +65,9 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof LetRec) {
                 visit((LetRec)e, func);
         }
+        else if (e instanceof LetTuple) {
+                visit((LetTuple)e, func);
+        }
         else if (e instanceof Int) {
                 return (Integer) visit((Int)e, func);
         }
@@ -400,11 +403,6 @@ public void visit(LetRec e, Function func){
         }
         visit(e.fd.e, newFunc);
         func.flist.add(newFunc);
-        // System.out.println("HERE");
-        // for (Function f : func.flist) {
-        //   f.show();
-        // }
-        // System.out.println("HERE end");
         visit(e.e, func);
 }
 
@@ -418,6 +416,17 @@ public TupleJerry visit(Tuple e, Function func){
         TupleJerry tuple = new TupleJerry(func, obj);
         tuple.show();
         return tuple;
+}
+
+public void visit(LetTuple e, Function func){
+        System.out.println("LETTUPLE");
+        // Integer i = 0;
+        // Integer size = e.ids.size();
+        //
+        // for (i = 0; i < size; i++) {
+        //       Type t = e.ts.get(0);
+        //       String name = e.ids.get(0).id;
+        // }
 }
 
 public Instruction visit(Unit e, Function func){
@@ -448,9 +457,6 @@ public Instruction visit(FDiv e, Function func){
         return null;
 }
 
-public Instruction visit(LetTuple e, Function func){
-        return null;
-}
 
 public Instruction visit(Array e, Function func){
         return null;

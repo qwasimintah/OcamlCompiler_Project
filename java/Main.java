@@ -197,13 +197,12 @@ static public void main(String argv[]) {
                         func.show();
                         System.out.println("");
 
+                        System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          f.show();
                           regalloc.LinearScan(f);
+                          f.showVariablesState();
                         }
-                        System.out.println("------ Register Allocation ------");
-                        func.showVariablesState();
                         System.out.println("");
 
                         System.out.println("------ ARM code generation ------");

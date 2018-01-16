@@ -55,12 +55,14 @@ public static void LinearScan(Function func) {
         List<Interval>intervals = new ArrayList<Interval>();
         Integer i = 0;
 
+        for (Variable v : func.getArguments()) {
+          // System.out.println("BLABLABLA");
+                v.allocParametersRegister();
+                // v.getSaveState();
+        }
+
         for (Instruction inst : func.getInstructions()) {
                 try {
-                        // if (inst instanceof InstructionIF) {
-                        //         LinearScan(((InstructionIF)inst).branch_then);
-                        //         LinearScan(((InstructionIF)inst).branch_else);
-                        // }
                         for (Object op : inst.getOperands()) {
                                 Variable var = (Variable) op;
                                 if (!variables.contains(var)) {
