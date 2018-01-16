@@ -7,7 +7,7 @@ public class RegisterUtils {
 
 // public static void initRegisters(LinkedHashMap<Register, Variable> registers, LinkedHashMap<Register, Variable> parametersRegisters) {
 public static void initRegisters(ArrayList<Register> registers, ArrayList<Register> parametersRegisters) {
-        for (Integer i = 4; i < 12; i++) {
+        for (Integer i = 4; i < 11; i++) {
                 Register reg = new Register(i);
                 // registers.put(reg, null);
                 registers.add(reg);
