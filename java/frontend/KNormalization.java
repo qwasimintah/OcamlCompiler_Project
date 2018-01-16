@@ -52,25 +52,53 @@ public Exp visit(LetRec e) {
 public Exp visit(App e) {
   List<Let> list_let = new ArrayList<Let>();
   List<Exp> list_var = new ArrayList<Exp>();
+  List<Exp> list_exp = new ArrayList<Exp>();
+  Exp true_name = e.e;
   // Var first_var = new Var(id_generator.gen());
   // Type first_t = new TInt();
-  for (int j = 0; j < e.es.size(); j++){
-    list_var.add(new Var(id_generator.gen()));
-    Var new_var = (Var) list_var.get(j);
-    list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+  // System.out.println(e.es.size());
+  // System.out.println(e.e);
+  // System.out.println(e.es.get(0));
+  // if (e.e instanceof App){
+  //   App temp_app = (App) e.e;
+  //   System.out.println("ONVAYARRIVE");
+  //   System.out.println(temp_app.e);
+  //   System.out.println(temp_app.es.get(0));
+  // }
+  // if (e.es.get(0) instanceof Int){
+  //   Int var_temp = (Int) e.es.get(0);
+  //   System.out.println(var_temp.i);
+  // }
+  if (e.e instanceof App){
+    App temp_app = (App) e.e;
+    for (int k = 0; k < temp_app.es.size(); k++){
+      list_var.add(new Var(id_generator.gen()));
+      Var new_var = (Var) list_var.get(k);
+      list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+      list_exp.add(temp_app.es.get(k));
+    }
+    if (temp_app.e instanceof Var){
+      true_name = (Var) temp_app.e;
+    }
   }
-  for (int i = (e.es.size() - 1); i >= 0; i--){
+  for (int j = 0; j < e.es.size(); j++){
+    Var new_var = new Var(id_generator.gen());
+    list_var.add(new_var);
+    list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+    list_exp.add(e.es.get(j));
+  }
+  for (int i = (list_exp.size() - 1); i >= 0; i--){
     Var new_var = (Var) list_var.get(i);
     Type t = new TInt();
-    Exp es_temp = e.es.get(i);
-    if (i < e.es.size() - 1){
+    Exp es_temp = list_exp.get(i);
+    if (i < list_exp.size() - 1){
       list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
     }
     else {
       // App new_app = new App(first_var, list_var);
       // list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
-      App new_app = new App(e.e, list_var);
-      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
+        App new_app = new App(true_name, list_var);
+        list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
     }
   }
   // return new Let(first_var.id, first_t, e.e.accept(this), list_let.get(0));

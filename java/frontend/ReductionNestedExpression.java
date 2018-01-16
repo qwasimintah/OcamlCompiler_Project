@@ -129,7 +129,8 @@ public Exp visit(LE e) {
 }
 
 public Exp visit(If e) {
-        return e;
+        If new_if = new If(e.e1.accept(this), e.e2.accept(this), e.e3.accept(this));
+        return new_if;
 }
 
 
