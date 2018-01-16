@@ -23,6 +23,28 @@ public class ReductionNestedExpression implements ObjVisitor<Exp> {
     }
   }
 
+  public Exp insert_tuple(LetTuple e, Exp exp){
+    if (exp instanceof Let) {
+      Let new_let = (Let) exp;
+      return (new Let(new_let.id, new_let.t, new_let.e1, insert_tuple(e, new_let.e2)));
+    }
+    else if (exp instanceof LetRec) {
+      LetRec new_let_rec =  (LetRec) exp;
+      return (new LetRec(new_let_rec.fd, insert_tuple(e, new_let_rec.e)));
+    }
+    else if (exp instanceof LetTuple) {
+      LetTuple new_letTuple = (LetTuple) exp;
+      return (new LetTuple(new_letTuple.ids, new_letTuple.ts, new_letTuple.e1, insert_tuple(e, new_letTuple.e2)));
+    }
+    else {
+      return (new LetTuple(e.ids, e.ts, exp, e.e2.accept(this)));
+    }
+  }
+
+public Exp visit(LetTuple e) {
+    return insert_tuple(e, e.e1.accept(this));
+}
+
 public Exp visit(Int e) {
         return e;
 }
@@ -109,15 +131,10 @@ public Exp visit(If e) {
 }
 
 
-
-
 public Exp visit(Tuple e) {
         return e;
 }
 
-public Exp visit(LetTuple e) {
-        return e;
-}
 
 public Exp visit(Array e) {
         return e;
