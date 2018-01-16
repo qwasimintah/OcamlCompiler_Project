@@ -15,6 +15,8 @@ public class FreeVariables implements ObjVisitor<Exp>{
 
   private HashSet<String> set_of_functions = new HashSet(); {{
     set_of_functions.add("print_int");
+    set_of_functions.add("print_newline");
+    set_of_functions.add("truncate");
   }}
 
   public static HashSet<String> getKnown(){
@@ -176,27 +178,43 @@ public class FreeVariables implements ObjVisitor<Exp>{
     if (set_free_variables == null){
       set_free_variables = new HashSet();
     }
-    if (!set_free_variables.isEmpty()){
-      Iterator<String> arg_iterator = set_free_variables.iterator();
-      LinkedList<Id> list_args = new LinkedList<Id> ();
-      while (arg_iterator.hasNext()){
-        String new_arg = arg_iterator.next();
-        list_args.add(new Id(new_arg));
-      }
-      list_args.addAll(let_rec.fd.args);
-      FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, new_exp_fd);
-      Exp new_e = let_rec.e.accept(this);
-      LetRec new_let_rec = new LetRec(new_fd, new_e);
+    /*if (!set_free_variables.isEmpty()){
+      //Iterator<String> arg_iterator = set_free_variables.iterator();
+      //LinkedList<Id> list_args = new LinkedList<Id> ();
+      //while (arg_iterator.hasNext()){
+      //  String new_arg = arg_iterator.next();
+      //  list_args.add(new Id(new_arg));
+      //}
+      //list_args.addAll(let_rec.fd.args);
+      //FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, list_args, new_exp_fd);
       current_functions.pop();
+      Exp new_e = let_rec.e.accept(this);
+      //LetRec new_let_rec = new LetRec(new_fd, new_e);
+      LetRec new_let_rec = new LetRec(let_rec.fd, new_e);
+      //current_functions.pop();
+      System.out.println("free_variables: " + free_variables);
       return new_let_rec;
     } else {
       known.remove(let_rec.fd.id.toString());
+      current_functions.pop();
       FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, let_rec.fd.args, new_exp_fd);
       Exp new_e = let_rec.e.accept(this);
       LetRec new_let_rec = new LetRec(new_fd, new_e);
-      current_functions.pop();
+      //current_functions.pop();
+      System.out.println("free_variables: " + free_variables);
       return new_let_rec;
+    }*/
+    FunDef new_fd = new FunDef(let_rec.fd.id, let_rec.fd.type, let_rec.fd.args, new_exp_fd);
+    current_functions.pop();
+    Exp new_e = let_rec.e.accept(this);
+    LetRec new_let_rec = new LetRec(new_fd, new_e);
+    //current_functions.pop();
+    if (set_free_variables.isEmpty()){
+      known.remove(let_rec.fd.id.toString());
     }
+    System.out.println("free_variables: " + free_variables);
+    System.out.println("known: " + known);
+    return new_let_rec;
   }
 
   public Exp visit(App app){

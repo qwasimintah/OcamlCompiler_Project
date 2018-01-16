@@ -61,7 +61,7 @@ static public void main(String argv[]) {
                       EquationSolver solved = new EquationSolver();
                       System.out.println(solved.reduce(expression_typechecked));
                       System.out.println(expression_typechecked.eqt_list);
-                      System.out.println(solved.solve(expression_typechecked));
+                      solved.solve(expression_typechecked);
                  }
 
                 // For KNormalization :
