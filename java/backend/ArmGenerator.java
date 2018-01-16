@@ -183,7 +183,7 @@ public void generate_branch(Function fun, String return_label){
                 }
                 else if(inst instanceof InstructionNOTHING) {
 
-                        generate_nothing((InstructionNOTHING) inst);
+                        //generate_nothing((InstructionNOTHING) inst);
                 }
                 else{
                         System.out.println("Instruction Not Supported\n");
@@ -831,7 +831,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 else if(op2 instanceof InstructionIF) {
 
-                        //generate_if((InstructionIF) op2);
+                        generate_if((InstructionIF) op2);
                         assign(reg, "r0");
 
                 }
