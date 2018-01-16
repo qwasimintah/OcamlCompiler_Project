@@ -17,12 +17,12 @@ public class EquationSolver{
         TFun f1 = (TFun)e.t1, f2 = (TFun)e.t2;
         eq.eqt_list.remove(e);
         if (f1.nbArgs != f2.nbArgs){
-          System.out.println("Functions " + f1.id + " and " + f2.id + " aren't from same type.\n" + f1 + f2);
+          System.out.println("Those functions have not the same domain dimension.\n" + f1 + f2);
           System.exit(1);
         } else if (f1.nbArgs == 1){
           eq.eqt_list.add(0, new Equation(f1.dom, f2.dom));
         } else {
-          System.out.println("caca" + f1.nbArgs);
+          // System.out.println("caca" + f1.nbArgs);
           for (int j = 0; j < f1.nbArgs; j++){
             eq.eqt_list.add(0, new Equation(f1.domlist.get(j), f2.domlist.get(j)));
           }
@@ -31,6 +31,38 @@ public class EquationSolver{
       } else if (e.t1 instanceof TFun || e.t2 instanceof TFun){
         System.out.println("Function associated with a non function");
         System.exit(1);
+      } else if (e.t1 instanceof TArray){
+          Type ty = ((TArray)e.t1).t;
+          // System.out.println("i = " + i + " e.t2 = " + e.t2);
+          for (Equation ee : eq.eqt_list){
+              // System.out.println("j = " + j + " ee.t2 = " + ee.t2);
+              if (ty.toString() == ee.t1.toString()){
+                if (!(ee.t2 instanceof TVar)){
+                  ((TArray)e.t1).t = ee.t2;
+                }
+              }
+              if (ty.toString() == ee.t2.toString()){
+                if (!(ee.t1 instanceof TVar)){
+                  ((TArray)e.t1).t = ee.t1;
+                }
+              }
+          }
+      } else if(e.t2 instanceof TArray) {
+          Type ty = ((TArray)e.t2).t;
+          // System.out.println("i = " + i + " e.t2 = " + e.t2);
+          for (Equation ee : eq.eqt_list){
+              // System.out.println("j = " + j + " ee.t2 = " + ee.t2);
+              if (ty.toString() == ee.t1.toString()){
+                if (!(ee.t2 instanceof TVar)){
+                  ((TArray)e.t2).t = ee.t2;
+                }
+              }
+              if (ty.toString() == ee.t2.toString()){
+                if (!(ee.t1 instanceof TVar)){
+                  ((TArray)e.t2).t = ee.t1;
+                }
+              }
+          }
       }
       // System.out.println(i);
     }
@@ -64,6 +96,7 @@ public class EquationSolver{
           // }
           // System.out.println(i);
           i++;
+          System.out.println("coucou");
           continue;
         } else if (e.t1 instanceof TVar) {
             TVar e_save = (TVar)e.t1;
@@ -77,8 +110,8 @@ public class EquationSolver{
                   ee.t2 = e.t2;
                 }
                 // j++;
-              }
-              i = 0;
+            }
+            i = 0;
         } else if (e.t2 instanceof TVar){
             TVar e_save = (TVar)e.t2;
             // System.out.println("i = " + i + " e.t2 = " + e.t2);
@@ -97,7 +130,7 @@ public class EquationSolver{
           // System.out.println("In NOTIN");
           return false;
         }
-        // System.out.println(eq.eqt_list);
+        System.out.println(eq.eqt_list);
         // try
         // {
         //     Thread.sleep(1000);
@@ -107,7 +140,6 @@ public class EquationSolver{
         //     Thread.currentThread().interrupt();
         // }
         // System.out.println(i);
-        i++;
 
     // i++;
     }
