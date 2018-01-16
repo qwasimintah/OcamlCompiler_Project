@@ -820,6 +820,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 else if (op2 instanceof InstructionASSIGN){
 
+                        System.out.println("This fires");
                         InstructionASSIGN ass = (InstructionASSIGN)op2;
 
                         generate_assign(ass);
