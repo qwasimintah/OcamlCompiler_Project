@@ -41,6 +41,6 @@ public List<Object> getOperands () {
 }
 
 public void show() {
-        System.out.println(operands.get(0) + " := " + operands.get(1));
+        System.out.println(((Variable)operands.get(0)).getName() + " (" + operands.get(0) + ") " + ":= " + operands.get(1));
 }
 }
