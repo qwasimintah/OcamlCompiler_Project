@@ -40,6 +40,10 @@ public ArmGenerator(){
         //initialise the .data=new ArrayList<Object>();
         dataSection=new DataSection();
         dataSection.data.append("\t.data\n");
+        dataSection.data.append("\t.global heap_ptr\n");
+        dataSection.data.append("\theap: .skip 4096\n");
+        dataSection.data.append("\theap_ptr: .word heap\n");
+
 
 
         //initialise the .text
@@ -53,15 +57,6 @@ public ArmGenerator(){
 
 
 
-public void initialise_heap(){
-        dataSection.data.append("\tbalign 4\n");
-}
-
-public void allocate_heap_space(){
-
-        //dataSection.data.append("\t")
-
-}
 
 
 
@@ -256,6 +251,7 @@ public void pop_params(int size){
                 textSection.text.append("\tADD sp, #").append((size-available_reg_param)*4).append("\n");
         }
 }
+
 
 
 public void generate_nothing(InstructionNOTHING instr){
@@ -607,6 +603,86 @@ public void generate_sub(InstructionSUB instr){
                 arith_operation("SUB",rd,operand1, ((int)op2));
 
         }
+
+
+
+}
+
+
+public void generate_create_array(){
+
+      int size = 5;
+      int initial=0;
+
+      textSection.text.append("\tMOV r0, #0\n");
+      textSection.text.append("create_array: \n");
+      textSection.text.append("\tCMP r0, #").append(size).append("\n");
+      textSection.text.append("\tBEQ end_create\n");
+      textSection.text.append("\tLDR r1, =heap_ptr\n");
+      textSection.text.append("\tLSL r2, r0, #2\n");
+      textSection.text.append("\tADD r2, r1, r2\n");
+      textSection.text.append("\tMOV r3, #").append(initial).append("\n");
+      textSection.text.append("\tSTR r3, [r2]").append("\n");
+      textSection.text.append("\tADD r0, r0, #1").append("\n");
+      textSection.text.append("\tB create_array\n");
+
+      textSection.text.append("end_create: \n");
+      textSection.text.append("\tMOV r0, #0\n\n");
+
+}
+
+
+public void generate_get_array(){
+
+      int index = 2;
+
+      textSection.text.append("get_array_element: \n");
+      textSection.text.append("\tMOV r0, #").append(index).append("\n");
+      textSection.text.append("\tLDR r1, =heap_ptr\n");
+      textSection.text.append("\tLSL r2, r0, #2\n");
+      textSection.text.append("\tADD r2, r1, r2\n");
+      textSection.text.append("\tLDR r1, [r2]\n\n");
+
+}
+
+
+public void generate_put_element(){
+
+      int index = 2;
+      int value =7;
+
+      textSection.text.append("put_array_element: \n");
+      textSection.text.append("\tMOV r0, #").append(index).append("\n");
+      textSection.text.append("\tLDR r1, =heap_ptr\n");
+      textSection.text.append("\tLSL r2, r0, #2\n");
+      textSection.text.append("\tADD r2, r1, r2\n");
+      textSection.text.append("\tMOV r3, #").append(value).append("\n");
+      textSection.text.append("\tSTR r3, [r2]").append("\n");
+
+}
+
+
+public void generate_create_tuples(){
+
+
+      int index = 1;
+      int value = 2;
+
+
+      textSection.text.append("\tMOV r0, #0\n");
+      textSection.text.append("\t");
+      textSection.text.append("\tLDR r1, =heap_ptr\n");
+      textSection.text.append("\tLSL r2, r0, #2\n");
+      textSection.text.append("\tADD r2, r1, r2\n");
+      textSection.text.append("\tMOV r3, #").append(value).append("\n");
+      textSection.text.append("\tSTR r3, [r2]").append("\n");
+      textSection.text.append("\tADD r0, r0, #1").append("\n");
+
+
+
+}
+
+public void generate_get_tuples(){
 
 
 
@@ -1031,7 +1107,7 @@ public String generate_if(InstructionIF inst){
         else if (exp instanceof BooleanLE) {
 
                 Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
-                Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
+                Variable op2 = (Variable)(((BooleanLE)exp).operands.get(1));
 
 
                 //VARIABLE WITH REGISTER
