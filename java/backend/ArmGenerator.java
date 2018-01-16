@@ -316,11 +316,6 @@ public void generate_addition(InstructionADD instr){
                         operand1="r0";
                 }
         }
-        // surely a parameter resulting from an add
-        else if(op1==null){
-
-              operand1="r2";
-        }
 
         if(op2 instanceof Variable) {
 
@@ -360,11 +355,7 @@ public void generate_addition(InstructionADD instr){
                 }
         }
 
-        // surely a parameter resulting from an add
-        else if(op2==null){
-
-              operand1="r2";
-        }
+    
 
         if(op1 instanceof Integer && op2 instanceof Variable) {
 
@@ -830,9 +821,9 @@ public void  generate_assign(InstructionASSIGN instr){
 
         }
 
-        else if(op2 == null){
+        /*else if(op2 == null){
           assign(operand1, "r2");
-        }
+        }*/
 
 
 }

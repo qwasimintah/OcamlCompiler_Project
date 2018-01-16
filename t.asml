@@ -1,0 +1,9 @@
+let _ = 
+	let v3 = 1 in
+	let v4 = 2 in
+ 	let temp1 = add v3 v4 in  
+	let v2 =  add v3 v4 in 
+	call _min_caml_print_int v2
+
+
+

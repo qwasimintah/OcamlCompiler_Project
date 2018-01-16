@@ -194,7 +194,10 @@ static public void main(String argv[]) {
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         System.out.println("------ Translation to Jerry ------");
-                        func.show();
+                        for (Function f: flist ) {
+                            f.show();    
+                        }
+                        
                         System.out.println("");
 
                         System.out.println("------ Register Allocation ------");

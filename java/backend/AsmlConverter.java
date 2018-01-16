@@ -14,24 +14,40 @@ import backend.booleans.*;
 public class AsmlConverter {
 
 	StringBuilder text = new StringBuilder();
+	int temp_counter =0;
+
+	public String get_temp_var (){
+		temp_counter++;
+		return "temp"+String.valueOf(temp_counter);
+	}
+
+	public String get_current_var (){
+		return "temp"+String.valueOf(temp_counter);
+	}
+
+
 
 	public StringBuilder convert(List<Function> funs){
 
 				
 		for(Function fun : funs) {
 
+				List<Variable> arguments = fun.getArguments();
+				List<Instruction> intr = fun.getInstructions();
+				HashSet<Variable> locals = fun.getVariables();
 	            String fname = fun.getName();
 	            if(fname=="main"){
 	                text.append("let _ = \n");
 	            }
 
 	            else {
-	                text.append("let _").append(fname).append("\n");
+	                text.append("let _").append(fname).append(" ");
+	                for(Variable v: arguments){
+	                	text.append(v.getName().substring(1)).append(" ");
+	                }
+	                text.append(" = \n");
 	            }
 
-				List<Variable> arguments = fun.getArguments();
-				List<Instruction> intr = fun.getInstructions();
-				HashSet<Variable> locals = fun.getVariables();
 				//process all intructions of functions
 				//int size= locals.size();
 				int size = intr.size();
@@ -47,14 +63,20 @@ public class AsmlConverter {
 						}
 
 					if(instr instanceof InstructionADD) {
+							if(count == size){
+								text.append("\tadd ");
+							}
+							else {
+								  text.append(" \tlet ").append(get_temp_var()).append (" = add ");
+							}
 
-							text.append("\tadd ");
 							Object op1= ((InstructionADD)instr).operands.get(0);
 							Object op2= ((InstructionADD)instr).operands.get(1);
 
 							if(op1 instanceof Variable || op1 instanceof VInteger) {
 								if(op1 instanceof Variable) {
 									text.append(((Variable)op1).getName().substring(1)).append(" ");
+									
 								}
 								else if(op1 instanceof VInteger) {
 									text.append(((VInteger)op1).getName().substring(1)).append(" ");
@@ -68,11 +90,17 @@ public class AsmlConverter {
 
 							if(op2 instanceof Variable || op2 instanceof VInteger) {
 								if(op1 instanceof Variable) {
-									text.append(((Variable)op2).getName().substring(1));
+									
+										text.append(((Variable)op2).getName().substring(1));
 									// if(in && count < size){
 									//  text.append(" in ");
 									// }
-									text.append(" \n");
+										if(count != size){
+											text.append(" in ");
+										}
+
+										text.append(" \n");
+								
 								}
 								else if(op2 instanceof VInteger) {
 									text.append(((VInteger)op2).getName().substring(1));
@@ -90,6 +118,8 @@ public class AsmlConverter {
 								//  }
 								text.append(" \n");
 							}
+
+							
 	                }
 
 	                else if (instr instanceof InstructionNOTHING){
@@ -105,10 +135,10 @@ public class AsmlConverter {
 
 						if(op1 instanceof Variable || op1 instanceof VInteger) {
 							if(op1 instanceof Variable) {
-															text.append(((Variable)op1).getName().substring(1)).append(" ");
+								text.append(((Variable)op1).getName().substring(1)).append(" ");
 							}
 							else if(op1 instanceof VInteger) {
-															text.append(((VInteger)op1).getName().substring(1)).append(" ");
+								text.append(((VInteger)op1).getName().substring(1)).append(" ");
 							}
 
 						}
@@ -121,7 +151,7 @@ public class AsmlConverter {
 							if(op1 instanceof Variable) {
 								text.append(((Variable)op2).getName().substring(1));
 								if(in && count < size) {
-																text.append(" in ");
+									text.append(" in ");
 								}
 								text.append(" \n");
 							}
@@ -191,13 +221,19 @@ public class AsmlConverter {
 
 	                else if (instr instanceof InstructionASSIGN) {
 
-							text.append("\tlet ");
+							
 
 							Object op1= ((InstructionASSIGN)instr).operands.get(0);
 							Object op2= ((InstructionASSIGN)instr).operands.get(1);
 
+							if(op2 !=null){
+								text.append("\tlet ");
+							}
+
+							
+
 							if(op1 instanceof Variable || op1 instanceof VInteger) {
-								if(op1 instanceof Variable) {
+								if(op1 instanceof Variable && op2 !=null) {
 									text.append(((Variable)op1).getName().substring(1)).append(" = ");
 								}
 								else if(op1 instanceof VInteger) {
@@ -219,7 +255,7 @@ public class AsmlConverter {
 							else if (op2 instanceof VInteger) {
 								text.append(((VInteger)op2).getName().substring(1));
 								if(in && count < size) {
-																text.append(" in ");
+									text.append(" in ");
 								}
 								text.append("\n");
 							}
@@ -257,10 +293,15 @@ public class AsmlConverter {
 
 								}
 
+								else if(op2 instanceof InstructionNOTHING){
+
+
+								}
 
 
 
-													}
+
+							}
 
 					}
 					else if (instr instanceof InstructionCALL) {
@@ -274,17 +315,16 @@ public class AsmlConverter {
 						if(inst.getFname().equals("print_int")) {
 														//Parameter param = (Parameter)params.get(0);
 							text.append("\tcall _min_caml_print_int ");
-							if(params.size() != 0) {
+							if(params.size() != 0 ) {
 
 									if(!(params.get(0) instanceof Integer)) {
 
 										Variable param = (Variable)params.get(0);
+										if(param !=null){
 										text.append(param.getName().substring(1));
-										if(in) {
-																		// if(count < size){
-																		//  text.append(" in ");
-																		// }
-
+										}
+										else{
+											text.append(get_current_var());
 										}
 										text.append("\n");
 										//assign("r0" , param.getRegister().getName());
@@ -300,6 +340,28 @@ public class AsmlConverter {
 
 							}
 	                    }
+	                    else {
+
+	                    	  text.append("\tcall _").append(inst.getFname()).append(" ");
+
+	                    	  for (int i = 0; i<num_params; i++){
+	                    	  		Variable p = (Variable)params.get(i);
+	                    	  		if(p!=null){
+	                    	  			text.append(p.getName());
+	                    	  		}
+	                    	  		else{
+	                    	  			text.append(get_current_var());
+	                    	  		}
+	                    	  }
+
+	                    	  text.append("\n");
+
+
+	                    
+
+	                    }
+
+
 
 					}
 
