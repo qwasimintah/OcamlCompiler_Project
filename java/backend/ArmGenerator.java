@@ -254,8 +254,13 @@ public void pop_params(int size){
 
 
 
-public void generate_nothing(InstructionNOTHING instr){
-        assign("r0", ((VInteger)instr.x).getValue());
+public void generate_nothing(InstructionNOTHING instr) {
+        if (instr.x instanceof VInteger) {
+          assign("r0", ((VInteger)instr.x).getValue());
+        }
+        else if (instr.x instanceof Variable) {
+
+        }
 }
 
 public void generate_addition(InstructionADD instr){
@@ -264,15 +269,15 @@ public void generate_addition(InstructionADD instr){
         String rd="r0";
         String operand1="";
         String operand2="";
-        System.out.println("begin");
-        System.out.println(((Variable)op1).getName());
-        System.out.println(((Variable)op1).getRegister());
-        System.out.println(((Variable)op1).getParametersRegister());
-
-        System.out.println(((Variable)op2).getName());
-        System.out.println(((Variable)op2).getRegister());
-        System.out.println(((Variable)op2).getParametersRegister());
-        System.out.println("end");
+        // System.out.println("begin");
+        // System.out.println(((Variable)op1).getName());
+        // System.out.println(((Variable)op1).getRegister());
+        // System.out.println(((Variable)op1).getParametersRegister());
+        //
+        // System.out.println(((Variable)op2).getName());
+        // System.out.println(((Variable)op2).getRegister());
+        // System.out.println(((Variable)op2).getParametersRegister());
+        // System.out.println("end");
 
 
 
@@ -357,7 +362,7 @@ public void generate_addition(InstructionADD instr){
                 }
         }
 
-    
+
 
         if(op1 instanceof Integer && op2 instanceof Variable) {
 
@@ -690,7 +695,7 @@ public void  generate_assign(InstructionASSIGN instr){
         Object op1= instr.operands.get(0);
         Object op2= instr.operands.get(1);
 
-        System.out.println(op2);
+        // System.out.println(op2);
 
         String operand1="";
         String offset1="";
@@ -698,14 +703,14 @@ public void  generate_assign(InstructionASSIGN instr){
 
 
         if(op1 instanceof Variable) {
-                if(((Variable)op1).getRegister()!=null) {
+                if(((Variable)op1).getRegister() != null) {
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 else{
-                        System.out.println("var name");
-                        System.out.println(((Variable)op1).getName());
-                        System.out.println(((Variable)op1).getParametersOffset());
-                        System.out.println(((Variable)op1).getOffset());
+                        // System.out.println("var name");
+                        // System.out.println(((Variable)op1).getName());
+                        // System.out.println(((Variable)op1).getParametersOffset());
+                        // System.out.println(((Variable)op1).getOffset());
                         offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
                         //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
                         operand1="r0";
@@ -1024,8 +1029,8 @@ public String generate_if(InstructionIF inst){
         Function else_branch = inst.branch_else;
 
         BooleanExpression exp = inst.cond.getExp();
-        System.out.println(inst.cond);
-        System.out.println(exp);
+        // System.out.println(inst.cond);
+        // System.out.println(exp);
 
         String operand1="";
         String operand2 = "";

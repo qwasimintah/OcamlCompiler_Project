@@ -35,7 +35,7 @@ static public void main(String argv[]) {
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
-                        System.out.println();
+                        System.out.println("");
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
@@ -56,7 +56,7 @@ static public void main(String argv[]) {
                       Env predef = new Env(env);
                       System.out.println(predef);
                       GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TInt()); // A CHANGER
+                      expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
                       System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
                       EquationSolver solved = new EquationSolver();
                       System.out.println(solved.reduce(expression_typechecked));
@@ -118,8 +118,8 @@ static public void main(String argv[]) {
 
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          // f.show();
-                          regalloc.LinearScan(f);
+                                // f.show();
+                                regalloc.LinearScan(f);
                         }
                         //System.out.println("------ Register Allocation ------");
                         //func.showVariablesState();
@@ -185,6 +185,13 @@ static public void main(String argv[]) {
                         System.out.println("");
                         System.out.println("");
 
+                        System.out.println("------ ClosureConversion ------");
+                        Exp expression_free = expression_reducted.accept(new FreeVariables());
+                        Exp expression_closure = expression_free.accept(new ClosureConversion());
+                        expression_closure.accept(new PrintVisitor());
+                        System.out.println("");
+                        System.out.println("");
+
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         ArrayList<Register> registers = new ArrayList<Register>(9);
@@ -199,18 +206,17 @@ static public void main(String argv[]) {
                         System.out.println("------ Translation to Jerry ------");
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-
-                        for (Function f: flist ) {
-                            f.show();    
+                        for (Function f : flist) {
+                                f.show();
                         }
-                        
+
                         System.out.println("");
 
                         System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          regalloc.LinearScan(f);
-                          f.showVariablesState();
+                                regalloc.LinearScan(f);
+                                f.showVariablesState();
                         }
                         System.out.println("");
 

@@ -12,7 +12,19 @@ public class ClosureConversion implements ObjVisitor<Exp>{
 
   private HashMap<String, HashSet<String> > free_variables = FreeVariables.getFree_variables();
 
-  private Stack current_let = new Stack();
+  private HashSet<String> set_of_functions = FreeVariables.getSet_of_functions();
+
+  private Stack current_let_rec = new Stack();
+
+  //private Stack current_app = new Stack();
+
+  private String current_app = null;
+
+  private boolean in_app = false;
+
+  private boolean moshi_moshi = false;
+
+  private HashSet<String> var_call = new HashSet<String> ();
 
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
@@ -25,18 +37,53 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(Let e){
-    //TODO
-    current_let.push(e);
     Exp new_e1 = e.e1.accept(this);
+    if (moshi_moshi){
+      var_call.add(e.id.toString());
+    }
     Exp new_e2 = e.e2.accept(this);
     Let new_e = new Let(e.id, e.t, new_e1, new_e2);
     return new_e;
   }
 
   public Exp visit(Var e){
-    //TODO
-    //System.out.println("Var: " + e.id.toString());
-    return e;
+    if (in_app){
+      Var new_var = null;
+      if (set_of_functions.contains(e.id.toString())){
+        //current_app.push("_" + e.id.toString());
+        current_app = "_" + e.id.toString();
+        HashSet<String> set_free_variables = free_variables.get(e.id.toString());
+        if (set_free_variables.isEmpty()){
+          new_var = new Var(new Id("apply_direct"));
+        } else {
+          new_var = new Var(new Id("apply_closure"));
+        }
+      } else {
+        if (!moshi_moshi && var_call.contains(e.id.toString())){
+          current_app = e.id.toString();
+          new_var = new Var(new Id("apply_closure"));
+        } else {
+          new_var = e;
+        }
+      }
+      return new_var;
+    } else {
+      if (set_of_functions.contains(e.id.toString()) && current_let_rec.size() > 1){
+        Id id = new Id("");
+        id = id.gen();
+        LetRec function = (LetRec) current_let_rec.peek();
+        Var new_var = new Var(new Id("make_closure"));
+        List<Exp> list = new LinkedList<Exp> ();
+        list.add(new Var(new Id("_" + e.id.toString())));
+        LetRec prev_fun = (LetRec) current_let_rec.get(current_let_rec.size() - 2);
+        for (Id arg: prev_fun.fd.args){
+          list.add(new Var(arg))  ;
+        }
+        Let new_let = new Let(id, function.fd.type, new App(new_var, list), new Var(id));
+        return new_let;
+      }
+      return e;
+    }
   }
 
   public Exp visit(Int e){
@@ -109,19 +156,62 @@ public class ClosureConversion implements ObjVisitor<Exp>{
   }
 
   public Exp visit(LetRec let_rec){
-    //TODO
-    //if
-    return let_rec;
+    current_let_rec.push(let_rec);
+    HashSet<String> set_free_variables = free_variables.get(let_rec.fd.id.toString());
+    String label = "_" + let_rec.fd.id.toString();
+    List<String> args = new LinkedList<String> ();
+    for (Id id: let_rec.fd.args){
+      args.add(id.toString());
+    }
+    Exp new_e = null;
+    Closure closure = null;
+    Exp new_fd_e = let_rec.fd.e.accept(this);
+    if (set_free_variables.isEmpty()){
+      closure = new Closure(label, null, args, new_fd_e);
+      current_let_rec.pop();
+      new_e = let_rec.e.accept(this);
+    } else {
+      List<String> free_list = new LinkedList<String> ();
+      free_list.addAll(set_free_variables);
+      closure = new Closure(label, free_list, args, new_fd_e);
+      new_e = let_rec.e.accept(this);
+      current_let_rec.pop();
+    }
+    func_list.add(closure);
+    System.out.println("Closure list: ");
+    System.out.println("closure numbers: " + func_list.size());
+    for (Closure clos: func_list){
+      System.out.println("\tlabel: " + clos.getLabel());
+      System.out.println("\tfree_list: " + clos.getFree_list());
+      System.out.println("\targs: " + clos.getArgs());
+      System.out.println("\tcode: ");
+      clos.getCode().accept(new PrintVisitor());
+      System.out.println("");
+    }
+    return new_e;
   }
 
   public Exp visit(App app){
-    //TODO
-    //System.out.println("App");
-    app.e.accept(this);
+    in_app = true;
+    moshi_moshi = false;
+    Exp new_e = app.e.accept(this);
+    moshi_moshi = true;
+    List<Exp> new_list = new LinkedList<Exp> ();
     for (Exp exp: app.es){
-      exp.accept(this);
+      new_list.add(exp.accept(this));
     }
-    return app;
+    /*if (!current_app.empty()){
+      String arg = (String) current_app.peek();
+      new_list.add(0, new Var(new Id("_" + arg)));
+      current_app.pop();
+    }*/
+    if (current_app != null){
+      new_list.add(0, new Var(new Id(current_app)));
+      current_app = null;
+    }
+    App new_app = new App(new_e, new_list);
+    in_app = false;
+    return new_app;
   }
 
   public Exp visit(Tuple e){
