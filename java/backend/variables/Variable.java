@@ -120,7 +120,7 @@ public void getSaveState() {
         } else {
                 storeArg = "-";
         }
-        System.out.println("Var/Arg " + this.getName() + " : " + storeVar + "/" + storeArg);
+        System.out.println("Var/Arg " + this.getName() + " (" + this + ") " + " : " + storeVar + "/" + storeArg);
 
         // if (this.getRegister() != null) {
         //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "stored in register " + this.getRegister().getName());

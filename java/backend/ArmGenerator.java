@@ -265,9 +265,11 @@ public void generate_addition(InstructionADD instr){
         String operand1="";
         String operand2="";
         System.out.println("begin");
+        System.out.println(((Variable)op1).getName());
         System.out.println(((Variable)op1).getRegister());
         System.out.println(((Variable)op1).getParametersRegister());
 
+        System.out.println(((Variable)op2).getName());
         System.out.println(((Variable)op2).getRegister());
         System.out.println(((Variable)op2).getParametersRegister());
         System.out.println("end");
@@ -747,7 +749,7 @@ public void  generate_assign(InstructionASSIGN instr){
                 // }
         }
 
-        
+
 
 
         if((op1 instanceof VInteger || op1 instanceof Variable)&& op2 instanceof Variable) {
