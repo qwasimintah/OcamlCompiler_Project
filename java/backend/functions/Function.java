@@ -82,6 +82,10 @@ public HashSet<Variable> getVariables(){
         return variables;
 }
 
+public void addVariable(Variable var) {
+        variables.add(var);
+}
+
 public void setVariables (HashSet<Variable> locals){
         variables = locals;
 }
