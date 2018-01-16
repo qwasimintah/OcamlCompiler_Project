@@ -35,7 +35,7 @@ static public void main(String argv[]) {
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
-                        System.out.println();
+                        System.out.println("");
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
@@ -185,6 +185,13 @@ static public void main(String argv[]) {
                         System.out.println("");
                         System.out.println("");
 
+                        System.out.println("------ ClosureConversion ------");
+                        Exp expression_free = expression_reducted.accept(new FreeVariables());
+                        Exp expression_closure = expression_free.accept(new ClosureConversion());
+                        expression_closure.accept(new PrintVisitor());
+                        System.out.println("");
+                        System.out.println("");
+
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         ArrayList<Register> registers = new ArrayList<Register>(9);
@@ -202,6 +209,7 @@ static public void main(String argv[]) {
                         for (Function f : flist) {
                                 f.show();
                         }
+
                         System.out.println("");
 
                         System.out.println("------ Register Allocation ------");
