@@ -690,6 +690,7 @@ public void generate_get_tuples(){
 public void  generate_assign(InstructionASSIGN instr){
 
 
+        System.out.println("SHOULD FIRE");
 
 
         Object op1= instr.operands.get(0);
@@ -776,7 +777,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
         }
 
-        else if(op1 instanceof VInteger && op2 instanceof Instruction) {
+        else if(op1 instanceof Variable && op2 instanceof Instruction) {
 
                 String reg= operand1;
 
@@ -804,11 +805,12 @@ public void  generate_assign(InstructionASSIGN instr){
                 }
 
                 else if(op2 instanceof InstructionCALL) {
-                        //generate_function_call((InstructionCALL) op2);
-                        System.out.println("Should fire");
+                        generate_function_call((InstructionCALL) op2);
+                        //System.out.println("Should fire");
                         System.out.println(((InstructionCALL)op2).getFname());
 
                         if(offset1!="") {
+                                System.out.println("Offset part ");
                                 textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
                                 textSection.text.append("\tSTR r1 , ").append(offset1).append("\n");
                         }
@@ -1282,12 +1284,12 @@ public void generate_function_call(InstructionCALL instr) {
                                 Variable param = (Variable)params.get(i);
                                 // case where the local var has a register and the paramter has a register
                                 if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                                        //System.out.println("1");
+                                        System.out.println("1");
                                         assign(param.getParametersRegister().getName(), param.getRegister().getName());
                                 }
                                 // case where pushing the local variable has a register but the parameter must be pushed on the stack
                                 else if (param.getRegister()!= null && param.getParametersRegister()==null) {
-                                        //System.out.println("2");
+                                        System.out.println("2");
                                         String value =param.getRegister().getName();
                                         //reserve_space_param(4);
                                         textSection.text.append("\tSUB sp, #4\n");
@@ -1298,7 +1300,7 @@ public void generate_function_call(InstructionCALL instr) {
                                 // case where local variable has an offset but the paramter has a register
 
                                 else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
-                                        //System.out.println("3");
+                                        System.out.println("3");
                                         // load variable from the stack
                                         String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
                                         textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
@@ -1310,7 +1312,7 @@ public void generate_function_call(InstructionCALL instr) {
                                 // case where local var has an offset and the parameter has an offset
 
                                 else if(param.getRegister()==null && param.getParametersRegister()==null) {
-                                        //System.out.println("3");
+                                        System.out.println("4");
                                         // load variable from the stack
                                         String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
                                         textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");

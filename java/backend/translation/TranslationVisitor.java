@@ -349,16 +349,16 @@ public InstructionCALL visit(App e, Function func){
         }
 
         // func.getParameters().add(vars);
-        // for (Object o : vars) {
-        //         if (o instanceof Variable) {
-        //                 ((Variable)o).allocParametersRegister();
-        //         }
-        // }
-        // for (Object o : vars) {
-        //         if (o instanceof Variable) {
-        //                 ((Variable)o).killParameter();
-        //         }
-        // }
+        for (Object o : vars) {
+                if (o instanceof Variable) {
+                        ((Variable)o).allocParametersRegister();
+                }
+        }
+        for (Object o : vars) {
+                if (o instanceof Variable) {
+                        ((Variable)o).killParameter();
+                }
+        }
         InstructionCALL inst = new InstructionCALL(vars, getLabel(((Var)e.e).id.id));
         func.addInstruction(inst);
         return inst;
