@@ -217,6 +217,10 @@ public void visit(Let e, Function func){
         }
         else if (e.e1 instanceof App) {
                 InstructionCALL value = (InstructionCALL) visit(e.e1, func);
+                if (func.getInstructions().contains(value)) {
+                        // System.out.println("REMOVED");
+                        func.getInstructions().remove(value);
+                }
                 Variable var = new Variable(e.id.id, func);
                 InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
@@ -459,12 +463,12 @@ public void visit(LetTuple e, Function func){
         //   Variable
         // }
         for (Integer i = 0; i < e.ids.size(); i++) {
-          Object value = visit(e.e2, func);
-          if (value instanceof TupleJerry) {
-            value = (TupleJerry)value;
-            System.out.println(value);
-          }
-          // Variable var = new
+                Object value = visit(e.e2, func);
+                if (value instanceof TupleJerry) {
+                        value = (TupleJerry)value;
+                        System.out.println(value);
+                }
+                // Variable var = new
         }
         // for (Id id : e.ids) {
         //         System.out.println(id.id);
