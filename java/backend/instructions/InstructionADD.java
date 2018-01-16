@@ -19,6 +19,6 @@ public List<Object> getOperands() {
 }
 
 public void show() {
-        System.out.println("ADD " + operands.get(0) + " " + operands.get(1));
+        System.out.println("ADD\t" + operands.get(0) + " " + operands.get(1));
 }
 }

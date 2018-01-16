@@ -35,7 +35,7 @@ static public void main(String argv[]) {
                 if (ihm.ast || ihm.parse_only) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
-                        System.out.println();
+                        System.out.println("");
                         if (ihm.parse_only) {
                                 System.exit(0);
                         }
@@ -118,8 +118,8 @@ static public void main(String argv[]) {
 
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          // f.show();
-                          regalloc.LinearScan(f);
+                                // f.show();
+                                regalloc.LinearScan(f);
                         }
                         //System.out.println("------ Register Allocation ------");
                         //func.showVariablesState();
@@ -165,20 +165,31 @@ static public void main(String argv[]) {
                         System.out.println("------ AST ------");
                         expression.accept(new PrintVisitor());
                         System.out.println("");
+                        System.out.println("");
 
                         System.out.println("------ K-Normalization ------");
                         Exp expression_normalized = expression.accept(new KNormalization());
                         expression_normalized.accept(new PrintVisitor());
+                        System.out.println("");
                         System.out.println("");
 
                         System.out.println("------ AlphaConversion ------");
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
+                        System.out.println("");
 
                         System.out.println("------ Reduction of Nested Let-Expressions ------");
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
                         expression_reducted.accept(new PrintVisitor());
+                        System.out.println("");
+                        System.out.println("");
+
+                        System.out.println("------ ClosureConversion ------");
+                        Exp expression_free = expression_reducted.accept(new FreeVariables());
+                        Exp expression_closure = expression_free.accept(new ClosureConversion());
+                        expression_closure.accept(new PrintVisitor());
+                        System.out.println("");
                         System.out.println("");
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
@@ -191,19 +202,22 @@ static public void main(String argv[]) {
                         ArrayList<Function> flist = new ArrayList<Function>();
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
                         flist.add(func);
+
+                        System.out.println("------ Translation to Jerry ------");
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-                        System.out.println("------ Translation to Jerry ------");
-                        func.show();
+                        for (Function f : flist) {
+                                f.show();
+                        }
+
                         System.out.println("");
 
+                        System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                          f.show();
-                          regalloc.LinearScan(f);
+                                regalloc.LinearScan(f);
+                                f.showVariablesState();
                         }
-                        System.out.println("------ Register Allocation ------");
-                        func.showVariablesState();
                         System.out.println("");
 
                         System.out.println("------ ARM code generation ------");

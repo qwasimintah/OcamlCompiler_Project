@@ -14,10 +14,36 @@ public class ReductionNestedExpression implements ObjVisitor<Exp> {
       LetRec new_let_rec =  (LetRec) exp;
       return (new LetRec(new_let_rec.fd, insert(e, new_let_rec.e)));
     }
+    else if (exp instanceof LetTuple) {
+      LetTuple new_let_tuple = (LetTuple) exp;
+      return (new LetTuple(new_let_tuple.ids, new_let_tuple.ts, new_let_tuple.e1, insert(e, new_let_tuple.e2)));
+    }
     else {
       return (new Let(e.id, e.t, exp, e.e2.accept(this)));
     }
   }
+
+  public Exp insert_tuple(LetTuple e, Exp exp){
+    if (exp instanceof Let) {
+      Let new_let = (Let) exp;
+      return (new Let(new_let.id, new_let.t, new_let.e1, insert_tuple(e, new_let.e2)));
+    }
+    else if (exp instanceof LetRec) {
+      LetRec new_let_rec =  (LetRec) exp;
+      return (new LetRec(new_let_rec.fd, insert_tuple(e, new_let_rec.e)));
+    }
+    else if (exp instanceof LetTuple) {
+      LetTuple new_letTuple = (LetTuple) exp;
+      return (new LetTuple(new_letTuple.ids, new_letTuple.ts, new_letTuple.e1, insert_tuple(e, new_letTuple.e2)));
+    }
+    else {
+      return (new LetTuple(e.ids, e.ts, exp, e.e2.accept(this)));
+    }
+  }
+
+public Exp visit(LetTuple e) {
+    return insert_tuple(e, e.e1.accept(this));
+}
 
 public Exp visit(Int e) {
         return e;
@@ -49,7 +75,9 @@ public Exp visit(App e) {
 }
 
 public Exp visit(LetRec e) {
-        return e;
+    FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
+    LetRec new_let_rec = new LetRec(new_fun, e.e.accept(this)) ;
+    return new_let_rec;
 }
 
 public Exp visit(Unit e) {
@@ -105,15 +133,10 @@ public Exp visit(If e) {
 }
 
 
-
-
 public Exp visit(Tuple e) {
         return e;
 }
 
-public Exp visit(LetTuple e) {
-        return e;
-}
 
 public Exp visit(Array e) {
         return e;

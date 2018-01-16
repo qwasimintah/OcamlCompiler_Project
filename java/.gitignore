@@ -1,1 +1,3 @@
-*.class *~ **/*.class **/**/*.class
+*.class
+test_result.txt
+*.out

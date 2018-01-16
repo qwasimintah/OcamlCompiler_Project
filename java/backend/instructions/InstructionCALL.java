@@ -41,7 +41,7 @@ public String getFname() {
 }
 
 public void show() {
-        System.out.print("CALL " + fname + " ");
+        System.out.print("CALL\t" + fname + " ");
         for (Object o : params) {
           System.out.print(o + " ");
         }

@@ -1,7 +1,7 @@
 JAVAC=javac
 SRC=./
 DEST=./
-FILES=TestArm2.java
+FILES=ArrayTest.java
 FLAGS=-Xlint:-serial -sourcepath ..
 
 all: $(FILES)
@@ -11,7 +11,7 @@ RegisterAllocation.java:
 
 ArmGenerator.java:
 
-TestArm2.java:
+ArrayTest.java:
 
 clean:
 	rm -rf **/*.class *.class

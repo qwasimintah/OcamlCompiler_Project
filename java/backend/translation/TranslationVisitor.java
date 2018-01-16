@@ -65,6 +65,9 @@ public Object visit(Exp e, Function func) {
         else if (e instanceof LetRec) {
                 visit((LetRec)e, func);
         }
+        else if (e instanceof LetTuple) {
+                visit((LetTuple)e, func);
+        }
         else if (e instanceof Int) {
                 return (Integer) visit((Int)e, func);
         }
@@ -78,7 +81,7 @@ public Object visit(Exp e, Function func) {
                 return (Variable) visit((Var)e, func);
         }
         else if (e instanceof App) {
-                visit((App)e, func);
+                return (InstructionCALL) visit((App)e, func);
         }
         else if (e instanceof Neg) {
                 return (Integer) visit((Neg)e, func);
@@ -111,11 +114,23 @@ public InstructionADD visit(Add e, Function func) {
                 }
         }
         if (vars.size() == 0) {
+                for (Variable var : func.getArguments()) {
+                        if (var1 == var.getName()) {
+                                vars.add(var);
+                        }
+                }
+        }
+        if (vars.size() == 0) {
                 VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
                 vars.add(tmpX);
         }
 
         for (Variable var : func.getVariables()) {
+                if (var2 == var.getName()) {
+                        vars.add(var);
+                }
+        }
+        for (Variable var : func.getArguments()) {
                 if (var2 == var.getName()) {
                         vars.add(var);
                 }
@@ -185,6 +200,7 @@ public InstructionSUB visit(Sub e, Function func) {
 
 public void visit(Let e, Function func){
         // System.out.println("LET");
+        // System.out.println(e.e1.getClass());
         if (e.e1 instanceof Int) {
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
@@ -200,7 +216,15 @@ public void visit(Let e, Function func){
                 func.addInstruction(inst);
         }
         else if (e.e1 instanceof App) {
-                visit(e.e1, func);
+                InstructionCALL value = (InstructionCALL) visit(e.e1, func);
+                if (func.getInstructions().contains(value)) {
+                        // System.out.println("REMOVED");
+                        func.getInstructions().remove(value);
+                }
+                Variable var = new Variable(e.id.id, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                func.getVariables().add(var);
+                func.addInstruction(inst);
         }
         else if (e.e1 instanceof Add) {
                 InstructionADD instadd = (InstructionADD) visit(e.e1, func);
@@ -218,7 +242,10 @@ public void visit(Let e, Function func){
         }
         else if (e.e1 instanceof Var) {
                 Variable var = new Variable(e.id.id, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, (Variable)visit(e.e1, func));
+                Variable var2 = (Variable)visit(e.e1, func);
+                // System.out.print("var2 : ");
+                // System.out.println(var2);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, var2);
                 func.getVariables().add(var);
                 func.addInstruction(inst);
                 //func.showVariables();
@@ -239,12 +266,24 @@ public void visit(Let e, Function func){
 public Variable visit(Var e, Function func){
         // System.out.println("VAR");
         String varName = ((Var)e).id.id;
+        // System.out.println(varName);
 
         for (Variable var : func.getVariables()) {
                 if (varName == var.getName()) {
+                        InstructionNOTHING inst = new InstructionNOTHING(var);
+                        func.addInstruction(inst);
                         return var;
                 }
         }
+        for (Variable var : func.getArguments()) {
+                if (varName == var.getName()) {
+                        InstructionNOTHING inst = new InstructionNOTHING(var);
+                        func.addInstruction(inst);
+                        return var;
+                }
+        }
+        InstructionNOTHING inst = new InstructionNOTHING(null);
+        func.addInstruction(inst);
         return null;
 }
 
@@ -262,7 +301,7 @@ public Integer visit(Neg e, Function func){
         return -i;
 }
 
-public void visit(App e, Function func){
+public InstructionCALL visit(App e, Function func){
         // System.out.println("APP");
         ArrayList<Object> vars = new ArrayList<Object>();
 
@@ -297,6 +336,7 @@ public void visit(App e, Function func){
         }
         InstructionCALL inst = new InstructionCALL(vars, getLabel(((Var)e.e).id.id));
         func.addInstruction(inst);
+        return inst;
 }
 
 public boolean visit(exp.Bool e, Function func){
@@ -374,9 +414,9 @@ public BooleanLE visit(LE e, Function func){
 public InstructionIF visit(If e, Function func) {
         // System.out.println("IF");
         VBoolean cond = new VBoolean(getTempVarName(), (BooleanExpression)visit(e.e1, func), func);
-        Function branch_then = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
+        Function branch_then = new Function(getNewLabel(), func.getArguments(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e2, branch_then);
-        Function branch_else = new Function(getNewLabel(), new ArrayList<Variable>(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
+        Function branch_else = new Function(getNewLabel(), func.getArguments(), new ArrayList<Instruction>(), func.registers, func.parametersRegisters, func.getVariables(), func.flist);
         visit(e.e3, branch_else);
         //System.out.println(cond.getExp());
         InstructionIF inst = new InstructionIF(cond, branch_then, branch_else);
@@ -400,11 +440,6 @@ public void visit(LetRec e, Function func){
         }
         visit(e.fd.e, newFunc);
         func.flist.add(newFunc);
-        // System.out.println("HERE");
-        // for (Function f : func.flist) {
-        //   f.show();
-        // }
-        // System.out.println("HERE end");
         visit(e.e, func);
 }
 
@@ -418,6 +453,33 @@ public TupleJerry visit(Tuple e, Function func){
         TupleJerry tuple = new TupleJerry(func, obj);
         tuple.show();
         return tuple;
+}
+
+public void visit(LetTuple e, Function func){
+        System.out.println("LETTUPLE");
+        System.out.println(e.e1.getClass());
+        System.out.println(e.e2.getClass());
+        // if (e.e1 instanceof Var) {
+        //   Variable
+        // }
+        for (Integer i = 0; i < e.ids.size(); i++) {
+                Object value = visit(e.e2, func);
+                if (value instanceof TupleJerry) {
+                        value = (TupleJerry)value;
+                        System.out.println(value);
+                }
+                // Variable var = new
+        }
+        // for (Id id : e.ids) {
+        //         System.out.println(id.id);
+        // }
+        // Integer i = 0;
+        // Integer size = e.ids.size();
+        //
+        // for (i = 0; i < size; i++) {
+        //       Type t = e.ts.get(0);
+        //       String name = e.ids.get(0).id;
+        // }
 }
 
 public Instruction visit(Unit e, Function func){
@@ -448,9 +510,6 @@ public Instruction visit(FDiv e, Function func){
         return null;
 }
 
-public Instruction visit(LetTuple e, Function func){
-        return null;
-}
 
 public Instruction visit(Array e, Function func){
         return null;

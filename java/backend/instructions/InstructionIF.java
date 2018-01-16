@@ -18,24 +18,33 @@ public InstructionIF(VBoolean cond, Function branch_then, Function branch_else) 
 }
 
 public void show() {
-        System.out.println("If " + this.cond + " then " + this.branch_then + " else " + this.branch_else);
+        System.out.println("IF\t" + this.cond + " THEN " + this.branch_then.getName() + " ELSE " + this.branch_else.getName());
+        System.out.println("");
+        this.branch_then.show();
+        this.branch_else.show();
 }
 
 public ArrayList<Object> getOperands() {
         ArrayList<Object> ops = new ArrayList<Object>();
+
         for (Instruction inst : this.branch_then.getInstructions()) {
                 for (Object o : inst.getOperands()) {
-                        ops.add(o);
+                        if (!(ops.contains(o)) && o != null) {
+                                ops.add(o);
+                        }
                 }
         }
         for (Instruction inst : this.branch_else.getInstructions()) {
                 for (Object o : inst.getOperands()) {
-                        ops.add(o);
+                        // System.out.println(o);
+                        if (!(ops.contains(o)) && o != null) {
+                                ops.add(o);
+                        }
                 }
         }
         // System.out.println("getOps IF");
         // for (Object o : ops) {
-        //         System.out.print(((Variable)o).getName() + " ");
+        //         // System.out.print(((Variable)o).getName() + " ");
         //         System.out.println(o);
         // }
         return ops;
