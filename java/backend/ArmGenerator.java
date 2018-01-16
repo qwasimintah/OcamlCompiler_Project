@@ -318,11 +318,6 @@ public void generate_addition(InstructionADD instr){
                         operand1="r0";
                 }
         }
-        // surely a parameter resulting from an add
-        else if(op1==null){
-
-              operand1="r2";
-        }
 
         if(op2 instanceof Variable) {
 
@@ -362,11 +357,7 @@ public void generate_addition(InstructionADD instr){
                 }
         }
 
-        // surely a parameter resulting from an add
-        else if(op2==null){
-
-              operand1="r2";
-        }
+    
 
         if(op1 instanceof Integer && op2 instanceof Variable) {
 
@@ -713,6 +704,8 @@ public void  generate_assign(InstructionASSIGN instr){
                 else{
                         System.out.println("var name");
                         System.out.println(((Variable)op1).getName());
+                        System.out.println(((Variable)op1).getParametersOffset());
+                        System.out.println(((Variable)op1).getOffset());
                         offset1="[fp , #-" + ((Variable)op1).getOffset().toString()+"]";
                         //textSection.text.append("\tSTR r0 , "). append(offset1).append("\n");
                         operand1="r0";
@@ -832,9 +825,9 @@ public void  generate_assign(InstructionASSIGN instr){
 
         }
 
-        else if(op2 == null){
+        /*else if(op2 == null){
           assign(operand1, "r2");
-        }
+        }*/
 
 
 }

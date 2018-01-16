@@ -199,9 +199,11 @@ static public void main(String argv[]) {
                         System.out.println("------ Translation to Jerry ------");
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-                        for (Function f : flist) {
-                          f.show();
+
+                        for (Function f: flist ) {
+                            f.show();    
                         }
+                        
                         System.out.println("");
 
                         System.out.println("------ Register Allocation ------");
