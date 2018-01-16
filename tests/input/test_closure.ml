@@ -1,4 +1,4 @@
-let rec make_adder x =
-  let rec adder y = x + y in
-  adder in
-print_int ((make_adder 3) 7)
+let rec f x =
+  let rec g y = x + y in
+  g in
+print_int ((f 3) 7)

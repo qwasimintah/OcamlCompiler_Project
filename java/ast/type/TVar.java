@@ -2,7 +2,8 @@ package ast.type;
 
 public class TVar extends Type {
     String v;
-    TVar(String v) {
+
+    public TVar(String v) {
         this.v = v;
     }
     @Override

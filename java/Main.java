@@ -25,7 +25,7 @@ static public void main(String argv[]) {
                 // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                System.out.println(expression);
+                //System.out.println(expression);
                 // assert (expression != null);
 
                 if (ihm.given_output) {
@@ -56,12 +56,12 @@ static public void main(String argv[]) {
                       Env predef = new Env(env);
                       System.out.println(predef);
                       GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TUnit());
-                      System.out.println(expression_typechecked.eqt_list);
+                      expression_typechecked.generate(predef, expression, new TInt()); // A CHANGER
+                      System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
                       EquationSolver solved = new EquationSolver();
-                      solved.reduce(expression_typechecked);
+                      System.out.println(solved.reduce(expression_typechecked));
                       System.out.println(expression_typechecked.eqt_list);
-                      // System.out.println(solved.solve(expression_typechecked));
+                      solved.solve(expression_typechecked);
                  }
 
                 // For KNormalization :
@@ -90,7 +90,8 @@ static public void main(String argv[]) {
 
                 //For ClosureConversion :
                 else if (ihm.closure_conversion) {
-                        Exp expression_converted = expression.accept(new ClosureConversion());
+                        Exp expression_free = expression.accept(new FreeVariables());
+                        Exp expression_converted = expression_free.accept(new ClosureConversion());
                         System.out.println("------ ClosureConversion ------");
                         expression_converted.accept(new PrintVisitor());
                         System.out.println("");
@@ -109,17 +110,26 @@ static public void main(String argv[]) {
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
 
                         RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.VBA(func);
+                        for (Function f : flist) {
+                          // f.show();
+                          regalloc.LinearScan(f);
+                        }
+                        //System.out.println("------ Register Allocation ------");
+                        //func.showVariablesState();
+                        //System.out.println("");
+
+                        //RegisterAllocation regalloc = new RegisterAllocation();
+                        //regalloc.VBA(func);
 
 
                         System.out.println("@------ ARM------");
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
@@ -139,11 +149,11 @@ static public void main(String argv[]) {
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         AsmlConverter asml = new AsmlConverter();
                         StringBuilder text1 = asml.convert(flist);
                         System.out.println(text1);
@@ -178,33 +188,31 @@ static public void main(String argv[]) {
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 
-                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters);
+                        ArrayList<Function> flist = new ArrayList<Function>();
+                        Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
+                        flist.add(func);
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         System.out.println("------ Translation to Jerry ------");
                         func.show();
                         System.out.println("");
 
-                        RegisterAllocation regalloc = new RegisterAllocation();
-                        regalloc.LinearScan(func);
                         System.out.println("------ Register Allocation ------");
-                        func.showVariablesState();
+                        RegisterAllocation regalloc = new RegisterAllocation();
+                        for (Function f : flist) {
+                          regalloc.LinearScan(f);
+                          f.showVariablesState();
+                        }
                         System.out.println("");
 
                         System.out.println("------ ARM code generation ------");
-                        List<Function> flist = new ArrayList<Function>();
-                        flist.add(func);
                         ArmGenerator arm = new ArmGenerator();
 
                         arm.generate_code(flist);
                         StringBuilder text = arm.textSection.text;
                         System.out.println(text);
 
-                        try (FileOutputStream oS = new FileOutputStream(new File(ihm.output_file))) {
-                                oS.write(text.toString().getBytes());
-                        } catch (IOException e) {
-                                e.printStackTrace();
-                        }
+
                 }
 
         } catch (Exception e) {
