@@ -106,8 +106,8 @@ static public void main(String argv[]) {
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
-                        ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
+                        ArrayList<Register> registers = new ArrayList<Register>();
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         ArrayList<Function> flist = new ArrayList<Function>();
@@ -145,8 +145,8 @@ static public void main(String argv[]) {
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>();
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>();
-                        ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
+                        ArrayList<Register> registers = new ArrayList<Register>();
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
 
                         ArrayList<Function> flist = new ArrayList<Function>();
@@ -194,8 +194,8 @@ static public void main(String argv[]) {
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
-                        ArrayList<Register> registers = new ArrayList<Register>(9);
-                        ArrayList<Register> parametersRegisters = new ArrayList<Register>(2);
+                        ArrayList<Register> registers = new ArrayList<Register>();
+                        ArrayList<Register> parametersRegisters = new ArrayList<Register>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
                         // RegisterUtils.showRegisters(registers);
 

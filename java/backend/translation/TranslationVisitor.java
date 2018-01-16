@@ -281,18 +281,23 @@ public Instruction visit(Let e, Function func){
                 visit(e.e2, func);
                 return inst;
         }
-        // else {
-        //         visit(e.e1, func);
-        //         return inst;
-        // }
-        return inst;
+        else {
+                visit(e.e1, func);
+                visit(e.e2, func);
+                return inst;
+        }
 }
 
 public Variable visit(Var e, Function func){
         // System.out.println("VAR");
         String varName = ((Var)e).id.id;
         // System.out.println(varName);
-
+        if (varName.equals("print_int")) {
+                Variable var = new Variable(varName, func);
+                InstructionNOTHING inst = new InstructionNOTHING(var);
+                func.addInstruction(inst);
+                return null;
+        }
         for (Variable var : func.getVariables()) {
                 if (varName == var.getName()) {
                         InstructionNOTHING inst = new InstructionNOTHING(var);
@@ -487,14 +492,20 @@ public void visit(LetTuple e, Function func){
         // if (e.e1 instanceof Var) {
         //   Variable
         // }
+        TupleJerry values = (TupleJerry)visit(e.e1, func);
         for (Integer i = 0; i < e.ids.size(); i++) {
-                Object value = visit(e.e2, func);
-                if (value instanceof TupleJerry) {
-                        value = (TupleJerry)value;
-                        System.out.println(value);
-                }
-                // Variable var = new
+                // Object value = visit(e.e2, func);
+                System.out.println(i);
+                // if (value instanceof TupleJerry) {
+                //         value = (TupleJerry)value;
+                //         System.out.println(value);
+                // }
+                Variable var = new Variable(e.ids.get(i).id, func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, values.getElements().get(i));
+                func.addInstruction(inst);
+                func.addVariable(var);
         }
+        visit(e.e2, func);
         // for (Id id : e.ids) {
         //         System.out.println(id.id);
         // }
