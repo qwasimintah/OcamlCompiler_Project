@@ -9,6 +9,7 @@ public class KNormalization implements ObjVisitor<Exp> {
 
 private Id id_generator = new Id("id");
 
+
 public Exp visit(Int e) {
         return e;
 }
@@ -49,12 +50,57 @@ public Exp visit(LetRec e) {
 }
 
 public Exp visit(App e) {
-        List<Exp> new_es = new ArrayList<Exp>();
-        for (int i = 0; i < e.es.size(); i++) {
-                Exp es_temp = e.es.get(i);
-                new_es.add(es_temp.accept(this));
-        }
-        return (new App(e.e.accept(this), new_es));
+  List<Let> list_let = new ArrayList<Let>();
+  List<Exp> list_var = new ArrayList<Exp>();
+  for (int j = 0; j < e.es.size(); j++){
+    list_var.add(new Var(id_generator.gen()));
+    Var new_var = (Var) list_var.get(j);
+    list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+  }
+  for (int i = (e.es.size() - 1); i >= 0; i--){
+    Var new_var = (Var) list_var.get(i);
+    Type t = new TInt();
+    Exp es_temp = e.es.get(i);
+    if (i < e.es.size() - 1){
+      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
+    }
+    else {
+      App new_app = new App(e.e, list_var);
+      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
+    }
+  }
+  return list_let.get(0);
+}
+
+public Exp visit(Tuple e) {
+  List<Exp> list_es = new ArrayList<Exp>();
+
+  for (int i = 0; i < e.es.size(); i++){
+    Exp es_temp = e.es.get(i);
+    list_es.add(es_temp.accept(this));
+  }
+  return new Tuple(list_es);
+
+  // List<Let> list_let = new ArrayList<Let>();
+  // List<Exp> list_var = new ArrayList<Exp>();
+  // for (int j = 0; j < e.es.size(); j++){
+  //   list_var.add(new Var(id_generator.gen()));
+  //   Var new_var = (Var) list_var.get(j);
+  //   list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
+  // }
+  // for (int i = (e.es.size() - 1); i >= 0; i--){
+  //   Var new_var = (Var) list_var.get(i);
+  //   Type t = new TInt();
+  //   Exp es_temp = e.es.get(i);
+  //   if (i < e.es.size() - 1){
+  //     list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
+  //   }
+  //   else {
+  //     Tuple new_tuple = new Tuple(list_var);
+  //     list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_tuple));
+  //   }
+  // }
+  // return list_let.get(0);
 }
 
 public Exp visit(If e) {
@@ -101,28 +147,6 @@ public Exp visit(If e) {
         return e;
 }
 
-public Exp visit(Tuple e) {
-  List<Let> list_let = new ArrayList<Let>();
-  List<Exp> list_var = new ArrayList<Exp>();
-  for (int j = 0; j < e.es.size(); j++){
-    list_var.add(new Var(id_generator.gen()));
-    Var new_var = (Var) list_var.get(j);
-    list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
-  }
-  for (int i = (e.es.size() - 1); i >= 0; i--){
-    Var new_var = (Var) list_var.get(i);
-    Type t = new TInt();
-    Exp es_temp = e.es.get(i);
-    if (i < e.es.size() - 1){
-      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
-    }
-    else {
-      Tuple new_tuple = new Tuple(list_var);
-      list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_tuple));
-    }
-  }
-  return list_let.get(0);
-}
 
 public Exp visit(Unit e) {
         return e;

@@ -1,0 +1,16 @@
+let _ = 
+let v6 = 1 in
+let v7 = 2 in
+let v8 = v6 in 
+let v9 = v7 in 
+if v8 <= v9 then ( 
+let v10 = v6 in 
+let v11 = 1 in
+add v10 v11 
+)
+else (
+let v12 = v7 in 
+let v13 = 2 in
+add v12 v13 
+)
+

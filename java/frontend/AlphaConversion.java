@@ -187,7 +187,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
       stack.push(new_id.toString());
       new_ids.add(new_id);
     }
-    Exp new_e1 = e.e1.accept(this);
+    Exp new_e1 = e.e1.accept(this); 
     Exp new_e2 = e.e2.accept(this);
     LetTuple new_e = new LetTuple(new_ids, e.ts, new_e1, new_e2);
     return new_e;

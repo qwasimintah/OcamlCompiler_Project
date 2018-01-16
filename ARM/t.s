@@ -1,42 +1,39 @@
+.data
+	.global heap_ptr
+	heap: .skip 4096
+	heap_ptr: .word heap
+
 	.text
 	.global _start
 _start:
-	BL _main
-_main:
-	@MAIN PROLOGUE
-	SUB sp, #4
-	LDR lr, [sp]
-	SUB sp, #4
-	STR fp, [sp]
-	MOV fp, sp
+	MOV r0, #0
+	bl create_array
+create_array: 
+	CMP r0, #5
+	BEQ end_create
+	LDR r1, =heap_ptr
+	LSL r2, r0, #2
+	ADD r2, r1, r2
+	MOV r3, #0
+	STR r3, [r2]
+	ADD r0, r0, #1
+	B create_array
+end_create: 
+	MOV r0, #0
 
-	LDR r4, =3
-	STMFD sp!,{r4-r12}
-	MOV r2, r4
-	BL _label1
-	LDMFD sp!, {r4-r12}
+put_array_element: 
+	MOV r0, #2
+	LDR r1, =heap_ptr
+	LSL r2, r0, #2
+	ADD r2, r1, r2
+	MOV r3, #7
+	STR r3, [r2]
+get_array_element: 
+	MOV r0, #2
+	LDR r1, =heap_ptr
+	LSL r2, r0, #2
+	ADD r2, r1, r2
+	LDR r1, [r2]
+	MOV r0, r1
 	BL min_caml_print_int
-	BL min_caml_print_newline
-
-	@MAIN EPILOGUE
-	ADD sp, #4
-	MOV sp, fp
-	LDR fp, [sp]
-	ADD sp, #4
-
-	MOV r7, #1
-	swi 0
-_label1:
-	@FUNCTION PROLOGUE
-	STMFD sp!, {fp, lr}
-	ADD fp, sp, #4
-
-	MOV r4, r2
-	LDR r5, =1
-	ADD r0, r4, r5
-
-	@FUNCTION EPILOGUE
-	SUB sp, fp, #4
-	LDMFD sp!, {fp, lr}
-	BX lr
-
+	BL min_caml_exit
