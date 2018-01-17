@@ -1375,11 +1375,17 @@ public void generate_function_call(InstructionCALL instr) {
         }
 
         textSection.text.append("\tBL ").append(fname).append("\n");
+        int diff = num_params - 2;
+        if(diff>=1){
+            textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
+        }
         restore_locals();
         if(num_params >= available_reg_param) {
                 //restore_parameters();
 
         }
+
+
 
 
 }

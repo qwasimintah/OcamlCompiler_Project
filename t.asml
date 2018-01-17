@@ -1,25 +1,21 @@
-NOTHING CLASS
-backend.instructions.InstructionNOTHING@45ee12a7
-NOTHING CLASS
-backend.instructions.InstructionNOTHING@330bedb4
-let _ = 
-	let tmpVar9 = 30 in
-	let temp1 = call _label1 tmpVar9  in 
-	call _min_caml_print_int temp1
-let _label1 v9  = 
-	let v10 = v9 in 
-	let v11 = 1 in
-	if v10 <= v11 then ( 
+let _label1 v22 v23  = 
+	let v24 = v22 in 
+	let v25 = 0 in
+	if v24 <= v25 then ( 
+	let v26 = v23 in 
+	let v27 = 1 in
+	add v26 v27 
 	)
 	else (
-	let v13 = 	1
-	let v14 = 1 in
-	sub v13 v14 in  
-	let v16 = 	2
-	let v17 = 2 in
-	sub v16 v17 in  
-	add mpVar6 mpVar7 
+	let v28 = v23 in 
+	let v29 = 0 in
+	if v28 <= v28 then ( 
 	)
+let _ = 
+	let v43 = 3 in
+	let v44 = 10 in
+	let v42 = 	call _label1 v43 v44  in 
+	call _min_caml_print_int v42
 
 
 

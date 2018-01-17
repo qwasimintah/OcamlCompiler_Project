@@ -38,6 +38,7 @@ public class AsmlConverter {
 
 	public StringBuilder convert(List<Function> funs){
 
+		Collections.reverse(funs);
 				
 		for(Function fun : funs) {
 
@@ -45,6 +46,9 @@ public class AsmlConverter {
 				List<Instruction> intr = fun.getInstructions();
 				HashSet<Variable> locals = fun.getVariables();
 	            String fname = fun.getName();
+
+
+
 	            if(fname=="main"){
 	                text.append("let _ = \n");
 	            }
@@ -138,7 +142,12 @@ public class AsmlConverter {
 
 	                else if (instr instanceof InstructionSUB) {
 
-						text.append("\tsub ");
+						if(count == size){
+								text.append("\tsub ");
+							}
+							else {
+								  text.append(" \tlet ").append(get_temp_var()).append (" = sub ");
+							}
 						Object op1= ((InstructionSUB)instr).operands.get(0);
 						Object op2= ((InstructionSUB)instr).operands.get(1);
 
@@ -284,7 +293,7 @@ public class AsmlConverter {
 									arithmetic("add", op4, op3, (InstructionADD)op2, in, count,size);
 
 								}
-								else if(op2 instanceof InstructionADD) {
+								else if(op2 instanceof InstructionSUB) {
 
 									Object op4= ((InstructionSUB)op2).operands.get(0);
 									Object op3= ((InstructionSUB)op2).operands.get(1);
@@ -307,100 +316,27 @@ public class AsmlConverter {
 
 								}
 
+								else if (op2 instanceof InstructionASSIGN){
+
+									generate_assignment((InstructionASSIGN) op2);
 
 
 
+
+								}
+
+								else if(op2 instanceof InstructionCALL){
+
+									InstructionCALL inst = (InstructionCALL)op2;
+
+									generate_call(inst);
+
+								}
 							}
 
 					}
 					else if (instr instanceof InstructionCALL) {
-
-						InstructionCALL inst = (InstructionCALL)instr;
-
-						List<Object> params = inst.getParams();
-						String return_reg = inst.getReturn();
-						int num_params=params.size();
-
-
-
-						if(inst.getFname().equals("print_int")) {
-														//Parameter param = (Parameter)params.get(0);
-							if(count == size){
-							text.append("\tcall _min_caml_print_int ");
-							}
-							else{
-								text.append("\tlet ").append(get_temp_var()).append(" = ");
-								text.append("call _min_caml_print_int ");
-							}
-							if(params.size() != 0 ) {
-
-									if(!(params.get(0) instanceof Integer)) {
-
-										Variable param = (Variable)params.get(0);
-										if(param !=null){
-										text.append(param.getName().substring(1));
-										}
-										else{
-											text.append(get_current_var());
-										}
-										if(count != size){
-											text.append(" in ");
-										}
-										text.append("\n");
-										//assign("r0" , param.getRegister().getName());
-						               }
-									else{
-										text.append((int)params.get(0));
-										//  if(in && count < size){
-										//  text.append(" in ");
-										// }
-
-										if(count != size){
-											text.append(" in ");
-										}
-
-										text.append("\n");
-
-									}
-
-							}
-
-
-
-	                    }
-	                    else {
-
-	                    	  
-
-	                    	if(count == size){
-							text.append("\tcall _").append(inst.getFname()).append(" ");
-							}
-							else{
-								text.append("\tlet ").append(get_temp_var()).append(" = ");
-								text.append("call _").append(inst.getFname()).append(" ");
-							}
-
-	                    	  for (int i = 0; i<num_params; i++){
-	                    	  		Variable p = (Variable)params.get(i);
-	                    	  		if(p!=null){
-	                    	  			text.append(p.getName()).append(" ");
-	                    	  		}
-	                    	  		else{
-	                    	  			text.append(get_current_var());
-	                    	  		}
-	                    	  }
-	                    	  if(count != size){
-								text.append(" in ");
-							  }
-	                    	  text.append("\n");
-
-
-	                    
-
-	                    }
-
-
-
+						generate_call((InstructionCALL) instr);
 					}
 
 	                else if (instr instanceof InstructionIF){
@@ -600,7 +536,12 @@ public class AsmlConverter {
 
 		        else if (instr instanceof InstructionSUB) {
 
-					text.append("\tsub ");
+					if(count == size){
+								text.append("\tsub ");
+							}
+							else {
+								  text.append(" \tlet ").append(get_temp_var()).append (" = sub ");
+					}
 					Object op1= ((InstructionSUB)instr).operands.get(0);
 					Object op2= ((InstructionSUB)instr).operands.get(1);
 
@@ -692,83 +633,8 @@ public class AsmlConverter {
 
 		        else if (instr instanceof InstructionASSIGN) {
 
-						text.append("\tlet ");
-
-						Object op1= ((InstructionASSIGN)instr).operands.get(0);
-						Object op2= ((InstructionASSIGN)instr).operands.get(1);
-
-						if(op1 instanceof Variable || op1 instanceof VInteger) {
-							if(op1 instanceof Variable) {
-								text.append(((Variable)op1).getName().substring(1)).append(" = ");
-							}
-							else if(op1 instanceof VInteger) {
-								text.append(((VInteger)op1).getName().substring(1)).append(" = ");
-							}
-
-						}
-
-
-						if(op2 instanceof Variable ) {
-
-							text.append(((Variable)op2).getName().substring(1));
-							if(in && count < size) {
-								text.append(" in ");
-							}
-							text.append("\n");
-						}
-
-						else if (op2 instanceof VInteger) {
-							text.append(((VInteger)op2).getName().substring(1));
-							if(in && count < size) {
-															text.append(" in ");
-							}
-							text.append("\n");
-						}
-
-						else if (op2 instanceof Integer) {
-														//System.out.print(op2);
-									text.append((Integer)op2).append(" in\n");
-						}
-
-						else if (op2 instanceof Instruction) {
-
-							if(op2 instanceof InstructionADD) {
-
-								Object op4= ((InstructionADD)op2).operands.get(0);
-								Object op3= ((InstructionADD)op2).operands.get(1);
-
-								arithmetic("add", op4, op3, (InstructionADD)op2, in, count,size);
-
-							}
-							else if(op2 instanceof InstructionADD) {
-
-								Object op4= ((InstructionSUB)op2).operands.get(0);
-								Object op3= ((InstructionSUB)op2).operands.get(1);
-
-								arithmetic("sub", op4, op3, (InstructionSUB)op2, in, count,size);
-
-							}
-
-							else if(op2 instanceof InstructionMULT) {
-
-								Object op4= ((InstructionMULT)op2).operands.get(0);
-								Object op3= ((InstructionMULT)op2).operands.get(1);
-
-								arithmetic("mul", op4, op3, (InstructionMULT)op2, in, count,size);
-
-							}
-
-							else if (op2 instanceof InstructionIF){
-
-								//generate_branch((InstructionIF)op2);
-
-							}
-
-							else if (op2 instanceof InstructionCALL){
-
-							}
-
-				}
+						
+					generate_assignment((InstructionASSIGN) instr);
 
 				
 
@@ -777,90 +643,14 @@ public class AsmlConverter {
 
 					InstructionCALL inst = (InstructionCALL)instr;
 
-					List<Object> params = inst.getParams();
-					String return_reg = inst.getReturn();
-					int num_params=params.size();
-
-					if(inst.getFname().equals("print_int")) {
-													//Parameter param = (Parameter)params.get(0);
-						text.append("\tcall _min_caml_print_int ");
-						if(params.size() != 0) {
-
-								if(!(params.get(0) instanceof Integer)) {
-
-									Variable param = (Variable)params.get(0);
-									text.append(param.getName().substring(1));
-									if(in) {
-																	// if(count < size){
-																	//  text.append(" in ");
-																	// }
-
-									}
-									text.append("\n");
-									//assign("r0" , param.getRegister().getName());
-					               }
-								else{
-									text.append((int)params.get(0));
-									//  if(in && count < size){
-									//  text.append(" in ");
-									// }
-									text.append("\n");
-
-								}
-
-						}
-		            }
-
+					generate_call(inst);
 				}
 
 		        else if (instr instanceof InstructionIF){
-
+		        		System.out.println("This should fire");
 		                InstructionIF inst = (InstructionIF) instr;
 
-		                Function then_branch = inst.branch_then;
-		                Function else_branch = inst.branch_else;
-
-		                BooleanExpression exp = inst.cond.getExp();
-
-		                String operand1="";
-		                String operand2 = "";
-		                String offset1 = "";
-
-
-		                if(exp instanceof BooleanEQ) {
-		                        Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
-		                        Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(1));
-
-		                        text.append("\tif ").append(op1.getName().substring(1)).append(" = ").append(op2.getName().substring(1)).append(" then ( \n");
-
-
-		                }
-
-		                else if (exp instanceof BooleanLE) {
-
-		                        Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
-		                        Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
-
-		                        text.append("\tif ").append(op1.getName().substring(1)).append(" <= ").append(op2.getName().substring(1)).append(" then ( \n");
-
-		                        
-		                }
-
-		                else if (exp instanceof BooleanTrue) {
-
-		                        text.append("\tif ").append(" true ").append(" then ( \n");
-
-
-		                }
-
-		                else if(exp instanceof BooleanFalse) {
-		                        text.append("\tif ").append(" false ").append(" then ( \n");
-		                }
-		                else{
-
-		                        System.out.println("Something crazy happenned");
-		                }
-
+		                generate_if(inst);
 
 		        }
 
@@ -873,7 +663,7 @@ public class AsmlConverter {
 
 						
 							Variable nothing = (Variable)(i.x);
-							System.out.println(nothing.getName());
+							//System.out.println(nothing.getName());
 
 							if(nothing.getName().length() > 6){
 								if(nothing.getName().substring(0,6).equalsIgnoreCase("tmpVar") && nothing instanceof VInteger){
@@ -899,6 +689,249 @@ public class AsmlConverter {
 		    }
 
 		text.append("\t)\n");
+
+	}
+
+
+
+	public void generate_call (InstructionCALL instr){
+
+			int count = 0;
+			int size = 0;
+
+
+			InstructionCALL inst = (InstructionCALL)instr;
+
+			List<Object> params = inst.getParams();
+			String return_reg = inst.getReturn();
+			int num_params=params.size();
+
+
+
+			if(inst.getFname().equals("print_int")) {
+											//Parameter param = (Parameter)params.get(0);
+				if(count == size){
+				text.append("\tcall _min_caml_print_int ");
+				}
+				else{
+					text.append("\tlet ").append(get_temp_var()).append(" = ");
+					text.append("call _min_caml_print_int ");
+				}
+				if(params.size() != 0 ) {
+
+						if(!(params.get(0) instanceof Integer)) {
+
+							Variable param = (Variable)params.get(0);
+							if(param !=null){
+							text.append(param.getName().substring(1));
+							}
+							else{
+								text.append(get_current_var());
+							}
+							if(count != size){
+								text.append(" in ");
+							}
+							text.append("\n");
+							//assign("r0" , param.getRegister().getName());
+			               }
+						else{
+							text.append((int)params.get(0));
+							//  if(in && count < size){
+							//  text.append(" in ");
+							// }
+
+							if(count != size){
+								text.append(" in ");
+							}
+
+							text.append("\n");
+
+						}
+
+				}
+
+
+
+            }
+            else {
+
+            	  
+
+            	
+				text.append("\tcall _").append(inst.getFname()).append(" ");
+	
+
+            	  for (int i = 0; i<num_params; i++){
+            	  		Variable p = (Variable)params.get(i);
+            	  		if(p!=null){
+            	  			text.append(get_parsable_name(p.getName())).append(" ");
+            	  		}
+            	  		else{
+            	  			text.append(get_current_var());
+            	  		}
+            	  }
+					text.append(" in ");
+				  
+            	  text.append("\n");
+
+
+            
+
+            }
+
+	}
+
+
+
+	public void generate_if(InstructionIF instr){
+
+		InstructionIF inst = (InstructionIF) instr;
+
+        Function then_branch = inst.branch_then;
+        Function else_branch = inst.branch_else;
+
+        BooleanExpression exp = inst.cond.getExp();
+
+        String operand1="";
+        String operand2 = "";
+        String offset1 = "";
+
+
+        if(exp instanceof BooleanEQ) {
+                Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
+                Variable op2 = (Variable)(((BooleanEQ)exp).operands.get(1));
+
+                text.append("\tif ").append(op1.getName().substring(1)).append(" = ").append(op2.getName().substring(1)).append(" then ( \n");
+
+
+        }
+
+        else if (exp instanceof BooleanLE) {
+
+                Variable op1 = (Variable)(((BooleanLE)exp).operands.get(0));
+                Variable op2 = (Variable)(((BooleanLE)exp).operands.get(0));
+
+                text.append("\tif ").append(op1.getName().substring(1)).append(" <= ").append(op2.getName().substring(1)).append(" then ( \n");
+
+                
+        }
+
+        else if (exp instanceof BooleanTrue) {
+
+                text.append("\tif ").append(" true ").append(" then ( \n");
+
+
+        }
+
+        else if(exp instanceof BooleanFalse) {
+                text.append("\tif ").append(" false ").append(" then ( \n");
+        }
+        else{
+
+                System.out.println("Something crazy happenned");
+        }
+
+
+
+	}
+
+
+	public void generate_assignment(InstructionASSIGN instr){
+
+				int count =0;
+				int size =0;
+				boolean in = false;
+
+				Object op1= ((InstructionASSIGN)instr).operands.get(0);
+				Object op2= ((InstructionASSIGN)instr).operands.get(1);
+
+				if(op2 !=null){
+					text.append("\tlet ");
+				}
+
+				
+
+				if(op1 instanceof Variable || op1 instanceof VInteger) {
+					if(op1 instanceof Variable && op2 !=null) {
+						text.append(get_parsable_name(((Variable)op1).getName())).append(" = ");
+					}
+					else if(op1 instanceof VInteger) {
+						text.append(((VInteger)op1).getName().substring(1)).append(" = ");
+					}
+
+				}
+
+
+				if(op2 instanceof Variable ) {
+
+					text.append(get_parsable_name(((Variable)op2).getName()));
+					text.append(" in ");
+					text.append("\n");
+				}
+
+				else if (op2 instanceof VInteger) {
+					text.append(((VInteger)op2).getName().substring(1));
+					text.append(" in ");
+					text.append("\n");
+				}
+
+				else if (op2 instanceof Integer) {
+												//System.out.print(op2);
+							text.append((Integer)op2).append(" in\n");
+				}
+
+				else if (op2 instanceof Instruction) {
+
+					if(op2 instanceof InstructionADD) {
+
+						Object op4= ((InstructionADD)op2).operands.get(0);
+						Object op3= ((InstructionADD)op2).operands.get(1);
+
+						arithmetic("add", op4, op3, (InstructionADD)op2, in, count,size);
+
+					}
+					else if(op2 instanceof InstructionSUB) {
+
+						Object op4= ((InstructionSUB)op2).operands.get(0);
+						Object op3= ((InstructionSUB)op2).operands.get(1);
+
+						arithmetic("sub", op4, op3, (InstructionSUB)op2, in, count,size);
+
+					}
+
+					else if(op2 instanceof InstructionMULT) {
+
+						Object op4= ((InstructionMULT)op2).operands.get(0);
+						Object op3= ((InstructionMULT)op2).operands.get(1);
+
+						arithmetic("mul", op4, op3, (InstructionMULT)op2, in, count,size);
+
+					}
+
+					else if(op2 instanceof InstructionNOTHING){
+
+
+					}
+
+					else if (op2 instanceof InstructionASSIGN){
+						InstructionASSIGN ass = (InstructionASSIGN)op2;
+
+						generate_assignment(ass);
+
+						text.append(" in ");
+
+
+					}
+
+					else if(op2 instanceof InstructionCALL){
+
+						InstructionCALL inst = (InstructionCALL)op2;
+
+						generate_call(inst);
+						
+					}
+				}
+
 
 	}	
 
