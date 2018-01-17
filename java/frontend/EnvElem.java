@@ -4,6 +4,14 @@ import ast.*;
 import ast.type.*;
 import java.util.*;
 
+/**
+  * Implementation of EnvElem, a cell of the complete environment, with several way to construct it.
+  *
+  *
+  *@author Quentin Delfosse
+  *
+  */
+
 @SuppressWarnings("serial")
 public class EnvElem{
 

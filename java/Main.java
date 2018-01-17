@@ -12,21 +12,19 @@ import frontend.*;
 import backend.variables.*;
 import backend.registers.*;
 
+/**
+  * Implementation of a type-checker in java to translate Ocaml to ARM (normal)
+  *
+  *@author les_cons-pileurs
+  *
+  */
+
 public class Main {
 static public void main(String argv[]) {
         Ihm ihm = new Ihm(argv);
         try {
-                // System.out.println(ihm.output_file);
-                // System.out.println(ihm.input_file);
-                // System.out.println(ihm.output_asml);
-                // System.out.println(ihm.typecheck_only);
-                // if (ihm.typecheck_only) {
-                //         throw new NotYetImplemented();
-                // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                //System.out.println(expression);
-                // assert (expression != null);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -41,28 +39,19 @@ static public void main(String argv[]) {
                         }
                 }
 
-
-                /* For evaluation :
-                   System.out.println("------ Evaluation ------");
-                   System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
-                 */
-
                 // For TypeChecking :
 
-                else if (ihm.typecheck_only) {
-                        LinkedList<EnvElem> env = new LinkedList<EnvElem>();
-                        env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
-                        env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
-                        Env predef = new Env(env);
-                        System.out.println(predef);
-                        GenEquation expression_typechecked = new GenEquation();
-                        expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
-                        System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
-                        EquationSolver solved = new EquationSolver();
-                        System.out.println(solved.reduce(expression_typechecked));
-                        System.out.println(expression_typechecked.eqt_list);
-                        solved.solve(expression_typechecked);
-                }
+                 else if (ihm.typecheck_only) {
+                      Env predef = new Env();
+                      predef = new Env(predef.gen_predef());
+                      GenEquation expression_typechecked = new GenEquation();
+                      expression_typechecked.generate(predef, expression, new TUnit());
+                      // System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
+                      EquationSolver solved = new EquationSolver();
+                      solved.reduce(expression_typechecked);
+                      // System.out.println("transformed eq list : " + expression_typechecked.eqt_list);
+                      solved.solve(expression_typechecked);
+                 }
 
                 // For KNormalization :
                 else if (ihm.knorm) {

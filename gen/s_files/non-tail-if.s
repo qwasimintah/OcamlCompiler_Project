@@ -16,103 +16,74 @@
 ------ Translation to Jerry ------
 ******** main *********
 NOTHING	null
-ASSIGN	?v14 (backend.variables.Variable@4d7e1886) backend.instructions.InstructionCALL@4617c264
->CALL	label1 null 
+ASSIGN	?v14 (backend.variables.Variable@511d50c0) backend.instructions.InstructionCALL@3764951d
 NOTHING	null
-ASSIGN	?v16 (backend.variables.Variable@3cd1a2f1) backend.instructions.InstructionCALL@36baf30c
->CALL	label2 null 
+ASSIGN	?v16 (backend.variables.Variable@60e53b93) backend.instructions.InstructionCALL@4b1210ee
 NOTHING	null
-ASSIGN	?v18 (backend.variables.Variable@2f0e140b) backend.instructions.InstructionCALL@7a81197d
->CALL	label3 null 
-NOTHING	tmpVar1 (backend.variables.VInteger@5ca881b5)
-ASSIGN	?v23 (backend.variables.VInteger@7440e464) 0
-NOTHING	?v18 (backend.variables.Variable@2f0e140b)
-ASSIGN	?v24 (backend.variables.Variable@49476842) backend.variables.Variable@2f0e140b
-IF	backend.variables.VBoolean@24d46ca6 THEN label4 ELSE label5
+ASSIGN	?v18 (backend.variables.Variable@5e2de80c) backend.instructions.InstructionCALL@4d7e1886
+NOTHING	tmpVar1 (backend.variables.VInteger@3cd1a2f1)
+ASSIGN	?v23 (backend.variables.VInteger@1d44bcfa) 0
+NOTHING	?v18 (backend.variables.Variable@5e2de80c)
+ASSIGN	?v24 (backend.variables.Variable@266474c2) backend.variables.Variable@5e2de80c
+IF	backend.variables.VBoolean@2f0e140b THEN label4 ELSE label5
 
 ******** label4 *********
-NOTHING	?v14 (backend.variables.Variable@4d7e1886)
+NOTHING	?v14 (backend.variables.Variable@511d50c0)
 
 ******** label5 *********
-NOTHING	?v16 (backend.variables.Variable@3cd1a2f1)
+NOTHING	?v16 (backend.variables.Variable@60e53b93)
 
-ASSIGN	?v22 (backend.variables.VInteger@78308db1) backend.instructions.InstructionIF@4517d9a3
->IF	backend.variables.VBoolean@24d46ca6 THEN label4 ELSE label5
-
-******** label4 *********
-NOTHING	?v14 (backend.variables.Variable@4d7e1886)
-
-******** label5 *********
-NOTHING	?v16 (backend.variables.Variable@3cd1a2f1)
-
-NOTHING	?v14 (backend.variables.Variable@4d7e1886)
-ASSIGN	?v26 (backend.variables.Variable@27c170f0) backend.variables.Variable@4d7e1886
-NOTHING	tmpVar3 (backend.variables.VInteger@372f7a8d)
-ASSIGN	?v27 (backend.variables.VInteger@5451c3a8) 0
-IF	backend.variables.VBoolean@2f92e0f4 THEN label6 ELSE label7
+ASSIGN	?v22 (backend.variables.VInteger@6f94fa3e) backend.instructions.InstructionIF@7440e464
+NOTHING	?v14 (backend.variables.Variable@511d50c0)
+ASSIGN	?v26 (backend.variables.Variable@5e481248) backend.variables.Variable@511d50c0
+NOTHING	tmpVar3 (backend.variables.VInteger@49476842)
+ASSIGN	?v27 (backend.variables.VInteger@66d3c617) 0
+IF	backend.variables.VBoolean@78308db1 THEN label6 ELSE label7
 
 ******** label6 *********
-NOTHING	?v16 (backend.variables.Variable@3cd1a2f1)
+NOTHING	?v16 (backend.variables.Variable@60e53b93)
 
 ******** label7 *********
-NOTHING	?v18 (backend.variables.Variable@2f0e140b)
+NOTHING	?v18 (backend.variables.Variable@5e2de80c)
 
-ASSIGN	?v25 (backend.variables.VInteger@2626b418) backend.instructions.InstructionIF@28a418fc
->IF	backend.variables.VBoolean@2f92e0f4 THEN label6 ELSE label7
-
-******** label6 *********
-NOTHING	?v16 (backend.variables.Variable@3cd1a2f1)
-
-******** label7 *********
-NOTHING	?v18 (backend.variables.Variable@2f0e140b)
-
-ADD	backend.variables.VInteger@78308db1 backend.variables.VInteger@2626b418
-ASSIGN	?v21 (backend.variables.VInteger@5a07e868) backend.instructions.InstructionADD@5305068a
->ADD	backend.variables.VInteger@78308db1 backend.variables.VInteger@2626b418
-NOTHING	tmpVar5 (backend.variables.VInteger@1f32e575)
-ASSIGN	?v29 (backend.variables.VInteger@76ed5528) 0
-NOTHING	?v16 (backend.variables.Variable@3cd1a2f1)
-ASSIGN	?v30 (backend.variables.Variable@2c7b84de) backend.variables.Variable@3cd1a2f1
-IF	backend.variables.VBoolean@279f2327 THEN label8 ELSE label9
+ASSIGN	?v25 (backend.variables.VInteger@63947c6b) backend.instructions.InstructionIF@27c170f0
+ADD	backend.variables.VInteger@6f94fa3e backend.variables.VInteger@63947c6b
+ASSIGN	?v21 (backend.variables.VInteger@2b193f2d) backend.instructions.InstructionADD@5451c3a8
+NOTHING	tmpVar5 (backend.variables.VInteger@2626b418)
+ASSIGN	?v29 (backend.variables.VInteger@355da254) 0
+NOTHING	?v16 (backend.variables.Variable@60e53b93)
+ASSIGN	?v30 (backend.variables.Variable@4dc63996) backend.variables.Variable@60e53b93
+IF	backend.variables.VBoolean@5a07e868 THEN label8 ELSE label9
 
 ******** label8 *********
-NOTHING	?v18 (backend.variables.Variable@2f0e140b)
+NOTHING	?v18 (backend.variables.Variable@5e2de80c)
 
 ******** label9 *********
-NOTHING	?v14 (backend.variables.Variable@4d7e1886)
+NOTHING	?v14 (backend.variables.Variable@511d50c0)
 
-ASSIGN	?v28 (backend.variables.VInteger@3fee733d) backend.instructions.InstructionIF@2ff4acd0
->IF	backend.variables.VBoolean@279f2327 THEN label8 ELSE label9
-
-******** label8 *********
-NOTHING	?v18 (backend.variables.Variable@2f0e140b)
-
-******** label9 *********
-NOTHING	?v14 (backend.variables.Variable@4d7e1886)
-
-ADD	backend.variables.VInteger@5a07e868 backend.variables.VInteger@3fee733d
-ASSIGN	?v20 (backend.variables.VInteger@5acf9800) backend.instructions.InstructionADD@54bedef2
->ADD	backend.variables.VInteger@5a07e868 backend.variables.VInteger@3fee733d
-NOTHING	?v20 (backend.variables.VInteger@5acf9800)
-CALL	print_int backend.variables.VInteger@5acf9800 
+ASSIGN	?v28 (backend.variables.VInteger@d716361) backend.instructions.InstructionIF@76ed5528
+ADD	backend.variables.VInteger@2b193f2d backend.variables.VInteger@d716361
+ASSIGN	?v20 (backend.variables.VInteger@6ff3c5b5) backend.instructions.InstructionADD@2c7b84de
+NOTHING	?v20 (backend.variables.VInteger@6ff3c5b5)
+CALL	print_int backend.variables.VInteger@6ff3c5b5 
 
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v16 (backend.variables.Variable@3cd1a2f1)  : r5/-
-Var/Arg ?v22 (backend.variables.VInteger@78308db1)  : r9/-
-Var/Arg ?v23 (backend.variables.VInteger@7440e464)  : r7/-
-Var/Arg ?v18 (backend.variables.Variable@2f0e140b)  : r6/-
-Var/Arg ?v24 (backend.variables.Variable@49476842)  : r8/-
-Var/Arg ?v29 (backend.variables.VInteger@76ed5528)  : r7/-
-Var/Arg ?v30 (backend.variables.Variable@2c7b84de)  : r8/-
-Var/Arg ?v21 (backend.variables.VInteger@5a07e868)  : r6/-
-Var/Arg ?v20 (backend.variables.VInteger@5acf9800)  : r4/r2
-Var/Arg ?v26 (backend.variables.Variable@27c170f0)  : r10/-
-Var/Arg ?v28 (backend.variables.VInteger@3fee733d)  : r10/-
-Var/Arg ?v14 (backend.variables.Variable@4d7e1886)  : r4/-
-Var/Arg ?v27 (backend.variables.VInteger@5451c3a8)  : r4/-
-Var/Arg ?v25 (backend.variables.VInteger@2626b418)  : r5/-
+Var/Arg ?v26 (backend.variables.Variable@5e481248)  : r10/-
+Var/Arg ?v18 (backend.variables.Variable@5e2de80c)  : r6/-
+Var/Arg ?v27 (backend.variables.VInteger@66d3c617)  : r11/-
+Var/Arg ?v24 (backend.variables.Variable@266474c2)  : r8/-
+Var/Arg ?v20 (backend.variables.VInteger@6ff3c5b5)  : r10/r2
+Var/Arg ?v29 (backend.variables.VInteger@355da254)  : r6/-
+Var/Arg ?v22 (backend.variables.VInteger@6f94fa3e)  : r9/-
+Var/Arg ?v30 (backend.variables.Variable@4dc63996)  : r7/-
+Var/Arg ?v28 (backend.variables.VInteger@d716361)  : r8/-
+Var/Arg ?v21 (backend.variables.VInteger@2b193f2d)  : r5/-
+Var/Arg ?v16 (backend.variables.Variable@60e53b93)  : r5/-
+Var/Arg ?v14 (backend.variables.Variable@511d50c0)  : r4/-
+Var/Arg ?v23 (backend.variables.VInteger@1d44bcfa)  : r7/-
+Var/Arg ?v25 (backend.variables.VInteger@63947c6b)  : r4/-
 ***main : Arguments state***
 
 
@@ -130,95 +101,44 @@ _main:
 	MOV fp, sp
 
 	SUB sp, #20
-	STMFD sp!,{r2-r12}
-	MOV r2, r0
-	BL _label1
-	LDMFD sp!, {r2-r12}
-	MOV r4, r0
-	STMFD sp!,{r2-r12}
-	MOV r2, r0
-	BL _label2
-	LDMFD sp!, {r2-r12}
-	MOV r5, r0
-	STMFD sp!,{r2-r12}
-	MOV r2, r0
-	BL _label3
-	LDMFD sp!, {r2-r12}
-	MOV r6, r0
 	LDR r7, =0
 	MOV r8, r6
 	CMP r7 , r8
 	BLE label4
 	B label5
 label4:
-	MOV r0, r4
 	b cont1
 label5:
-	MOV r0, r5
 	b cont1
 cont1:
-	CMP r7 , r8
-	BLE label4
-	B label5
-label4:
-	MOV r0, r4
-	b cont2
-label5:
-	MOV r0, r5
-	b cont2
-cont2:
 	MOV r9, r0
 	MOV r10, r4
-	LDR r4, =0
-	CMP r10 , r4
+	LDR r11, =0
+	CMP r10 , r11
 	BLE label6
 	B label7
 label6:
-	MOV r0, r5
-	b cont3
+	b cont2
 label7:
-	MOV r0, r6
+	b cont2
+cont2:
+	MOV r4, r0
+	ADD r0, r9, r4
+	MOV r5, r0
+	LDR r6, =0
+	MOV r7, r5
+	CMP r6 , r7
+	BLE label8
+	B label9
+label8:
+	b cont3
+label9:
 	b cont3
 cont3:
-	CMP r10 , r4
-	BLE label6
-	B label7
-label6:
-	MOV r0, r5
-	b cont4
-label7:
-	MOV r0, r6
-	b cont4
-cont4:
-	MOV r5, r0
-	ADD r0, r9, r5
-	MOV r6, r0
-	LDR r7, =0
-	MOV r8, r5
-	CMP r7 , r8
-	BLE label8
-	B label9
-label8:
-	MOV r0, r6
-	b cont5
-label9:
-	MOV r0, r4
-	b cont5
-cont5:
-	CMP r7 , r8
-	BLE label8
-	B label9
-label8:
-	MOV r0, r6
-	b cont6
-label9:
-	MOV r0, r4
-	b cont6
-cont6:
+	MOV r8, r0
+	ADD r0, r5, r8
 	MOV r10, r0
-	ADD r0, r6, r10
-	MOV r4, r0
-	MOV r0, r4
+	MOV r0, r10
 	BL min_caml_print_int
 	BL min_caml_print_newline
 	ADD sp, #20
