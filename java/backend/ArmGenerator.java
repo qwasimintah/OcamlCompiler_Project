@@ -1303,7 +1303,7 @@ public void generate_function_call(InstructionCALL instr) {
 
                 if(par instanceof Variable) {
 
-                    push_params(params);
+                        push_params(params);
 
 
 
@@ -1320,8 +1320,8 @@ public void generate_function_call(InstructionCALL instr) {
 
         textSection.text.append("\tBL ").append(fname).append("\n");
         int diff = num_params - 2;
-        if(diff>=1){
-            textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
+        if(diff>=1) {
+                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
         }
         restore_locals();
         if(num_params >= available_reg_param) {
@@ -1340,88 +1340,89 @@ public void generate_function_call(InstructionCALL instr) {
 public void push_params(List<Object> params){
 
 
-    int l = params.size();
-    Variable param ;
-    int i;
+        int l = params.size();
+        Variable param;
+        int i;
 
-    if(l <= 2){
-        for(i=0; i<l; i++) {
-            param= (Variable)params.get(i);
-            // case where the local var has a register and the paramter has a register
-            if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                    // System.out.println("1");
-                assign(param.getParametersRegister().getName(), param.getRegister().getName());
-            }
-        }
-    }
-    else{
-
-        for(i=0; i<2; i++) {
-             param = (Variable)params.get(i);
-            // case where the local var has a register and the paramter has a register
-            if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                    // System.out.println("1");
-                assign(param.getParametersRegister().getName(), param.getRegister().getName());
-            }
-        }
-
-         int left = l-2;
-         for (i = l-1; i>=left; i--){
-                param = (Variable)params.get(i);
-                // case where the local var has a register and the paramter has a register
-                if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                        // System.out.println("1");
-                        assign(param.getParametersRegister().getName(), param.getRegister().getName());
+        if(l <= 2) {
+                for(i=0; i<l; i++) {
+                        param= (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
                 }
-                // case where pushing the local variable has a register but the parameter must be pushed on the stack
-                else if (param.getRegister()!= null && param.getParametersRegister()==null) {
-                        // System.out.println("2");
-                        String value =param.getRegister().getName();
-                        //reserve_space_param(4);
-                        textSection.text.append("\tSUB sp, #4\n");
-                        assign("r0", value);
-                        textSection.text.append("\tSTR r0, [sp]\n");
+        }
+        else{
+
+                for(i=0; i<2; i++) {
+                        param = (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
                 }
 
-                // case where local variable has an offset but the paramter has a register
+                int left = l-2;
+                for (i = l-1; i>=left; i--) {
+                        param = (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
+                        // case where pushing the local variable has a register but the parameter must be pushed on the stack
+                        else if (param.getRegister()!= null && param.getParametersRegister()==null) {
+                                // System.out.println("2");
+                                String value =param.getRegister().getName();
+                                //reserve_space_param(4);
+                                textSection.text.append("\tSUB sp, #4\n");
+                                assign("r0", value);
+                                textSection.text.append("\tSTR r0, [sp]\n");
+                        }
 
-                else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
-                        // System.out.println("3");
-                        // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                        // case where local variable has an offset but the paramter has a register
 
-                        String value =param.getParametersRegister().getName();
-                        assign(value, "r0");
+                        else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
+                                // System.out.println("3");
+                                // load variable from the stack
+                                String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+
+                                String value =param.getParametersRegister().getName();
+                                assign(value, "r0");
+                        }
+
+                        // case where local var has an offset and the parameter has an offset
+
+                        else if(param.getRegister()==null && param.getParametersRegister() == null) {
+                                // System.out.println("4");
+                                // load variable from the stack
+                                String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                textSection.text.append("\tSUB sp, #4\n");
+                                textSection.text.append("\tSTR r0, [sp]\n");
+
+                        }
+
+
+                        textSection.text.append("\tBL ").append(fname).append("\n");
+                        int diff = num_params - 2;
+                        if(diff>=1) {
+                                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
+                        }
+                        restore_locals();
+                        if(num_params >= available_reg_param) {
+                                //restore_parameters();
+
+                        }
+
+
                 }
 
-                // case where local var has an offset and the parameter has an offset
-
-                else if(param.getRegister()==null && param.getParametersRegister()==null) {
-                        // System.out.println("4");
-                        // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                        textSection.text.append("\tSUB sp, #4\n");
-                        textSection.text.append("\tSTR r0, [sp]\n");
-
-                }
-
-
-        textSection.text.append("\tBL ").append(fname).append("\n");
-        int diff = num_params - 2;
-        if(diff>=1) {
-                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
         }
-        restore_locals();
-        if(num_params >= available_reg_param) {
-                //restore_parameters();
-
-        }
-
-
-    }
-
 }
 
 
