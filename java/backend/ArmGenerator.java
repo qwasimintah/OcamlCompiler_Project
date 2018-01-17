@@ -151,14 +151,16 @@ public void generate_branch(Function fun, String return_label){
         HashSet<Variable> locals = fun.getVariables();
         //process all intructions of functions
         int size= locals.size();
-
+        int instr_count = intr.size();
+        int count=0;
 
         String fname = fun.getName();
         generate_branch_label(fname);
 
 
-        for (Instruction inst : intr) {
 
+        for (Instruction inst : intr) {
+            count++;
                 if(inst instanceof InstructionADD) {
                         generate_addition((InstructionADD) inst);
                 }
@@ -179,11 +181,15 @@ public void generate_branch(Function fun, String return_label){
                 }
                 else if(inst instanceof InstructionIF) {
 
-                        generate_if((InstructionIF) inst);
+                        String ret = generate_if((InstructionIF) inst);
+                        generate_branch_label(ret);
                 }
                 else if(inst instanceof InstructionNOTHING) {
 
+                    if(count == instr_count){
                         generate_nothing((InstructionNOTHING) inst);
+                    }
+                    
                 }
                 else{
                         System.out.println("Instruction Not Supported\n");
@@ -201,7 +207,7 @@ public void generate_branch(Function fun, String return_label){
 public void pushing_local_params(HashSet<Variable> locals,int size){
 
         int num_of_args = size;
-        System.out.println(num_of_args);
+        // System.out.println(num_of_args);
 
         if (num_of_args>1) {
                 int off=1;
@@ -259,6 +265,15 @@ public void generate_nothing(InstructionNOTHING instr) {
           assign("r0", ((VInteger)instr.x).getValue());
         }
         else if (instr.x instanceof Variable) {
+
+            Variable v = (Variable)(instr.x);
+
+            if(v.getRegister() != null){
+                assign("r0", ((Variable)instr.x).getRegister().getName());
+            }
+            else if(v.getParametersRegister()!=null){
+                assign("r0", ((Variable)instr.x).getParametersRegister().getName());
+            }
 
         }
 }
@@ -690,6 +705,7 @@ public void generate_get_tuples(){
 public void  generate_assign(InstructionASSIGN instr){
 
 
+        // System.out.println("SHOULD FIRE");
 
 
         Object op1= instr.operands.get(0);
@@ -776,7 +792,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
         }
 
-        else if(op1 instanceof VInteger && op2 instanceof Instruction) {
+        else if(op1 instanceof Variable && op2 instanceof Instruction) {
 
                 String reg= operand1;
 
@@ -804,23 +820,38 @@ public void  generate_assign(InstructionASSIGN instr){
                 }
 
                 else if(op2 instanceof InstructionCALL) {
-                        //generate_function_call((InstructionCALL) op2);
+                        generate_function_call((InstructionCALL) op2);
+                        //System.out.println("Should fire");
+                        // System.out.println(((InstructionCALL)op2).getFname());
 
                         if(offset1!="") {
+                                System.out.println("Offset part ");
                                 textSection.text.append("\tMOV  r1 , ").append(((InstructionCALL)op2).getReturn()).append("\n");
                                 textSection.text.append("\tSTR r1 , ").append(offset1).append("\n");
                         }
                         else{
+
                                 assign(reg, ((InstructionCALL)op2).getReturn());
                         }
                 }
 
+                else if (op2 instanceof InstructionASSIGN){
+
+                        System.out.println("This fires");
+                        InstructionASSIGN ass = (InstructionASSIGN)op2;
+
+                        generate_assign(ass);
+
+                        Variable v = (Variable)(ass.operands.get(0));
+
+                        assign(reg, v.getRegister().getName());
+                }
+
                 else if(op2 instanceof InstructionIF) {
 
-                        //generate_if((InstructionIF) op2);
+                        String ret = generate_if((InstructionIF) op2);
+                        generate_branch_label(ret);
                         assign(reg, "r0");
-
-
 
                 }
 
@@ -925,11 +956,11 @@ public void arith_operation(String mnemonic, String dest, int operand1, int oper
 
 public void stash_locals(){
 
-        textSection.text.append("\tSTMFD sp!,{r4-r12}\n");
+        textSection.text.append("\tSTMFD sp!,{r2-r12}\n");
 }
 
 public void restore_locals(){
-        textSection.text.append("\tLDMFD sp!, {r4-r12}\n");
+        textSection.text.append("\tLDMFD sp!, {r2-r12}\n");
 
 }
 
@@ -1269,12 +1300,12 @@ public void generate_function_call(InstructionCALL instr) {
                                 Variable param = (Variable)params.get(i);
                                 // case where the local var has a register and the paramter has a register
                                 if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                                        //System.out.println("1");
+                                        // System.out.println("1");
                                         assign(param.getParametersRegister().getName(), param.getRegister().getName());
                                 }
                                 // case where pushing the local variable has a register but the parameter must be pushed on the stack
                                 else if (param.getRegister()!= null && param.getParametersRegister()==null) {
-                                        //System.out.println("2");
+                                        // System.out.println("2");
                                         String value =param.getRegister().getName();
                                         //reserve_space_param(4);
                                         textSection.text.append("\tSUB sp, #4\n");
@@ -1285,7 +1316,7 @@ public void generate_function_call(InstructionCALL instr) {
                                 // case where local variable has an offset but the paramter has a register
 
                                 else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
-                                        //System.out.println("3");
+                                        // System.out.println("3");
                                         // load variable from the stack
                                         String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
                                         textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
@@ -1297,7 +1328,7 @@ public void generate_function_call(InstructionCALL instr) {
                                 // case where local var has an offset and the parameter has an offset
 
                                 else if(param.getRegister()==null && param.getParametersRegister()==null) {
-                                        //System.out.println("3");
+                                        // System.out.println("4");
                                         // load variable from the stack
                                         String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
                                         textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");

@@ -24,6 +24,12 @@ public List<Object> getOperands () {
 }
 
 public void show() {
-        System.out.println("ASSIGN\t" + ((Variable)operands.get(0)).getName() + " (" + operands.get(0) + ") " + operands.get(1));
+        Variable var1 = (Variable)operands.get(0);
+        Object var2 = operands.get(1);
+        System.out.println("ASSIGN\t" + var1.getName() + " (" + var1 + ") " + var2);
+        if (var2 instanceof Instruction) {
+                System.out.print(">");
+                ((Instruction)var2).show();
+        }
 }
 }

@@ -19,7 +19,12 @@ public ArrayList<Object> getElements() {
 public void show() {
         System.out.print("(");
         for (Object o : this.elements) {
-                System.out.print(((Variable)o).getName() + ", ");
+                try {
+                  System.out.print(((Variable)o).getName() + ", ");
+                }
+                catch (Exception e) {
+                  System.out.print(o + ", ");
+                }
         }
         System.out.println(")");
 }
