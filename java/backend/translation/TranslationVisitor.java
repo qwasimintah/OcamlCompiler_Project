@@ -252,9 +252,9 @@ public Instruction visit(Let e, Function func){
         }
         else if (e.e1 instanceof App) {
                 InstructionCALL value = (InstructionCALL) visit(e.e1, func);
-                if (func.getInstructions().contains(value)) {
-                        func.getInstructions().remove(value);
-                }
+                // if (func.getInstructions().contains(value)) {
+                //         func.getInstructions().remove(value);
+                // }
                 Variable var = new Variable(e.id.id, func);
                 inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
