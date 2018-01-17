@@ -1305,10 +1305,6 @@ public void generate_function_call(InstructionCALL instr) {
 
                     push_params(params);
 
-
-
-
-
                 }
 
                 else if(par ==null) {
@@ -1328,12 +1324,6 @@ public void generate_function_call(InstructionCALL instr) {
                 //restore_parameters();
 
         }
-
-
-
-
-
-
 
 }
 
@@ -1406,18 +1396,7 @@ public void push_params(List<Object> params){
                         textSection.text.append("\tSTR r0, [sp]\n");
 
                 }
-
-
-        textSection.text.append("\tBL ").append(fname).append("\n");
-        int diff = num_params - 2;
-        if(diff>=1) {
-                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
-        }
-        restore_locals();
-        if(num_params >= available_reg_param) {
-                //restore_parameters();
-
-        }
+    
 
 
     }
@@ -1425,160 +1404,7 @@ public void push_params(List<Object> params){
 }
 
 
-public static void main(String[] args){
-
-        /*ArmGenerator  arm = new ArmGenerator();
-
-
-           List<Instruction> instr = new ArrayList<Instruction>();
-           List<Instruction> add_instr = new ArrayList<Instruction>();
-
-           //global structure
-           List<Function> funs= new ArrayList<Function>();
-
-           //functions
-           Function fundef= new Function("main", null, instr);
-           Function fadd = new Function("add", null, add_instr);
-
-
-           //variables
-           Integer x= new Integer(1);
-           Integer f = new Integer(2);
-           HashMap<Register, Variable> registers = new HashMap<Register, Variable>(9);
-           HashMap<Register, Variable> param_registers = new HashMap<Register, Variable>(4);
-           HashSet<Variable> locals = new HashSet<Variable>();
-
-           RegisterUtils.initRegisters(registers, param_registers);
-           //
-
-           //RegisterUtils.showRegisters(registers);
-
-
-           VInteger y = new VInteger("y", 10, registers,fundef);
-           VInteger w = new VInteger("w", 11, registers,fundef);
-           VInteger a = new VInteger("a",20, registers,fundef);
-           VInteger b = new VInteger("b",40, registers,fundef);
-           VInteger y1 = new VInteger("y",60, registers,fundef);
-           VInteger w1 = new VInteger("w",80, registers,fundef);
-           VInteger a1 = new VInteger("a",100, registers,fundef);
-           VInteger b1 = new VInteger("b",110, registers,fundef);
-           VInteger y2 = new VInteger("y",120, registers,fundef);
-           VInteger w2 = new VInteger("w",130, registers,fundef);
-           VInteger a2 = new VInteger("a",140, registers,fundef);
-           VInteger b2 = new VInteger("b",150, registers,fundef);
-
-
-
-           Parameter c = new Parameter("c",1, param_registers,fundef);
-           Parameter d = new Parameter("d",2, param_registers,fundef);
-           Parameter r = new Parameter("r",512, param_registers,fundef);
-           Parameter t = new Parameter("t",512, param_registers,fundef);
-           Parameter g = new Parameter("g",512, param_registers,fundef);
-
-           locals.add(y);
-           locals.add(w);
-
-           fundef.setVariables(locals);
-           fadd.setVariables(locals);
-
-
-           y.allocRegister();
-           w.allocRegister();
-           a.allocRegister();
-           b.allocRegister();
-           y1.allocRegister();
-           w1.allocRegister();
-           a1.allocRegister();
-           b1.allocRegister();
-           y2.allocRegister();
-           w2.allocRegister();
-           a2.allocRegister();
-           b2.allocRegister();
-
-
-
-           c.allocRegister();
-           d.allocRegister();
-           r.allocRegister();
-           t.allocRegister();
-           g.allocRegister();
-
-
-
-
-           List<Parameter> params = new ArrayList<Parameter>();
-           params.add(c);
-           params.add(d);
-           params.add(r);
-           //params.add(r);
-           //params.add(t);
-           //params.add(g);
-           //params.add(w);
-
-           y.getSaveState();
-           System.out.println(w.getOffset());
-           g.getSaveState();
-           System.out.println(g.getOffset());
-           RegisterUtils.showRegisters(registers);
-           RegisterUtils.showRegisters(param_registers);
-
-           InstructionASSIGN q = new InstructionASSIGN(fundef, y, 5);
-           InstructionASSIGN p = new InstructionASSIGN(fundef, w, 9);
-           InstructionASSIGN ai = new InstructionASSIGN(fundef, a, 20);
-           InstructionASSIGN bi = new InstructionASSIGN(fundef, b, 40);
-           InstructionASSIGN ci = new InstructionASSIGN(fundef, c, 200);
-
-
-           InstructionADD add = new InstructionADD(fundef, c, d);
-           InstructionASSIGN fadd_ass= new InstructionASSIGN(fadd,b, r);
-
-           InstructionSUB sub = new InstructionSUB(fundef, c, b);
-           InstructionMULT mul = new InstructionMULT(fundef, a, y);
-
-           InstructionCALL call = new InstructionCALL(params, "add");
-           // add.show();
-           InstructionASSIGN ass = new InstructionASSIGN(fundef, c, sub);
-           // ass.show();
-           //fundef.addInstruction(call);
-           fundef.addInstruction(q);
-           fundef.addInstruction(p);
-           fundef.addInstruction(call);
-           //fundef.addInstruction(bi);
-           //fundef.addInstruction(ci);
-           //fundef.addInstruction(sub);
-
-           //fundef.addInstruction(ass);stash
-
-
-           fadd.addInstruction(add);
-           fadd.addInstruction(fadd_ass);
-           List<Parameter> para= new ArrayList<Parameter>();
-           para.add(new Parameter(b.getName(),b.getValue(), param_registers, fadd));
-           fadd.addInstruction(new InstructionCALL(para,"print_int"));
-           //fadd.addInstruction(add);
-
-
-           //fundef.addInstruction(sub);
-           //fundef.addInstruction(mul);
-           funs.add(fundef);
-           funs.add(fadd);
-           arm.generate_code(funs);
-
-           StringBuilder result= arm.textSection.text;
-
-           System.out.println(result);
-
-
-           try (FileOutputStream oS = new FileOutputStream(new File("../../ARM/call_test.s"))) {
-                 oS.write(result.toString().getBytes());
-              } catch (IOException e) {
-                  e.printStackTrace();
-           }*/
-
 }
-
-
-
 
 
 
