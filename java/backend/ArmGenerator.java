@@ -181,7 +181,8 @@ public void generate_branch(Function fun, String return_label){
                 }
                 else if(inst instanceof InstructionIF) {
 
-                        generate_if((InstructionIF) inst);
+                        String ret = generate_if((InstructionIF) inst);
+                        generate_branch_label(ret);
                 }
                 else if(inst instanceof InstructionNOTHING) {
 
@@ -273,7 +274,7 @@ public void generate_nothing(InstructionNOTHING instr) {
             else if(v.getParametersRegister()!=null){
                 assign("r0", ((Variable)instr.x).getParametersRegister().getName());
             }
-            
+
         }
 }
 
@@ -848,7 +849,8 @@ public void  generate_assign(InstructionASSIGN instr){
 
                 else if(op2 instanceof InstructionIF) {
 
-                        generate_if((InstructionIF) op2);
+                        String ret = generate_if((InstructionIF) op2);
+                        generate_branch_label(ret);
                         assign(reg, "r0");
 
                 }
@@ -954,11 +956,11 @@ public void arith_operation(String mnemonic, String dest, int operand1, int oper
 
 public void stash_locals(){
 
-        textSection.text.append("\tSTMFD sp!,{r4-r12}\n");
+        textSection.text.append("\tSTMFD sp!,{r2-r12}\n");
 }
 
 public void restore_locals(){
-        textSection.text.append("\tLDMFD sp!, {r4-r12}\n");
+        textSection.text.append("\tLDMFD sp!, {r2-r12}\n");
 
 }
 
