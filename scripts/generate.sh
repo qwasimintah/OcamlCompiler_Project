@@ -5,7 +5,7 @@ MINCAMLC=java/mincamlc
 
 if [ $# -eq 0 ]
   then
-    test_list="ast knorm alpha_conversion reduction arm"
+    test_list="knorm alpha_conversion reduction"
   else
     test_list=$1
 fi

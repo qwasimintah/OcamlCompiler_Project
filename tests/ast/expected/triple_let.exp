@@ -1,5 +1,0 @@
------- AST ------
-(let x = (let y = (let z = e0 in e1) in e2) in e3)
------- Height of the AST ------
-using Height.computeHeight: 3
-using HeightVisitor: 3

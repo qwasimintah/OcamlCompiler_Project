@@ -1,2 +1,0 @@
------- AST ------
-(if (not (y <= x)) then x else y)
