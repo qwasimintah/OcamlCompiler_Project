@@ -264,7 +264,7 @@ public Exp visit(Put e) {
 }
 
 /**
-  *Visit the LEtTuple in the AST
+  *Visit the LetTuple in the AST
   *
   *@param e A LetTuple
   *@return A LetTuple with the expressions K-normalized

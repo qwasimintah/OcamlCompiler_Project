@@ -1,10 +1,6 @@
-let rec f a b c d =
+let rec f a b  =
   let e = a + b in
-  let f = a + c in
-  let g = a + d in
-  let h = b + c in
-  let i = b + d in
-  let j = c + d in
+
 
   (* let k = e + f in
   let l = e + g in
@@ -37,9 +33,8 @@ let rec f a b c d =
   let am = k + x in
   let an = k + y in *)
 
-  let z = a + b + c + d +
-      e + f + g + h + i + j (* +
+  let z = a + b + e (* +
       k + l + m + n + o + p + q + r + s + t + u + v + w + x + y +
       aa + ab + ac + ad + ae + af + ag + ah + ai + aj + ak + al + am + an *) in
   -z in
-print_int (f 1 2 3 4)
+print_int (f 1 2)
