@@ -55,8 +55,8 @@ public String getLabel(String var) {
 }
 
 public Object visit(Exp e, Function func) {
-        System.out.print(e.getClass());
-        System.out.println("\twith lastResult = " + lastResult);
+        // System.out.print(e.getClass());
+        // System.out.println("\twith lastResult = " + lastResult);
         if (e instanceof Add) {
                 lastResult = (InstructionADD)visit((Add)e, func);
                 return lastResult;
@@ -538,8 +538,8 @@ public TupleJerry visit(Tuple e, Function func){
 }
 
 public void visit(LetTuple e, Function func){
-        System.out.println(e.e1.getClass());
-        System.out.println(e.e2.getClass());
+        // System.out.println(e.e1.getClass());
+        // System.out.println(e.e2.getClass());
         TupleJerry values;
         try {
                 values = (TupleJerry)visit(e.e1, func);
@@ -549,7 +549,6 @@ public void visit(LetTuple e, Function func){
         }
         for (Integer i = 0; i < e.ids.size(); i++) {
                 // Object value = visit(e.e2, func);
-                System.out.println(i);
                 // if (value instanceof TupleJerry) {
                 //         value = (TupleJerry)value;
                 //         System.out.println(value);
