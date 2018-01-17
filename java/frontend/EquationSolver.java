@@ -5,13 +5,24 @@ import exp.*;
 import ast.*;
 import ast.type.*;
 
+/**
+  * Implementation of the Equation Solver Class.
+  * Class solving Equations passed by parameters to transform and solve
+  *
+  *@author Quentin Delfosse
+  *
+  */
+
 public class EquationSolver{
-  // Class solving Equations passed by parameters to transform and solve
   public EquationSolver(){}
-  // int i, j = 0;
+  /**
+    * Transforms equations so they are easier to solve, for exemple, seperate functions equations
+    * to equations between their parameters and their results.
+    *
+    *@param eq A GenEqation
+    *@return nothing
+  */
   public void transform(GenEquation eq){
-    // Transforms equations so they are easier to solve, for exemple, seperate functions equations
-    // to equations between their parameters and their results.
     for (int i = 0; i < eq.eqt_list.size(); i++){
       Equation e = eq.eqt_list.get(i);
       if (e.t1 instanceof TFun && e.t2 instanceof TFun){
@@ -31,7 +42,7 @@ public class EquationSolver{
         eq.eqt_list.add(0, new Equation(f1.codom, f2.codom)); // for the result
       } else if (e.t1 instanceof TFun || e.t2 instanceof TFun){ // Otherwise, with just one function
         // For the functions passed in parameters.
-        if (e.t1 instanceof TFun && e.t2 instanceof TVar){
+        if (e.t1 instanceof TFun && e.t2 instanceof TVar){ // Cas of function passed as parameter-part2
           Type f_save = e.t2;
           for (Equation ee : eq.eqt_list){
               if (f_save.toString() == ee.t1.toString()){
@@ -41,7 +52,7 @@ public class EquationSolver{
                   ee.t2 = e.t1;
               }
           }
-        } else if (e.t1 instanceof TVar && e.t2 instanceof TFun){
+        } else if (e.t1 instanceof TVar && e.t2 instanceof TFun){ // Cas of function passed as parameter-part2
           Type f_save = e.t1;
           for (Equation ee : eq.eqt_list){
               if (f_save.toString() == ee.t1.toString()){
@@ -94,8 +105,14 @@ public class EquationSolver{
     }
   }
 
+  /**
+    * reduce and simplify the eqation list by removing evident equations after transformations
+    *
+    *@param eq An GenEqation
+    *@return a Boolean telling if it worked well or not
+  */
+
   public Boolean reduce(GenEquation eq){
-    // reduce and simplify the eqation list by removing evident equations after transformations
     this.transform(eq);
     int i = 0, j = 0;
     while (! eq.eqt_list.isEmpty()){
@@ -114,7 +131,7 @@ public class EquationSolver{
           i++;
           continue;
         }
-        if (!(e.t1 instanceof TVar || e.t2 instanceof TVar)){
+        if (!(e.t1 instanceof TVar || e.t2 instanceof TVar)){ // If none is a variable
           if(e.t1.toString().equals(e.t2.toString())){
               eq.eqt_list.remove(e);
               i = 0;
@@ -124,7 +141,7 @@ public class EquationSolver{
             System.exit(1);
           }
 
-        } else if (e.t1 instanceof TVar && e.t2 instanceof TVar){
+        } else if (e.t1 instanceof TVar && e.t2 instanceof TVar){ // If both are variable
           i++;
           continue;
         } else if (e.t1 instanceof TVar) {
@@ -157,8 +174,14 @@ public class EquationSolver{
     return eq.eqt_list.isEmpty();
   }
 
+  /**
+    * Finally solve the left equations, for now, if the left eqations are just variables, it consider it as true
+    *
+    *@param eq An GenEqation
+    *@return a Boolean telling that it worked well, otherwise it's exiting returning an error
+  */
+
   public Boolean solve(GenEquation eq){
-    // solve the equation, for now, if the left eqations are just variables, it consider it as true
     Boolean all_variables = true;
     for (Equation e : eq.eqt_list){ //checking if all equation is just composed of variables, to check
       if (!(e.t1 instanceof TVar && e.t2 instanceof TVar)) {
@@ -168,7 +191,8 @@ public class EquationSolver{
     } if (!all_variables){ //if not, might try to reduce it.
         for (Equation e : eq.eqt_list){
           if (!e.t1.getClass().equals(e.t2.getClass())){
-            return false;
+            System.out.println("The equations are not equivalent, your programm has a Type Error");
+            System.exit(1);
           }
         }
     }

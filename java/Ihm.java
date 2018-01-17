@@ -2,6 +2,13 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+  * Implementation of the K-Normalization of an expression
+  *
+  *@author Quentin DELFOSSE
+  *
+  */
+
 public class Ihm {
 String input_file, output_file;
 Boolean given_output, typecheck_only, parse_only, output_asml, ast, knorm, alpha_conversion, reduction, closure_conversion, arm, translation, register, complete;
@@ -100,6 +107,15 @@ private void print_help(){
         System.out.println("-p : parse only");
         System.out.println("-asml : output ASML");
         System.out.println("-my-opt : you can add personal options (optimizations, etc.)");
+        try {
+                Scanner fileIn = new Scanner(new File("../troll_head.txt"));
+                while(fileIn.hasNext())
+                {
+                        System.out.println(fileIn.nextLine());
+                }
+                fileIn.close();
+                System.out.println();
+        } catch (FileNotFoundException e) {}
         System.exit(0);
       }
 }

@@ -3,9 +3,15 @@ package frontend;
 import java.util.*;
 import ast.type.*;
 
+/**
+  * Implementation of the class Equation (to put in the list), the construction is always the same :
+  * the two Types we want to compare.
+  *
+  *@author Quentin Delfosse
+  *
+  */
+
 public class Equation{
-  // Class of equation (to put in the list), the construction is always the same :
-  // the two Types we want to compare.
   public Type t1;
   public Type t2;
 

@@ -8,7 +8,7 @@ import ast.type.*;
 /**
   * Implementation of the K-Normalization of an expression
   *
-  *@author balsamor
+  *@author ApresShampoingManQuiDortPendantQueLesAutresTriment
   *
   */
 
