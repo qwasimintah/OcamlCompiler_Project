@@ -151,14 +151,16 @@ public void generate_branch(Function fun, String return_label){
         HashSet<Variable> locals = fun.getVariables();
         //process all intructions of functions
         int size= locals.size();
-
+        int instr_count = intr.size();
+        int count=0;
 
         String fname = fun.getName();
         generate_branch_label(fname);
 
 
-        for (Instruction inst : intr) {
 
+        for (Instruction inst : intr) {
+            count++;
                 if(inst instanceof InstructionADD) {
                         generate_addition((InstructionADD) inst);
                 }
@@ -183,7 +185,10 @@ public void generate_branch(Function fun, String return_label){
                 }
                 else if(inst instanceof InstructionNOTHING) {
 
-                        //generate_nothing((InstructionNOTHING) inst);
+                    if(count == instr_count){
+                        generate_nothing((InstructionNOTHING) inst);
+                    }
+                    
                 }
                 else{
                         System.out.println("Instruction Not Supported\n");
@@ -260,6 +265,15 @@ public void generate_nothing(InstructionNOTHING instr) {
         }
         else if (instr.x instanceof Variable) {
 
+            Variable v = (Variable)(instr.x);
+
+            if(v.getRegister() != null){
+                assign("r0", ((Variable)instr.x).getRegister().getName());
+            }
+            else if(v.getParametersRegister()!=null){
+                assign("r0", ((Variable)instr.x).getParametersRegister().getName());
+            }
+            
         }
 }
 
