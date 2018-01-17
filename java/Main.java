@@ -57,7 +57,7 @@ static public void main(String argv[]) {
                       System.out.println(predef);
                       GenEquation expression_typechecked = new GenEquation();
                       expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
-                      System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
+                      System.out.println("initial eqt list : \n" + expression_typechecked.eqt_list);
                       EquationSolver solved = new EquationSolver();
                       System.out.println(solved.reduce(expression_typechecked));
                       System.out.println(expression_typechecked.eqt_list);

@@ -79,14 +79,15 @@ public class GenEquation{
           Env env1 = env.hadd(new EnvElem(((Let)exp).id, ((Let)exp).t));
           // System.out.println(env + " size : " + env.size);
           // System.out.println(env1 + " size : " + env1.size);
-          System.out.println(((Let)exp).t);
-          System.out.println(exp_type);
+          // System.out.println(((Let)exp).t);
+          // System.out.println("coucou" + exp_type);
           generate(env1, ((Let)exp).e2, exp_type);
           generate(env, ((Let)exp).e1, ((Let)exp).t);
       } else if (exp instanceof Var) {
           Type t1;
           EnvElem node = env.head;
           Boolean inside = false;
+          // System.out.println("NOM :" + ((Var)exp).id.toString());
           while(node != null){
             if(node.id.toString().equals(((Var)exp).id.toString())){
               t1 = node.t;
@@ -183,8 +184,8 @@ public class GenEquation{
       } else if (exp instanceof LetTuple) {
         Env env1 = env;
         for (int i = 0; i < ((LetTuple)exp).ids.size(); i++){
-            System.out.println(i);
-            System.out.println(((LetTuple)exp).ids.get(i));
+            // System.out.println(i);
+            // System.out.println(((LetTuple)exp).ids.get(i));
             // System.out.println(((LetTuple)exp).ts.get(i));
             env1 = env1.hadd(new EnvElem(((LetTuple)exp).ids.get(i), Type.gen()));
             generate(env, ((LetTuple)exp).e1, Type.gen());
@@ -193,22 +194,33 @@ public class GenEquation{
 
       } else if (exp instanceof Array) {
           Type t = Type.gen();
+          // System.out.println("t=" + t);
           eqt_list.add(new Equation(new TArray(t), exp_type));
           generate(env, ((Array)exp).e1, new TInt());
           generate(env, ((Array)exp).e2, t);
 
       } else if (exp instanceof Get) {
           // Array arr = (Array)((Get)exp).e1;
-          System.out.println("get e1 " + ((Get)exp).e1);
-          System.out.println("get e2 " + ((Get)exp).e2);
-          System.out.println(env);
-          System.out.println("exp " + exp_type);
+          // System.out.println("get e1 " + ((Get)exp).e1);
+          // System.out.println("get e2 " + ((Get)exp).e2);
+          // System.out.println(env);
+          // System.out.println("exp " + exp_type);
           generate(env, ((Get)exp).e1, new TArray(exp_type));
           generate(env, ((Get)exp).e2, new TInt());
           // System.out.println(arr);
-      // }  else if (exp instanceof Put) {
-      //         Put e = (Put) exp;
-      //         res = Math.max(computeHeight(e.e1), Math.max(computeHeight(e.e2), computeHeight(e.e3))) + 1;
+      } else if (exp instanceof Put) {
+        // System.out.println("IN PUT");
+        // System.out.println(exp_type);
+        // System.out.println(((Put)exp).e1);
+        // System.out.println(((Put)exp).e2);
+        // System.out.println(((Put)exp).e3 + "\n\n");
+        Type t_array = Type.gen();
+        generate(env, ((Put)exp).e1, new TArray(t_array));
+        eqt_list.add(new Equation(new TUnit(), exp_type));
+        generate(env, ((Put)exp).e2, new TInt());
+        generate(env, ((Put)exp).e3, t_array);
+
+    // System.out.println(env);
       } else {
         System.out.println(exp);
               // shouldn't happen
