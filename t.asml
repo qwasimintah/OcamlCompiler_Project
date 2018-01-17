@@ -32,8 +32,8 @@ let _label1 v22 v23  =
 	)
 	)
 let _ = 
-	let v43 = 3 in
-	let v44 = 10 in
+	let v43 = 1 in
+	let v44 = 1 in
 	let v42 = 	call _label1 v43 v44  in 
 	call _min_caml_print_int v42
 
