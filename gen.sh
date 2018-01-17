@@ -11,8 +11,7 @@ for file in $input_files
 do
       echo -e "generating \033[0;36m ${file::-3}.result \033[0m"
       ocaml mincaml/$file > results/${file::-3}.result
-      $MINCAMLC mincaml/$file --arm > results/${file::-3}.s
-      rm ARM/*.arm ARM/*.s
+      $MINCAMLC --arm mincaml/$file > results/${file::-3}.s
       cp results/${file::-3}.s ARM/
       cd ARM
       make
@@ -28,4 +27,5 @@ do
         else
           echo -e '\033[31m FAILED \033[0m'
       fi
+      echo -e "\n\n"
 done
