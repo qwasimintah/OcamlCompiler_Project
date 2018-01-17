@@ -28,13 +28,25 @@ public String getName() {
 }
 
 public void allocRegister() {
-        if (func.registers.isEmpty()) {
-                spill();
-        } else {
+        // if (func.registers.isEmpty()) {
+        //         this.spill();
+        // } else {
+        //         Register reg = func.registers.get(0);
+        //         func.registers.remove(0);
+        //         this.setRegister(reg);
+        // }
+        try {
                 Register reg = func.registers.get(0);
                 func.registers.remove(0);
                 this.setRegister(reg);
+                return;
         }
+        catch (Exception e) {
+                this.spill();
+                return;
+        }
+        // System.out.println("not allocated " + this.getName());
+
 }
 
 public void allocParametersRegister() {
@@ -121,22 +133,6 @@ public void getSaveState() {
                 storeArg = "-";
         }
         System.out.println("Var/Arg " + this.getName() + " (" + this + ") " + " : " + storeVar + "/" + storeArg);
-
-        // if (this.getRegister() != null) {
-        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "stored in register " + this.getRegister().getName());
-        // } else if (this.getOffset() != null) {
-        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "stored in memory at [fp + " + this.getOffset() + "]");
-        // } else {
-        //         System.out.println("Variable " + this.getName() + " (" + this + ") " + "not saved !");
-        // }
-        //
-        // if (this.getParametersRegister() != null) {
-        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "stored in register " + this.getParametersRegister().getName());
-        // } else if (this.getParametersOffset() != null) {
-        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "stored in memory at [fp + " + this.getParametersOffset() + "]");
-        // } else {
-        //         System.out.println("Parameter " + this.getName() + " (" + this + ") " + "not saved !");
-        // }
 }
 
 public Interval getInterval() {
@@ -149,6 +145,6 @@ public void kill() {
 
 public void killParameter() {
         func.parametersRegisters.add(this.parametersRegister);
-        Collections.sort(func.parametersRegisters);
+        // Collections.sort(func.parametersRegisters);
 }
 }

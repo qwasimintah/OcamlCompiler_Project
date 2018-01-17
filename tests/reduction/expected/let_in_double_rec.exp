@@ -1,2 +1,2 @@
 ------ Reduction of Nested Let-Expressions ------
-(let rec f x = (let rec g y = (x + y) in y) in (let x = x in x))
+(let rec f x = (let rec g y = (x + y) in x) in (let x = x in (print_int x)))
