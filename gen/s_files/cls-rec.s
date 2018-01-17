@@ -1,23 +1,65 @@
------- AST ------
-(let x = 10 in (let rec f y = (if (y = 0) then 0 else (x + (f (y - 1)))) in (print_int (f 123))))
+@------ ARM code generation ------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
 
------- K-Normalization ------
-(let x = 10 in (let rec f y = (let ?v0 = y in (let ?v1 = 0 in (if (?v0 = ?v1) then 0 else (let ?v2 = x in (let ?v3 = (let ?v4 = (let ?v5 = y in (let ?v6 = 1 in (?v5 - ?v6))) in (f ?v4)) in (?v2 + ?v3)))))) in (let ?v7 = (let ?v8 = 123 in (f ?v8)) in (print_int ?v7))))
+	LDR r4, =10
+	LDR r5, =123
+	STMFD sp!,{r2-r12}
+	MOV r2, r5
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r6, r0
+	MOV r0, r6
+	BL min_caml_print_int
+	BL min_caml_print_newline
 
------- AlphaConversion ------
-(let ?v9 = 10 in (let rec ?v10 ?v11 = (let ?v12 = ?v11 in (let ?v13 = 0 in (if (?v12 = ?v13) then 0 else (let ?v14 = ?v9 in (let ?v15 = (let ?v16 = (let ?v17 = ?v11 in (let ?v18 = 1 in (?v17 - ?v18))) in (?v10 ?v16)) in (?v14 + ?v15)))))) in (let ?v19 = (let ?v20 = 123 in (?v10 ?v20)) in (print_int ?v19))))
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
 
------- Reduction of Nested Let-Expressions ------
-(let ?v9 = 10 in (let rec ?v10 ?v11 = (let ?v12 = ?v11 in (let ?v13 = 0 in (if (?v12 = ?v13) then 0 else (let ?v14 = ?v9 in (let ?v15 = (let ?v16 = (let ?v17 = ?v11 in (let ?v18 = 1 in (?v17 - ?v18))) in (?v10 ?v16)) in (?v14 + ?v15)))))) in (let ?v20 = 123 in (let ?v19 = (?v10 ?v20) in (print_int ?v19)))))
+	MOV r7, #1
+	swi 0
+_label1:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
 
------- ClosureConversion ------
-Closure list: 
-closure numbers: 1
-	label: _?v10
-	free_list: [?v9]
-	args: [?v11]
-	code: 
-(let ?v12 = ?v11 in (let ?v13 = 0 in (if (?v12 = ?v13) then 0 else (let ?v14 = ?v9 in (let ?v15 = (let ?v16 = (let ?v17 = ?v11 in (let ?v18 = 1 in (?v17 - ?v18))) in (apply_closure _?v10 ?v16)) in (?v14 + ?v15))))))
-(let ?v9 = 10 in (let ?v20 = 123 in (let ?v19 = (apply_closure _?v10 ?v20) in (print_int ?v19))))
+	MOV r4, r3
+	LDR r6, =0
+	CMP r4 , r6
+	BEQ label2
+	B label3
+label2:
+	LDR r0, =0
+	b cont1
+label3:
+	MOV r8, r3
+	LDR r9, =1
+	SUB r0, r8, r9
+	MOV r10, r0
+	STMFD sp!,{r2-r12}
+	MOV r2, r10
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r4, r0
+	ADD r0, r7, r4
+	b cont1
+cont1:
 
------- Translation to Jerry ------
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+

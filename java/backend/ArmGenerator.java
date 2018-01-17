@@ -1408,14 +1408,6 @@ public void push_params(List<Object> params){
                 }
 
 
-        textSection.text.append("\tBL ").append(fname).append("\n");
-        int diff = num_params - 2;
-        if(diff>=1) {
-                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
-        }
-        restore_locals();
-        if(num_params >= available_reg_param) {
-                //restore_parameters();
 
         }
 
@@ -1425,7 +1417,7 @@ public void push_params(List<Object> params){
 }
 
 
-public static void main(String[] args){
+// public static void main(String[] args){
 
         /*ArmGenerator  arm = new ArmGenerator();
 
@@ -1586,4 +1578,4 @@ public static void main(String[] args){
 
 
 
-}
+// }

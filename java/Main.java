@@ -151,35 +151,9 @@ static public void main(String argv[]) {
                 }
 
                 else{
-                        System.out.println("------ AST ------");
-                        expression.accept(new PrintVisitor());
-                        System.out.println("");
-                        System.out.println("");
-
-                        System.out.println("------ K-Normalization ------");
                         Exp expression_normalized = expression.accept(new KNormalization());
-                        expression_normalized.accept(new PrintVisitor());
-                        System.out.println("");
-                        System.out.println("");
-
-                        System.out.println("------ AlphaConversion ------");
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
-                        expression_converted.accept(new PrintVisitor());
-                        System.out.println("");
-                        System.out.println("");
-
-                        System.out.println("------ Reduction of Nested Let-Expressions ------");
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
-                        expression_reducted.accept(new PrintVisitor());
-                        System.out.println("");
-                        System.out.println("");
-
-                        System.out.println("------ ClosureConversion ------");
-                        Exp expression_free = expression_reducted.accept(new FreeVariables());
-                        Exp expression_closure = expression_free.accept(new ClosureConversion());
-                        expression_closure.accept(new PrintVisitor());
-                        System.out.println("");
-                        System.out.println("");
 
                         // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
                         // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
@@ -192,24 +166,19 @@ static public void main(String argv[]) {
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
                         flist.add(func);
 
-                        System.out.println("------ Translation to Jerry ------");
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
                         for (Function f : flist) {
-                                f.show();
+                                // f.show();
                         }
 
-                        System.out.println("");
-
-                        System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
                                 regalloc.LinearScan(f);
-                                f.showVariablesState();
+                                // f.showVariablesState();
                         }
-                        System.out.println("");
 
-                        System.out.println("------ ARM code generation ------");
+                        System.out.println("@------ ARM code generation ------");
                         ArmGenerator arm = new ArmGenerator();
 
                         arm.generate_code(flist);

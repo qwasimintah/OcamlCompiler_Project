@@ -103,8 +103,8 @@ public static void LinearScan(Function func) {
                 }
         }
         for (Interval interval : intervals) {
-                System.out.println(interval.getDescription());
-                interval.getVariable().getSaveState();
+                // System.out.println(interval.getDescription());
+                // interval.getVariable().getSaveState();
         }
 
 }
