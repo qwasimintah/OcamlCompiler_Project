@@ -356,13 +356,21 @@ public Integer visit(Int e, Function func){
 public InstructionMULT visit(Neg e, Function func) {
         if (e.e instanceof Int) {
                 Integer i = (Integer) visit(e.e, func);
-                InstructionMULT inst = new InstructionMULT(func, i, -1);
+                VInteger minusOne = new VInteger(getTempVarName(), -1, func);
+                InstructionASSIGN ass = new InstructionASSIGN(func, minusOne, -1);
+                InstructionMULT inst = new InstructionMULT(func, i, minusOne);
+                func.addVariable(minusOne);
+                func.addInstruction(ass);
                 func.addInstruction(inst);
                 return inst;
         }
         else if (e.e instanceof Var) {
                 Variable var = (Variable)visit(e.e, func);
-                InstructionMULT inst = new InstructionMULT(func, var, -1);
+                VInteger minusOne = new VInteger(getTempVarName(), -1, func);
+                InstructionASSIGN ass = new InstructionASSIGN(func, minusOne, -1);
+                InstructionMULT inst = new InstructionMULT(func, var, minusOne);
+                func.addVariable(minusOne);
+                func.addInstruction(ass);
                 func.addInstruction(inst);
                 return inst;
         }
