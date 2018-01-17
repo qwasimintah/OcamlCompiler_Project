@@ -20,6 +20,9 @@ public List<Object> getOperands () {
                         op.add(o);
                 }
         }
+        else if (operands.get(1) instanceof Variable) {
+                op.add(operands.get(1));
+        }
         return op;
 }
 

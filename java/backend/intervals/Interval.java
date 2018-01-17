@@ -37,7 +37,7 @@ public void setEndingPoint(Integer end) {
 }
 
 public String getDescription() {
-        return "(" + start + ", " + end + ")";
+        return variable.getName() + " (" + start + ", " + end + ")";
 }
 
 @Override

@@ -52,37 +52,41 @@ public static void LinearScan(Function func) {
         List<Interval>intervals = new ArrayList<Interval>();
         Integer i = 0;
 
-        // func.showVariables();
-        // System.out.println(">>>>>>>>>>>>>");
-        // func.showVariablesState();
-
         for (Variable v : func.getArguments()) {
                 v.allocParametersRegister();
         }
 
-        for (Instruction inst : func.getInstructions()) {
-                try {
-                        for (Object op : inst.getOperands()) {
-                                Variable var = (Variable) op;
-                                if (!variables.contains(var)) {
-                                        var.getInterval().setStartingPoint(i);
-                                        var.getInterval().setEndingPoint(i);
-                                        variables.add(var);
-                                        intervals.add(var.getInterval());
-                                } else {
-                                        var.getInterval().setEndingPoint(i);
-                                }
+        // for (Instruction inst : func.getInstructions()) {
+        //         try {
+        //                 for (Object op : inst.getOperands()) {
+        //                         Variable var = (Variable) op;
+        //                         if (!variables.contains(var)) {
+        //                                 var.getInterval().setStartingPoint(i);
+        //                                 var.getInterval().setEndingPoint(i);
+        //                                 variables.add(var);
+        //                                 intervals.add(var.getInterval());
+        //                         } else {
+        //                                 var.getInterval().setEndingPoint(i);
+        //                         }
+        //
+        //                 }
+        //         } catch (Exception e) {;}
+        //         i++;
+        // }
 
-                        }
-                } catch (Exception e) {;}
+        for (Variable var : func.getVariables()) {
+                if (!variables.contains(var)) {
+                        var.getInterval().setStartingPoint(i);
+                        var.getInterval().setEndingPoint(i);
+                        variables.add(var);
+                        intervals.add(var.getInterval());
+                } else {
+                        var.getInterval().setEndingPoint(i);
+                }
                 i++;
         }
 
         Collections.sort(intervals);
-        // for (Interval interval : intervals) {
-        //         System.out.println(interval.getDescription());
-        // }
-
 
         for (Integer j = 0; j < i; j++) {
                 for (Interval interval : intervals) {
@@ -98,5 +102,10 @@ public static void LinearScan(Function func) {
                         }
                 }
         }
+        for (Interval interval : intervals) {
+                System.out.println(interval.getDescription());
+                interval.getVariable().getSaveState();
+        }
+
 }
 }
