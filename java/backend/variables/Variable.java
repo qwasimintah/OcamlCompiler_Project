@@ -144,12 +144,11 @@ public Interval getInterval() {
 }
 
 public void kill() {
-        // registers.put(this.register, null);
         func.registers.add(this.register);
 }
 
 public void killParameter() {
-        // registers.put(this.register, null);
         func.parametersRegisters.add(this.parametersRegister);
+        Collections.sort(func.parametersRegisters);
 }
 }

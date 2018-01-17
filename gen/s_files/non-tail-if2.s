@@ -8,6 +8,6 @@
 (let rec ?v9 ?v10 = 12345 in (let ?v11 = (Array.create 10 3) in (let ?v12 = 67890 in (let ?v13 = (let ?v14 = ?v11.(0) in (let ?v15 = 3 in (if (?v14 = ?v15) then (let ?v16 = (let ?v17 = (let ?v18 = () in (?v9 ?v18)) in (let ?v19 = ?v11.(1) in (?v17 + ?v19))) in (let ?v20 = ?v12 in (?v16 + ?v20))) else 7))) in (print_int ?v13)))))
 
 ------ Reduction of Nested Let-Expressions ------
-(let rec ?v9 ?v10 = 12345 in (let ?v11 = (Array.create 10 3) in (let ?v12 = 67890 in (let ?v14 = ?v11.(0) in (let ?v15 = 3 in (let ?v13 = (if (?v14 = ?v15) then (let ?v16 = (let ?v17 = (let ?v18 = () in (?v9 ?v18)) in (let ?v19 = ?v11.(1) in (?v17 + ?v19))) in (let ?v20 = ?v12 in (?v16 + ?v20))) else 7) in (print_int ?v13)))))))
+(let rec ?v9 ?v10 = 12345 in (let ?v11 = (Array.create 10 3) in (let ?v12 = 67890 in (let ?v14 = ?v11.(0) in (let ?v15 = 3 in (let ?v13 = (if (?v14 = ?v15) then (let ?v18 = () in (let ?v17 = (?v9 ?v18) in (let ?v19 = ?v11.(1) in (let ?v16 = (?v17 + ?v19) in (let ?v20 = ?v12 in (?v16 + ?v20)))))) else 7) in (print_int ?v13)))))))
 
 ------ ClosureConversion ------

@@ -19,23 +19,26 @@ NOTHING	tmpVar1 (backend.variables.VInteger@1d44bcfa)
 ASSIGN	?v8 (backend.variables.VInteger@5cad8086) 123
 NOTHING	?v8 (backend.variables.VInteger@5cad8086)
 ASSIGN	?v7 (backend.variables.Variable@6e0be858) backend.instructions.InstructionCALL@266474c2
+>CALL	print_int backend.variables.VInteger@5cad8086 
 NOTHING	tmpVar2 (backend.variables.VInteger@6f94fa3e)
 ASSIGN	?v10 (backend.variables.VInteger@61bbe9ba) -456
 NOTHING	?v10 (backend.variables.VInteger@61bbe9ba)
 ASSIGN	?v9 (backend.variables.Variable@610455d6) backend.instructions.InstructionCALL@5e481248
+>CALL	print_int backend.variables.VInteger@61bbe9ba 
 NOTHING	tmpVar3 (backend.variables.VInteger@66d3c617)
 ASSIGN	?v12 (backend.variables.VInteger@511d50c0) 789
 NOTHING	tmpVar4 (backend.variables.VInteger@63947c6b)
 ASSIGN	?v13 (backend.variables.VInteger@60e53b93) 0
 ADD	backend.variables.VInteger@511d50c0 backend.variables.VInteger@60e53b93
 ASSIGN	?v11 (backend.variables.VInteger@5e2de80c) backend.instructions.InstructionADD@2b193f2d
+>ADD	backend.variables.VInteger@511d50c0 backend.variables.VInteger@60e53b93
 NOTHING	?v11 (backend.variables.VInteger@5e2de80c)
 CALL	print_int backend.variables.VInteger@5e2de80c 
 
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v10 (backend.variables.VInteger@61bbe9ba)  : r6/r3
+Var/Arg ?v10 (backend.variables.VInteger@61bbe9ba)  : r6/r2
 Var/Arg ?v11 (backend.variables.VInteger@5e2de80c)  : r10/r2
 Var/Arg ?v9 (backend.variables.Variable@610455d6)  : r7/-
 Var/Arg ?v7 (backend.variables.Variable@6e0be858)  : r5/-
@@ -59,7 +62,15 @@ _main:
 	MOV fp, sp
 
 	LDR r4, =123
+	MOV r0, r4
+	BL min_caml_print_int
+	BL min_caml_print_newline
+	MOV r5, r0
 	LDR r6, =-456
+	MOV r0, r6
+	BL min_caml_print_int
+	BL min_caml_print_newline
+	MOV r7, r0
 	LDR r8, =789
 	LDR r9, =0
 	ADD r0, r8, r9

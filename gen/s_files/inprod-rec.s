@@ -24,6 +24,7 @@ closure numbers: 1
 ******** main *********
 NOTHING	null
 ASSIGN	?v12 (backend.variables.Variable@2f0e140b) backend.instructions.InstructionCALL@7440e464
+>CALL	label4 null 
 NOTHING	?v12 (backend.variables.Variable@2f0e140b)
 CALL	print_int backend.variables.Variable@2f0e140b 
 

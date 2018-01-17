@@ -8,7 +8,7 @@
 (let rec ?v8 ?v9 = (let ?v10 = 0 in (let ?v11 = ?v9 in (if (?v10 <= ?v11) then (let ?v12 = (let ?v13 = ?v9 in (print_int ?v13)) in (let ?v14 = (Array.create 1 ?v8) in (let ?v15 = (let ?v16 = ?v9 in (let ?v17 = 1 in (?v16 - ?v17))) in (?v14.(0) ?v15)))) else ()))) in (let ?v18 = 9 in (?v8 ?v18)))
 
 ------ Reduction of Nested Let-Expressions ------
-(let rec ?v8 ?v9 = (let ?v10 = 0 in (let ?v11 = ?v9 in (if (?v10 <= ?v11) then (let ?v12 = (let ?v13 = ?v9 in (print_int ?v13)) in (let ?v14 = (Array.create 1 ?v8) in (let ?v15 = (let ?v16 = ?v9 in (let ?v17 = 1 in (?v16 - ?v17))) in (?v14.(0) ?v15)))) else ()))) in (let ?v18 = 9 in (?v8 ?v18)))
+(let rec ?v8 ?v9 = (let ?v10 = 0 in (let ?v11 = ?v9 in (if (?v10 <= ?v11) then (let ?v13 = ?v9 in (let ?v12 = (print_int ?v13) in (let ?v14 = (Array.create 1 ?v8) in (let ?v16 = ?v9 in (let ?v17 = 1 in (let ?v15 = (?v16 - ?v17) in (?v14.(0) ?v15))))))) else ()))) in (let ?v18 = 9 in (?v8 ?v18)))
 
 ------ ClosureConversion ------
 Closure list: 
@@ -17,7 +17,7 @@ closure numbers: 1
 	free_list: null
 	args: [?v9]
 	code: 
-(let ?v10 = 0 in (let ?v11 = ?v9 in (if (?v10 <= ?v11) then (let ?v12 = (let ?v13 = ?v9 in (print_int ?v13)) in (let ?v14 = (Array.create 1 ?v8) in (let ?v15 = (let ?v16 = ?v9 in (let ?v17 = 1 in (?v16 - ?v17))) in (apply_closure.(0) ?v14 ?v15)))) else ())))
+(let ?v10 = 0 in (let ?v11 = ?v9 in (if (?v10 <= ?v11) then (let ?v13 = ?v9 in (let ?v12 = (print_int ?v13) in (let ?v14 = (Array.create 1 ?v8) in (let ?v16 = ?v9 in (let ?v17 = 1 in (let ?v15 = (?v16 - ?v17) in (apply_closure.(0) ?v14 ?v15))))))) else ())))
 (let ?v18 = 9 in (apply_direct _?v8 ?v18))
 
 ------ Translation to Jerry ------

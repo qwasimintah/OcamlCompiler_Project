@@ -109,13 +109,16 @@ ASSIGN	?v37 (backend.variables.Variable@5e481248) null
 NOTHING	?v36 (backend.variables.Variable@6f94fa3e)
 NOTHING	?v37 (backend.variables.Variable@5e481248)
 ASSIGN	?v35 (backend.variables.Variable@66d3c617) backend.instructions.InstructionCALL@4dc63996
+>CALL	label1 backend.variables.Variable@6f94fa3e backend.variables.Variable@5e481248 
 NOTHING	?v34 (backend.variables.Variable@266474c2)
 NOTHING	?v35 (backend.variables.Variable@66d3c617)
 ASSIGN	?v33 (backend.variables.Variable@63947c6b) backend.instructions.InstructionCALL@d716361
+>CALL	label1 backend.variables.Variable@266474c2 backend.variables.Variable@66d3c617 
 NOTHING	tmpVar3 (backend.variables.VInteger@6ff3c5b5)
 ASSIGN	?v39 (backend.variables.VInteger@2b193f2d) 123
 NOTHING	?v39 (backend.variables.VInteger@2b193f2d)
 ASSIGN	?v38 (backend.variables.Variable@355da254) backend.instructions.InstructionCALL@3764951d
+>CALL	label8 backend.variables.VInteger@2b193f2d 
 NOTHING	?v38 (backend.variables.Variable@355da254)
 CALL	print_int backend.variables.Variable@355da254 
 
@@ -124,6 +127,7 @@ NOTHING	?v18 (backend.variables.Variable@4b1210ee)
 ASSIGN	?v20 (backend.variables.Variable@5cad8086) backend.variables.Variable@4b1210ee
 NOTHING	?v20 (backend.variables.Variable@5cad8086)
 ASSIGN	?v19 (backend.variables.Variable@6e0be858) backend.instructions.InstructionCALL@4d7e1886
+>CALL	label3 backend.variables.Variable@5cad8086 
 NOTHING	?v19 (backend.variables.Variable@6e0be858)
 CALL	label4 backend.variables.Variable@6e0be858 
 
@@ -158,13 +162,13 @@ Var/Arg ?v37 (backend.variables.Variable@5e481248)  : r6/r3
 Var/Arg ?v35 (backend.variables.Variable@66d3c617)  : r7/r3
 Var/Arg ?v39 (backend.variables.VInteger@2b193f2d)  : r9/r2
 Var/Arg ?v34 (backend.variables.Variable@266474c2)  : r4/r2
-Var/Arg ?v38 (backend.variables.Variable@355da254)  : r10/r3
+Var/Arg ?v38 (backend.variables.Variable@355da254)  : r10/r2
 Var/Arg ?v36 (backend.variables.Variable@6f94fa3e)  : r5/r2
 Var/Arg ?v33 (backend.variables.Variable@63947c6b)  : r8/-
 ***main : Arguments state***
 
 ***label2 : Variables state***
-Var/Arg ?v19 (backend.variables.Variable@6e0be858)  : r5/r3
+Var/Arg ?v19 (backend.variables.Variable@6e0be858)  : r5/r2
 Var/Arg ?v20 (backend.variables.Variable@5cad8086)  : r4/r2
 ***label2 : Arguments state***
 Var/Arg ?v18 (backend.variables.Variable@4b1210ee)  : -/r2
@@ -206,7 +210,24 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
+	STMFD sp!,{r2-r12}
+	MOV r2, r5
+	MOV r3, r6
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r7, r0
+	STMFD sp!,{r2-r12}
+	MOV r2, r4
+	MOV r3, r7
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r8, r0
 	LDR r9, =123
+	STMFD sp!,{r2-r12}
+	MOV r2, r9
+	BL _label8
+	LDMFD sp!, {r2-r12}
+	MOV r10, r0
 	MOV r0, r10
 	BL min_caml_print_int
 	BL min_caml_print_newline
@@ -225,10 +246,15 @@ _label2:
 	ADD fp, sp, #4
 
 	MOV r4, r2
-	STMFD sp!,{r4-r12}
-	MOV r3, r5
+	STMFD sp!,{r2-r12}
+	MOV r2, r4
+	BL _label3
+	LDMFD sp!, {r2-r12}
+	MOV r5, r0
+	STMFD sp!,{r2-r12}
+	MOV r2, r5
 	BL _label4
-	LDMFD sp!, {r4-r12}
+	LDMFD sp!, {r2-r12}
 
 	@FUNCTION EPILOGUE
 	SUB sp, fp, #4

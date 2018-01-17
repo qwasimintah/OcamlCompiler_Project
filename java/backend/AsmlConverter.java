@@ -758,6 +758,16 @@ public class AsmlConverter {
 
 							}
 
+							else if (op2 instanceof InstructionIF){
+
+								//generate_branch((InstructionIF)op2);
+
+							}
+
+							else if (op2 instanceof InstructionCALL){
+
+							}
+
 				}
 
 				
@@ -855,18 +865,32 @@ public class AsmlConverter {
 		        }
 
 		        else if (instr instanceof InstructionNOTHING){
-					System.out.println("NOTHING CLASS");
-					System.out.println(instr);
-					InstructionNOTHING i = (InstructionNOTHING)instr;
-					VInteger nothing = (VInteger)(i.x);
-					//System.out.println(nothing.getName().substring(0,5));
-					if(nothing.getName().substring(0,6).equalsIgnoreCase("tmpVar")){
-						text.append("\t").append(nothing.getValue()).append("\n");
-					}
+					/*System.out.println("NOTHING CLASS");
+					System.out.println(instr);*/
 
-					else {
-						text.append("\t").append(nothing.getName()).append("\n");
+					if(count == size){
+							InstructionNOTHING i = (InstructionNOTHING)instr;
+
+						
+							Variable nothing = (Variable)(i.x);
+							System.out.println(nothing.getName());
+
+							if(nothing.getName().length() > 6){
+								if(nothing.getName().substring(0,6).equalsIgnoreCase("tmpVar") && nothing instanceof VInteger){
+
+									text.append("\t").append(((VInteger)(nothing)).getValue()).append("\n");
+								}
+
+								else {
+									text.append("\t").append(nothing.getName()).append("\n");
+								}
+							}
+							else{
+								text.append("\t").append(get_parsable_name(nothing.getName())).append("\n");
+							}
+
 					}
+					
 				}
 		        else {
 		        	System.out.println("Instruction Not Supported");
