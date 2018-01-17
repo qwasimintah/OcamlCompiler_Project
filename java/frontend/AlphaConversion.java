@@ -4,6 +4,13 @@ import java.util.*;
 import exp.*;
 import ast.*;
 
+/**
+  * Implementation of the Alpha Conversion of an expression
+  *
+  *@author Florian Groguelin
+  *
+  */
+
 public class AlphaConversion implements ObjVisitor<Exp>{
   private HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
 
@@ -13,6 +20,12 @@ public class AlphaConversion implements ObjVisitor<Exp>{
 
   private HashSet<String> functions = new HashSet();
 
+  /**
+    *Visit the Add in the AST
+    *
+    *@param e an Add
+    *@return An Add
+  */
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
     return new_add;
@@ -43,7 +56,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     }
     while (!used_vars.empty()){
       String key = (String) used_vars.pop();
-      if (!functions.contains(key)){
+      if ((stack.size() > 1 && functions.contains(key))|| !functions.contains(key)){
         Stack tmp_stack = epsilon.get(key);
         if (!tmp_stack.empty() && !set.contains(key)) {
           tmp_stack.pop();
