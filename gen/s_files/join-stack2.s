@@ -1,13 +1,91 @@
------- AST ------
-(let rec f ?v0 = 123 in (let rec g ?v1 = 456 in (let x = (f ()) in (print_int ((if (x <= 0) then ((g ()) + x) else x) + x)))))
+@------ ARM code generation ------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
 
------- K-Normalization ------
-(let rec f ?v0 = 123 in (let rec g ?v1 = 456 in (let x = (let ?v2 = () in (f ?v2)) in (let ?v3 = (let ?v4 = (let ?v6 = x in (let ?v7 = 0 in (if (?v6 <= ?v7) then (let ?v8 = (let ?v10 = () in (g ?v10)) in (let ?v9 = x in (?v8 + ?v9))) else x))) in (let ?v5 = x in (?v4 + ?v5))) in (print_int ?v3)))))
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r4, r0
+	MOV r5, r4
+	LDR r6, =0
+	CMP r5 , r6
+	BLE label3
+	B label4
+label3:
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label2
+	LDMFD sp!, {r2-r12}
+	MOV r7, r0
+	MOV r8, r4
+	ADD r0, r7, r8
+	b cont1
+label4:
+	MOV r0, r4
+	b cont1
+cont1:
+	CMP r5 , r6
+	BLE label3
+	B label4
+label3:
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label2
+	LDMFD sp!, {r2-r12}
+	MOV r7, r0
+	MOV r8, r4
+	ADD r0, r7, r8
+	b cont2
+label4:
+	MOV r0, r4
+	b cont2
+cont2:
+	MOV r9, r0
+	MOV r10, r4
+	ADD r0, r9, r10
+	MOV r5, r0
+	MOV r0, r5
+	BL min_caml_print_int
+	BL min_caml_print_newline
 
------- AlphaConversion ------
-(let rec ?v11 ?v12 = 123 in (let rec ?v13 ?v14 = 456 in (let ?v15 = (let ?v16 = () in (?v11 ?v16)) in (let ?v17 = (let ?v18 = (let ?v19 = ?v15 in (let ?v20 = 0 in (if (?v19 <= ?v20) then (let ?v21 = (let ?v22 = () in (?v13 ?v22)) in (let ?v23 = ?v15 in (?v21 + ?v23))) else ?v15))) in (let ?v24 = ?v15 in (?v18 + ?v24))) in (print_int ?v17)))))
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
 
------- Reduction of Nested Let-Expressions ------
-(let rec ?v11 ?v12 = 123 in (let rec ?v13 ?v14 = 456 in (let ?v16 = () in (let ?v15 = (?v11 ?v16) in (let ?v19 = ?v15 in (let ?v20 = 0 in (let ?v18 = (if (?v19 <= ?v20) then (let ?v21 = (let ?v22 = () in (?v13 ?v22)) in (let ?v23 = ?v15 in (?v21 + ?v23))) else ?v15) in (let ?v24 = ?v15 in (let ?v17 = (?v18 + ?v24) in (print_int ?v17))))))))))
+	MOV r7, #1
+	swi 0
+_label1:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
 
------- ClosureConversion ------
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+_label2:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+

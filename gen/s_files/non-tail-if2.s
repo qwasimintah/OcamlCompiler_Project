@@ -1,13 +1,76 @@
------- AST ------
-(let rec f ?v0 = 12345 in (let y = (Array.create 10 3) in (let x = 67890 in (print_int (if (y.(0) = 3) then (((f ()) + y.(1)) + x) else 7)))))
+@------ ARM code generation ------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
 
------- K-Normalization ------
-(let rec f ?v0 = 12345 in (let y = (Array.create 10 3) in (let x = 67890 in (let ?v1 = (let ?v2 = y.(0) in (let ?v3 = 3 in (if (?v2 = ?v3) then (let ?v4 = (let ?v6 = (let ?v8 = () in (f ?v8)) in (let ?v7 = y.(1) in (?v6 + ?v7))) in (let ?v5 = x in (?v4 + ?v5))) else 7))) in (print_int ?v1)))))
+	LDR r4, =67890
+	LDR r5, =3
+	CMP  , r5
+	BEQ label2
+	B label3
+label2:
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r6, r0
+	ADD r0, r6, r7
+	MOV r8, r0
+	MOV r9, r4
+	ADD r0, r8, r9
+	b cont1
+label3:
+	LDR r0, =7
+	b cont1
+cont1:
+	CMP  , r5
+	BEQ label2
+	B label3
+label2:
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r6, r0
+	ADD r0, r6, r7
+	MOV r8, r0
+	MOV r9, r4
+	ADD r0, r8, r9
+	b cont2
+label3:
+	LDR r0, =7
+	b cont2
+cont2:
+	MOV r10, r0
+	MOV r0, r10
+	BL min_caml_print_int
+	BL min_caml_print_newline
 
------- AlphaConversion ------
-(let rec ?v9 ?v10 = 12345 in (let ?v11 = (Array.create 10 3) in (let ?v12 = 67890 in (let ?v13 = (let ?v14 = ?v11.(0) in (let ?v15 = 3 in (if (?v14 = ?v15) then (let ?v16 = (let ?v17 = (let ?v18 = () in (?v9 ?v18)) in (let ?v19 = ?v11.(1) in (?v17 + ?v19))) in (let ?v20 = ?v12 in (?v16 + ?v20))) else 7))) in (print_int ?v13)))))
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
 
------- Reduction of Nested Let-Expressions ------
-(let rec ?v9 ?v10 = 12345 in (let ?v11 = (Array.create 10 3) in (let ?v12 = 67890 in (let ?v14 = ?v11.(0) in (let ?v15 = 3 in (let ?v13 = (if (?v14 = ?v15) then (let ?v16 = (let ?v17 = (let ?v18 = () in (?v9 ?v18)) in (let ?v19 = ?v11.(1) in (?v17 + ?v19))) in (let ?v20 = ?v12 in (?v16 + ?v20))) else 7) in (print_int ?v13)))))))
+	MOV r7, #1
+	swi 0
+_label1:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
 
------- ClosureConversion ------
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+
