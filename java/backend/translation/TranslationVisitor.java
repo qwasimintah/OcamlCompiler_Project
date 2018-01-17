@@ -55,8 +55,6 @@ public String getLabel(String var) {
 }
 
 public Object visit(Exp e, Function func) {
-        // System.out.print(e.getClass());
-        // System.out.println("\twith lastResult = " + lastResult);
         if (e instanceof Add) {
                 lastResult = (InstructionADD)visit((Add)e, func);
                 return lastResult;
@@ -525,56 +523,25 @@ public TupleJerry visit(Tuple e, Function func){
         for (Exp e1 : e.es) {
                 Object value = (Object)visit(e1, func);
                 Variable var = new Variable(getTempVarName(), func);
-                // InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
-                // func.addInstruction(inst);
                 vars.add(var);
-                // var.spill(func);
-                // System.out.println(var.getOffset());
         }
         TupleJerry tuple = new TupleJerry(func, vars);
 
-        // tuple.show();
         return tuple;
 }
 
 public void visit(LetTuple e, Function func){
         System.out.println(e.getClass());
         ArrayList<Object> elements = new ArrayList<Object>();
-        // System.out.println(e.e2.getClass());
-        // TupleJerry values;
-        // try {
-        //         values = (TupleJerry)visit(e.e1, func);
-        // }
-        // catch (Exception exc) {
-        //         values = ((VTuple)visit(e.e1, func)).getValue();
-        // }
         Object values = visit(e.e1, func);
         for (Integer i = 0; i < e.ids.size(); i++) {
-                // Object value = visit(e.e2, func);
-                // if (value instanceof TupleJerry) {
-                //         value = (TupleJerry)value;
-                //         System.out.println(value);
-                // }
                 Variable var = new Variable(e.ids.get(i).id, func);
                 elements.add(var);
-                // InstructionASSIGN inst = new InstructionASSIGN(func, var, values.getElements().get(i));
-                // func.addInstruction(inst);
-                // func.addVariable(var);
         }
         TupleJerry tuple = new TupleJerry(func, elements);
         InstructionASSIGN inst = new InstructionASSIGN(func, tuple, values);
         func.addInstruction(inst);
         visit(e.e2, func);
-        // for (Id id : e.ids) {
-        //         System.out.println(id.id);
-        // }
-        // Integer i = 0;
-        // Integer size = e.ids.size();
-        //
-        // for (i = 0; i < size; i++) {
-        //       Type t = e.ts.get(0);
-        //       String name = e.ids.get(0).id;
-        // }
 }
 
 public Instruction visit(Unit e, Function func){

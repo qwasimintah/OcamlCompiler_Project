@@ -13,11 +13,11 @@ import backend.variables.*;
 import backend.registers.*;
 
 /**
-  * Implementation of a type-checker in java to translate Ocaml to ARM (normal)
-  *
-  *@author les_cons-pileurs
-  *
-  */
+ * Implementation of a type-checker in java to translate Ocaml to ARM (normal)
+ *
+ *@author les_cons-pileurs
+ *
+ */
 
 public class Main {
 static public void main(String argv[]) {
@@ -41,17 +41,17 @@ static public void main(String argv[]) {
 
                 // For TypeChecking :
 
-                 else if (ihm.typecheck_only) {
-                      Env predef = new Env();
-                      predef = new Env(predef.gen_predef());
-                      GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TUnit());
-                      // System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
-                      EquationSolver solved = new EquationSolver();
-                      solved.reduce(expression_typechecked);
-                      // System.out.println("transformed eq list : " + expression_typechecked.eqt_list);
-                      solved.solve(expression_typechecked);
-                 }
+                else if (ihm.typecheck_only) {
+                        Env predef = new Env();
+                        predef = new Env(predef.gen_predef());
+                        GenEquation expression_typechecked = new GenEquation();
+                        expression_typechecked.generate(predef, expression, new TUnit());
+                        // System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
+                        EquationSolver solved = new EquationSolver();
+                        solved.reduce(expression_typechecked);
+                        // System.out.println("transformed eq list : " + expression_typechecked.eqt_list);
+                        solved.solve(expression_typechecked);
+                }
 
                 // For KNormalization :
                 else if (ihm.knorm) {
@@ -181,12 +181,9 @@ static public void main(String argv[]) {
                         System.out.println("");
                         System.out.println("");
 
-                        // LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
-                        // LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
                         ArrayList<Register> registers = new ArrayList<Register>();
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
-                        // RegisterUtils.showRegisters(registers);
 
                         ArrayList<Function> flist = new ArrayList<Function>();
                         Function func = new Function("main", new ArrayList(), new ArrayList(), registers, parametersRegisters, flist);
@@ -195,9 +192,9 @@ static public void main(String argv[]) {
                         System.out.println("------ Translation to Jerry ------");
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
-                        for (Function f : flist) {
-                                f.show();
-                        }
+                        // for (Function f : flist) {
+                        //         f.show();
+                        // }
 
                         System.out.println("");
 
@@ -205,7 +202,7 @@ static public void main(String argv[]) {
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
                                 regalloc.LinearScan(f);
-                                f.showVariablesState();
+                                // f.showVariablesState();
                         }
                         System.out.println("");
 

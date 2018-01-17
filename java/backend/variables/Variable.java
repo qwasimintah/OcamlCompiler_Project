@@ -29,8 +29,8 @@ public String getName() {
 
 public void allocRegister() {
         try {
-                Register reg = func.registers.get(0);
-                func.registers.remove(0);
+                Register reg = this.func.registers.get(0);
+                this.func.registers.remove(0);
                 this.setRegister(reg);
                 return;
         }
@@ -42,9 +42,9 @@ public void allocRegister() {
 
 public void allocParametersRegister() {
         if (func.parametersRegisters.isEmpty()) {
-                spillParameter();
+                this.spillParameter();
         } else {
-                Register reg = func.parametersRegisters.get(0);
+                Register reg = this.func.parametersRegisters.get(0);
                 func.parametersRegisters.remove(0);
                 this.setParametersRegister(reg);
         }
@@ -137,7 +137,9 @@ public Interval getInterval() {
 }
 
 public void kill() {
-        func.registers.add(this.register);
+        if (this.register != null) {
+          func.registers.add(this.register);
+        }
 }
 
 public void killParameter() {

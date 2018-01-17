@@ -50,7 +50,7 @@ public static void VBA(Function func) {
 public static void LinearScan(Function func) {
         HashSet<Variable> variables = new HashSet<Variable>();
         List<Interval>intervals = new ArrayList<Interval>();
-        Integer i = 0;
+        int i = 0;
 
         for (Variable v : func.getArguments()) {
                 v.allocParametersRegister();
@@ -74,38 +74,18 @@ public static void LinearScan(Function func) {
                 i++;
         }
 
-        // for (Variable var : func.getVariables()) {
-        //         if (!variables.contains(var)) {
-        //                 var.getInterval().setStartingPoint(i);
-        //                 var.getInterval().setEndingPoint(i);
-        //                 variables.add(var);
-        //                 intervals.add(var.getInterval());
-        //         } else {
-        //                 var.getInterval().setEndingPoint(i);
-        //         }
-        //         i++;
-        // }
-
         Collections.sort(intervals);
 
-        for (Integer j = 0; j < i; j++) {
+        for (Integer j = 0; j <= i; j++) {
                 for (Interval interval : intervals) {
                         if (interval.getStartingPoint() == j) {
-                                try {
-                                        interval.getVariable().allocRegister();
-                                } catch (Exception e) {
-                                        System.out.println(e.getMessage());
-                                }
+                                interval.getVariable().allocRegister();
+                                interval.getVariable().getSaveState();
                         }
                         if (interval.getEndingPoint() == j) {
                                 interval.getVariable().kill();
                         }
                 }
         }
-        for (Interval interval : intervals) {
-                System.out.println(interval.getDescription());
-                interval.getVariable().getSaveState();
-        }
-
 }
 }
