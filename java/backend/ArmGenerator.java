@@ -1049,10 +1049,7 @@ public String get_label(String name){
 public String gen_temp_label(){
         label_counter++;
         return "cont" + String.valueOf(label_counter);
-
-
 }
-
 
 public String generate_if(InstructionIF inst){
 
@@ -1066,7 +1063,6 @@ public String generate_if(InstructionIF inst){
         String operand1="";
         String operand2 = "";
         String offset1 = "";
-
 
         if(exp instanceof BooleanEQ) {
                 Variable op1 = (Variable)(((BooleanEQ)exp).operands.get(0));
@@ -1142,11 +1138,16 @@ public String generate_if(InstructionIF inst){
 
 
                 //VARIABLE WITH REGISTER
-                if(((Variable)op1).getRegister()!=null &&   ((Variable)op1).getParametersRegister()==null && ((Variable)op1).getParametersOffset()==null) {
+                if(((Variable)op1).getRegister() != null &&
+                   ((Variable)op1).getParametersRegister() == null &&
+                   ((Variable)op1).getParametersOffset() == null) {
+
                         operand1=((Variable)op1).getRegister().getName();
                 }
                 //VARIABLE WITH OFFSET
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()!=null && ((Variable)op1).getParametersRegister()==null) {
+                else if (((Variable)op1).getRegister() == null &&
+                         ((Variable)op1).getOffset() != null &&
+                         ((Variable)op1).getParametersRegister() == null) {
 
                         operand1="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
@@ -1155,25 +1156,34 @@ public String generate_if(InstructionIF inst){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getOffset()==null && ((Variable)op1).getParametersRegister()!=null) {
+                else if (((Variable)op1).getRegister() == null &&
+                         ((Variable)op1).getOffset() == null &&
+                         ((Variable)op1).getParametersRegister() != null) {
 
                         operand1=((Variable)op1).getParametersRegister().getName();
                 }
 
 
                 // if its a paramter with an offset
-                else if(((Variable)op1).getRegister()==null && ((Variable)op1).getParametersOffset()!=null && ((Variable)op1).getOffset()==null ) {
+                else if (((Variable)op1).getRegister() == null &&
+                         ((Variable)op1).getParametersOffset() != null &&
+                         ((Variable)op1).getOffset() == null ) {
 
                         operand1="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r0 , ").append(operand1).append("\n");
                         operand1="r0";
                 }
 
-                if(((Variable)op2).getRegister()!=null &&   ((Variable)op2).getParametersRegister()==null && ((Variable)op2).getParametersOffset()==null) {
+                if (((Variable)op2).getRegister() != null &&
+                    ((Variable)op2).getParametersRegister() == null &&
+                    ((Variable)op2).getParametersOffset() == null) {
+
                         operand2=((Variable)op2).getRegister().getName();
                 }
                 // it its a local variable with an offset
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()==null) {
+                else if (((Variable)op2).getRegister() == null &&
+                         ((Variable)op2).getOffset() == null &&
+                         ((Variable)op2).getParametersRegister() == null) {
 
                         operand2="[fp ,#-" + ((Variable)op2).getOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -1182,21 +1192,22 @@ public String generate_if(InstructionIF inst){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+                else if (((Variable)op2).getRegister() == null &&
+                         ((Variable)op2).getOffset() == null &&
+                         ((Variable)op2).getParametersRegister() != null) {
 
                         operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
-
                 // if its a paramter with an offset
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset()!=null && ((Variable)op2).getOffset()==null ) {
+                else if (((Variable)op2).getRegister() == null &&
+                         ((Variable)op2).getParametersOffset() != null &&
+                         ((Variable)op2).getOffset() == null) {
 
                         operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
                         operand2="r1";
                 }
-
-
 
                 textSection.text.append("\tCMP ").append(operand1).append(" , ").append(operand2).append("\n");
                 textSection.text.append("\tBLE ").append(inst.branch_then.getName()).append("\n");
@@ -1207,18 +1218,13 @@ public String generate_if(InstructionIF inst){
         }
 
         else if (exp instanceof BooleanTrue) {
-
                 textSection.text.append("\tB ").append(inst.branch_then.getName()).append("\n");
-
-
-
         }
 
         else if(exp instanceof BooleanFalse) {
                 textSection.text.append("\tB ").append(inst.branch_else.getName()).append("\n");
         }
         else{
-
                 System.out.println("Something crazy happenned");
         }
 
@@ -1243,7 +1249,6 @@ public void generate_function_call(InstructionCALL instr) {
         List<Object> params = instr.getParams();
         String return_reg = instr.getReturn();
         String fname = get_label(instr.getFname());
-        // String fname = getNewLabel();
         int num_params=params.size();
 
         if(instr.getFname().equals("print_int")) {
@@ -1289,7 +1294,7 @@ public void generate_function_call(InstructionCALL instr) {
         stash_locals();
 
         //check if function has parameters
-        if(params.size()!=0) {
+        if(params.size() != 0) {
 
                 //get first parameter
                 Object par = params.get(0);
