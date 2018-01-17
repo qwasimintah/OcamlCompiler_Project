@@ -13,11 +13,8 @@ import backend.translation.*;
 
 public class RegisterAllocation {
 
-// private static LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
-// private static LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
 private static ArrayList<Register> registers = new ArrayList<Register>(9);
 private static ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
-
 
 public static void VBA(Function func) {
         for (Variable var : func.getVariables()) {
@@ -55,6 +52,10 @@ public static void LinearScan(Function func) {
         List<Interval>intervals = new ArrayList<Interval>();
         Integer i = 0;
 
+        // func.showVariables();
+        // System.out.println(">>>>>>>>>>>>>");
+        // func.showVariablesState();
+
         for (Variable v : func.getArguments()) {
                 v.allocParametersRegister();
         }
@@ -78,9 +79,9 @@ public static void LinearScan(Function func) {
         }
 
         Collections.sort(intervals);
-        // for (Interval interval : intervals) {
-        //         System.out.println(interval.getDescription());
-        // }
+        for (Interval interval : intervals) {
+                System.out.println(interval.getDescription());
+        }
 
 
         for (Integer j = 0; j < i; j++) {

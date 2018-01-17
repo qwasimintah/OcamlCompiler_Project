@@ -49,20 +49,20 @@ static public void main(String argv[]) {
 
                 // For TypeChecking :
 
-                 else if (ihm.typecheck_only) {
-                      LinkedList<EnvElem> env = new LinkedList<EnvElem>();
-                      env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
-                      env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
-                      Env predef = new Env(env);
-                      System.out.println(predef);
-                      GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
-                      System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
-                      EquationSolver solved = new EquationSolver();
-                      System.out.println(solved.reduce(expression_typechecked));
-                      System.out.println(expression_typechecked.eqt_list);
-                      solved.solve(expression_typechecked);
-                 }
+                else if (ihm.typecheck_only) {
+                        LinkedList<EnvElem> env = new LinkedList<EnvElem>();
+                        env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
+                        env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
+                        Env predef = new Env(env);
+                        System.out.println(predef);
+                        GenEquation expression_typechecked = new GenEquation();
+                        expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
+                        System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
+                        EquationSolver solved = new EquationSolver();
+                        System.out.println(solved.reduce(expression_typechecked));
+                        System.out.println(expression_typechecked.eqt_list);
+                        solved.solve(expression_typechecked);
+                }
 
                 // For KNormalization :
                 else if (ihm.knorm) {
