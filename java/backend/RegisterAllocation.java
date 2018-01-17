@@ -79,9 +79,9 @@ public static void LinearScan(Function func) {
         }
 
         Collections.sort(intervals);
-        for (Interval interval : intervals) {
-                System.out.println(interval.getDescription());
-        }
+        // for (Interval interval : intervals) {
+        //         System.out.println(interval.getDescription());
+        // }
 
 
         for (Integer j = 0; j < i; j++) {
