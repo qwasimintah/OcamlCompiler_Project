@@ -1,3 +1,11 @@
+/**
+  * Visitor going through the AST given in output of the frontend
+  * and translating it in Jerry
+  *
+  * @author Fabien Tribel
+  *
+  */
+
 package backend.translation;
 
 import java.io.*;
@@ -55,6 +63,15 @@ public String getLabel(String var) {
 }
 
 public Object visit(Exp e, Function func) {
+  /**
+    * Visits the given node e and add its translation to the the function func.
+    * Other visit methods do the adequate translation regarding the Expression's
+    * type
+    *
+    * @param e, func an Expression and a Function
+
+    * @return an Object which type depends of the Expression visited
+  */
         if (e instanceof Add) {
                 lastResult = (InstructionADD)visit((Add)e, func);
                 return lastResult;

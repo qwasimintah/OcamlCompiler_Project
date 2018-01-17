@@ -172,6 +172,7 @@ static public void main(String argv[]) {
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
                                 regalloc.LinearScan(f);
+                                regalloc.VBA(f);
                                 // f.showVariablesState();
                         }
 

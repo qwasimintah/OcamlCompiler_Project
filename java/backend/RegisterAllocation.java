@@ -1,3 +1,9 @@
+/**
+  * Implementation of the alpha conversion of an expression
+  *
+  *@author Fabien Tribel
+  *
+  */
 
 package backend;
 
@@ -17,6 +23,14 @@ private static ArrayList<Register> registers = new ArrayList<Register>(9);
 private static ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
 
 public static void VBA(Function func) {
+  /**
+    * Very Basic Allocation that put variables in free registers and spill them
+    * if all registers are taken
+    *
+    *@param func a Function object
+
+    *@return nothing
+  */
         for (Variable var : func.getVariables()) {
                 try {
                         if (var.getRegister() == null) {
@@ -48,6 +62,13 @@ public static void VBA(Function func) {
 // }
 
 public static void LinearScan(Function func) {
+  /**
+    * Linear Scan for register allocation
+    *
+    * @param func a Function object
+    *
+    * @return nothing
+  */
         HashSet<Variable> variables = new HashSet<Variable>();
         List<Interval>intervals = new ArrayList<Interval>();
         Integer i = 0;
