@@ -1,3 +1,13 @@
+/**
+  * Class Function, representing a block containing some instructions,
+  * possibly having arguments.
+  * This is the second biggest container in our Jerry structure after the List
+  * of Functions (flist).
+  *
+  * @author Fabien Tribel
+  *
+  */
+
 package backend.functions;
 
 import java.util.*;
@@ -20,6 +30,18 @@ public ArrayList<Function> flist;
 public Function(String name, List<Variable> arguments, List<Instruction> instructions,
                 ArrayList<Register> registers,
                 ArrayList<Register> parametersRegisters, ArrayList<Function> flist) {
+        /**
+          * Constructor of a Function object.
+          *
+          *@param name the Function's id
+          *@param arguments its list of arguments
+          *@param instructions the list of instructions the function consists in
+          *@param registers the list of available registers (for local variables)
+          *@param parametersRegisters the list of available registers (for arguments)
+          *@param flist the list of Functions it belongs to
+
+          *@return nothing
+        */
         this.name = name;
         this.instructions = instructions;
         this.arguments = arguments;

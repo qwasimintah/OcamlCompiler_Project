@@ -68,8 +68,9 @@ public Object visit(Exp e, Function func) {
     * Other visit methods do the adequate translation regarding the Expression's
     * type
     *
-    * @param e, func an Expression and a Function
-
+    * @param e an Expression
+    * @param func a Function
+    *
     * @return an Object which type depends of the Expression visited
   */
         if (e instanceof Add) {
