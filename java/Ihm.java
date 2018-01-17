@@ -38,16 +38,6 @@ public Ihm(String options[]){
         {
                 switch(options[i]) {
                 case "-o":
-                        if (i < options.length - 1) {
-                                given_output = true;
-                                if (i == options.length - 2){
-                                  input_file = options[options.length-3];
-                                }
-                                output_file = options[i+1];
-                        } else {
-                                System.out.println("If you specify -o, you must also specified the name of the output file.");
-                                System.exit(1);
-                        }
                         break;
                 case "-h": // TO DO : Pour faire propre, il faudrait jeter une exception :p
                         print_help();
@@ -91,7 +81,13 @@ public Ihm(String options[]){
                 case "--translation":
                         translation = true;
                 default:
+                    if (i > 1 && options[i-1].toString().equals("-o")){
+                        output_file = options[i];
+                        given_output = true;
+                    } else {
                         input_file = options[i];
+
+                    }
                 }
         }
 }
