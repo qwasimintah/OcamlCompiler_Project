@@ -1,7 +1,8 @@
 # README for the Compiler Project of the Cons Pileurs
 As requested, you have to be located in the root folder
 
-
+#Javadoc 
+- The Javadoc  directory is located on the java directory.
 
 # Previous important remarks
 - Our project is able to produce arm and able to produce asml. We have also created our own intermediate langage (Jerry), because we thought it would be more interesting to program own langage to figure out what were the constraint that we wouldn't have thought to otherwise.
