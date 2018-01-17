@@ -50,7 +50,7 @@ public static void VBA(Function func) {
 public static void LinearScan(Function func) {
         HashSet<Variable> variables = new HashSet<Variable>();
         List<Interval>intervals = new ArrayList<Interval>();
-        int i = 0;
+        Integer i = 0;
 
         for (Variable v : func.getArguments()) {
                 v.allocParametersRegister();
@@ -80,7 +80,6 @@ public static void LinearScan(Function func) {
                 for (Interval interval : intervals) {
                         if (interval.getStartingPoint() == j) {
                                 interval.getVariable().allocRegister();
-                                interval.getVariable().getSaveState();
                         }
                         if (interval.getEndingPoint() == j) {
                                 interval.getVariable().kill();
