@@ -1,2 +1,0 @@
------- Reduction of Nested Let-Expressions ------
-(if (not (x <= y)) then x else y)
