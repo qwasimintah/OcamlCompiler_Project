@@ -16,9 +16,9 @@ do
       cd ARM
       make
       cd -
-      cp ARM/${file::-3}.arm results/
+      cp ARM/output results/${file::-3}.arm
       pwd
-      rm ARM/*.arm ARM/*.s
+      rm ARM/output ARM/*.s
       qemu-arm results/${file::-3}.arm > results/${file::-3}.ourresult
       diff results/${file::-3}.result results/${file::-3}.ourresult > /dev/null
       if [ $? -eq 0 ]
