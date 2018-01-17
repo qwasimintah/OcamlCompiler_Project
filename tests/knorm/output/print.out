@@ -1,2 +1,0 @@
------- K-Normalization ------
-(let ?v1 = (print_int 123) in (let ?v0 = (print_int (- 456)) in (print_int (let ?v2 = 789 in (let ?v3 = 0 in (?v2 + ?v3))))))

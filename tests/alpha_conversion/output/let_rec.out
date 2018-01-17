@@ -1,2 +1,0 @@
------- AlphaConversion ------
-(let rec ?v0 ?v1 = (x + 1) in x)

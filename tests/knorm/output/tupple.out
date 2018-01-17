@@ -1,2 +1,2 @@
 ------ K-Normalization ------
-(1, 2, (5 +. 4), (let x = (let y = 5 in (y + 2)) in (x - 3)))
+(1, 2, (let ?v0 = 5 in (let ?v1 = 4 in (?v0 + ?v1))), (let x = (let y = 5 in (let ?v2 = y in (let ?v3 = 2 in (?v2 + ?v3)))) in (let ?v4 = x in (let ?v5 = 3 in (?v4 - ?v5)))))

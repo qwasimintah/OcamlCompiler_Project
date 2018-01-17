@@ -1,2 +1,0 @@
------- AlphaConversion ------
-(1, 2, (5 + 4), (let ?v0 = (let ?v1 = 5 in (?v1 + 2)) in (?v0 - 3)))
