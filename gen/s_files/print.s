@@ -15,36 +15,33 @@
 
 ------ Translation to Jerry ------
 ******** main *********
-NOTHING	tmpVar1 (backend.variables.VInteger@1d44bcfa)
-ASSIGN	?v8 (backend.variables.VInteger@5cad8086) 123
-NOTHING	?v8 (backend.variables.VInteger@5cad8086)
-ASSIGN	?v7 (backend.variables.Variable@6e0be858) backend.instructions.InstructionCALL@266474c2
->CALL	print_int backend.variables.VInteger@5cad8086 
-NOTHING	tmpVar2 (backend.variables.VInteger@6f94fa3e)
-ASSIGN	?v10 (backend.variables.VInteger@61bbe9ba) -456
-NOTHING	?v10 (backend.variables.VInteger@61bbe9ba)
-ASSIGN	?v9 (backend.variables.Variable@610455d6) backend.instructions.InstructionCALL@5e481248
->CALL	print_int backend.variables.VInteger@61bbe9ba 
-NOTHING	tmpVar3 (backend.variables.VInteger@66d3c617)
-ASSIGN	?v12 (backend.variables.VInteger@511d50c0) 789
-NOTHING	tmpVar4 (backend.variables.VInteger@63947c6b)
-ASSIGN	?v13 (backend.variables.VInteger@60e53b93) 0
-ADD	backend.variables.VInteger@511d50c0 backend.variables.VInteger@60e53b93
-ASSIGN	?v11 (backend.variables.VInteger@5e2de80c) backend.instructions.InstructionADD@2b193f2d
->ADD	backend.variables.VInteger@511d50c0 backend.variables.VInteger@60e53b93
-NOTHING	?v11 (backend.variables.VInteger@5e2de80c)
-CALL	print_int backend.variables.VInteger@5e2de80c 
+NOTHING	tmpVar1 (backend.variables.VInteger@6d6f6e28)
+ASSIGN	?v8 (backend.variables.VInteger@1b6d3586) 123
+NOTHING	?v8 (backend.variables.VInteger@1b6d3586)
+ASSIGN	?v7 (backend.variables.Variable@4554617c) backend.instructions.InstructionCALL@135fbaa4
+NOTHING	tmpVar2 (backend.variables.VInteger@45ee12a7)
+ASSIGN	?v10 (backend.variables.VInteger@74a14482) -456
+NOTHING	?v10 (backend.variables.VInteger@74a14482)
+ASSIGN	?v9 (backend.variables.Variable@1540e19d) backend.instructions.InstructionCALL@330bedb4
+NOTHING	tmpVar3 (backend.variables.VInteger@2503dbd3)
+ASSIGN	?v12 (backend.variables.VInteger@677327b6) 789
+NOTHING	tmpVar4 (backend.variables.VInteger@4b67cf4d)
+ASSIGN	?v13 (backend.variables.VInteger@14ae5a5) 0
+ADD	backend.variables.VInteger@677327b6 backend.variables.VInteger@14ae5a5
+ASSIGN	?v11 (backend.variables.VInteger@7f31245a) backend.instructions.InstructionADD@7ea987ac
+NOTHING	?v11 (backend.variables.VInteger@7f31245a)
+CALL	print_int backend.variables.VInteger@7f31245a 
 
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v10 (backend.variables.VInteger@61bbe9ba)  : r6/r2
-Var/Arg ?v11 (backend.variables.VInteger@5e2de80c)  : r10/r2
-Var/Arg ?v9 (backend.variables.Variable@610455d6)  : r7/-
-Var/Arg ?v7 (backend.variables.Variable@6e0be858)  : r5/-
-Var/Arg ?v13 (backend.variables.VInteger@60e53b93)  : r9/-
-Var/Arg ?v8 (backend.variables.VInteger@5cad8086)  : r4/r2
-Var/Arg ?v12 (backend.variables.VInteger@511d50c0)  : r8/-
+Var/Arg ?v10 (backend.variables.VInteger@74a14482)  : r6/r3
+Var/Arg ?v12 (backend.variables.VInteger@677327b6)  : r8/-
+Var/Arg ?v7 (backend.variables.Variable@4554617c)  : r5/-
+Var/Arg ?v8 (backend.variables.VInteger@1b6d3586)  : r4/r2
+Var/Arg ?v11 (backend.variables.VInteger@7f31245a)  : r10/r2
+Var/Arg ?v9 (backend.variables.Variable@1540e19d)  : r7/-
+Var/Arg ?v13 (backend.variables.VInteger@14ae5a5)  : r9/-
 ***main : Arguments state***
 
 
@@ -62,15 +59,7 @@ _main:
 	MOV fp, sp
 
 	LDR r4, =123
-	MOV r0, r4
-	BL min_caml_print_int
-	BL min_caml_print_newline
-	MOV r5, r0
 	LDR r6, =-456
-	MOV r0, r6
-	BL min_caml_print_int
-	BL min_caml_print_newline
-	MOV r7, r0
 	LDR r8, =789
 	LDR r9, =0
 	ADD r0, r8, r9

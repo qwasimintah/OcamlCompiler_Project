@@ -15,14 +15,14 @@
 
 ------ Translation to Jerry ------
 ******** main *********
-NOTHING	tmpVar1 (backend.variables.VInteger@6e0be858)
-ASSIGN	?v0 (backend.variables.VInteger@5cad8086) 1
-NOTHING	tmpVar2 (backend.variables.VInteger@61bbe9ba)
+NOTHING	tmpVar1 (backend.variables.VInteger@4554617c)
+ASSIGN	?v0 (backend.variables.VInteger@1b6d3586) 1
+NOTHING	tmpVar2 (backend.variables.VInteger@74a14482)
 
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v0 (backend.variables.VInteger@5cad8086)  : r4/-
+Var/Arg ?v0 (backend.variables.VInteger@1b6d3586)  : r4/-
 ***main : Arguments state***
 
 

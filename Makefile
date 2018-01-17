@@ -9,6 +9,9 @@ test:
 teacher_test:
 	./scripts/global_test.sh
 
+typechecking:
+	./scripts/typecheking_test.sh
+
 clean:
 	$(MAKE) -C ./java clean
 

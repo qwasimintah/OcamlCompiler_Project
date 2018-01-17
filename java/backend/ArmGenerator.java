@@ -751,14 +751,16 @@ public void  generate_assign(InstructionASSIGN instr){
                 }
 
                 // if its a parameter with a register
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getOffset()==null && ((Variable)op2).getParametersRegister()!=null) {
+                else if (((Variable)op2).getOffset() == null &&
+                         ((Variable)op2).getParametersRegister() != null) {
 
                         operand2=((Variable)op2).getParametersRegister().getName();
                 }
 
 
                 // if its a parameter with an offset
-                else if(((Variable)op2).getRegister()==null && ((Variable)op2).getParametersOffset() != null && ((Variable)op2).getOffset()==null ) {
+                else if (((Variable)op2).getParametersOffset() != null &&
+                         ((Variable)op2).getOffset() == null) {
 
                         operand2="[fp ,#" + ((Variable)op2).getParametersOffset().toString()+"]";
                         textSection.text.append("\tLDR r1 , ").append(operand2).append("\n");
@@ -1406,9 +1408,14 @@ public void push_params(List<Object> params){
                 }
 
 
-
-            
-
+        textSection.text.append("\tBL ").append(fname).append("\n");
+        int diff = num_params - 2;
+        if(diff>=1) {
+                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
+        }
+        restore_locals();
+        if(num_params >= available_reg_param) {
+                //restore_parameters();
 
         }
 
