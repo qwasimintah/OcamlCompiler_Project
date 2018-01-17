@@ -647,7 +647,6 @@ public class AsmlConverter {
 				}
 
 		        else if (instr instanceof InstructionIF){
-		        		System.out.println("This should fire");
 		                InstructionIF inst = (InstructionIF) instr;
 
 		                generate_if(inst);
@@ -830,6 +829,17 @@ public class AsmlConverter {
 
                 System.out.println("Something crazy happenned");
         }
+
+
+// generate branch then 
+
+        generate_branch(then_branch,"");
+
+        // generate branch else 
+
+        generate_branch(else_branch, "else");
+
+
 
 
 
