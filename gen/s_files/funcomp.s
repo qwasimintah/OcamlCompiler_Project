@@ -101,100 +101,96 @@ closure numbers: 5
 ------ Translation to Jerry ------
 ******** main *********
 NOTHING	null
-ASSIGN	?v34 (backend.variables.Variable@266474c2) null
+ASSIGN	?v34 (backend.variables.Variable@135fbaa4) null
 NOTHING	null
-ASSIGN	?v36 (backend.variables.Variable@6f94fa3e) null
+ASSIGN	?v36 (backend.variables.Variable@45ee12a7) null
 NOTHING	null
-ASSIGN	?v37 (backend.variables.Variable@5e481248) null
-NOTHING	?v36 (backend.variables.Variable@6f94fa3e)
-NOTHING	?v37 (backend.variables.Variable@5e481248)
-ASSIGN	?v35 (backend.variables.Variable@66d3c617) backend.instructions.InstructionCALL@4dc63996
->CALL	label1 backend.variables.Variable@6f94fa3e backend.variables.Variable@5e481248 
-NOTHING	?v34 (backend.variables.Variable@266474c2)
-NOTHING	?v35 (backend.variables.Variable@66d3c617)
-ASSIGN	?v33 (backend.variables.Variable@63947c6b) backend.instructions.InstructionCALL@d716361
->CALL	label1 backend.variables.Variable@266474c2 backend.variables.Variable@66d3c617 
-NOTHING	tmpVar3 (backend.variables.VInteger@6ff3c5b5)
-ASSIGN	?v39 (backend.variables.VInteger@2b193f2d) 123
-NOTHING	?v39 (backend.variables.VInteger@2b193f2d)
-ASSIGN	?v38 (backend.variables.Variable@355da254) backend.instructions.InstructionCALL@3764951d
->CALL	label8 backend.variables.VInteger@2b193f2d 
-NOTHING	?v38 (backend.variables.Variable@355da254)
-CALL	print_int backend.variables.Variable@355da254 
+ASSIGN	?v37 (backend.variables.Variable@330bedb4) null
+NOTHING	?v36 (backend.variables.Variable@45ee12a7)
+NOTHING	?v37 (backend.variables.Variable@330bedb4)
+ASSIGN	?v35 (backend.variables.Variable@2503dbd3) backend.instructions.InstructionCALL@29453f44
+NOTHING	?v34 (backend.variables.Variable@135fbaa4)
+NOTHING	?v35 (backend.variables.Variable@2503dbd3)
+ASSIGN	?v33 (backend.variables.Variable@4b67cf4d) backend.instructions.InstructionCALL@5cad8086
+NOTHING	tmpVar3 (backend.variables.VInteger@6e0be858)
+ASSIGN	?v39 (backend.variables.VInteger@7ea987ac) 123
+NOTHING	?v39 (backend.variables.VInteger@7ea987ac)
+ASSIGN	?v38 (backend.variables.Variable@12a3a380) backend.instructions.InstructionCALL@61bbe9ba
+NOTHING	?v38 (backend.variables.Variable@12a3a380)
+CALL	print_int backend.variables.Variable@12a3a380 
 
 ******** label2 *********
-NOTHING	?v18 (backend.variables.Variable@4b1210ee)
-ASSIGN	?v20 (backend.variables.Variable@5cad8086) backend.variables.Variable@4b1210ee
-NOTHING	?v20 (backend.variables.Variable@5cad8086)
-ASSIGN	?v19 (backend.variables.Variable@6e0be858) backend.instructions.InstructionCALL@4d7e1886
->CALL	label3 backend.variables.Variable@5cad8086 
-NOTHING	?v19 (backend.variables.Variable@6e0be858)
-CALL	label4 backend.variables.Variable@6e0be858 
+NOTHING	?v18 (backend.variables.Variable@610455d6)
+ASSIGN	?v20 (backend.variables.Variable@1b6d3586) backend.variables.Variable@610455d6
+NOTHING	?v20 (backend.variables.Variable@1b6d3586)
+ASSIGN	?v19 (backend.variables.Variable@4554617c) backend.instructions.InstructionCALL@511d50c0
+NOTHING	?v19 (backend.variables.Variable@4554617c)
+CALL	label4 backend.variables.Variable@4554617c 
 
 ******** label1 *********
 NOTHING	null
 
 ******** label5 *********
-NOTHING	?v22 (backend.variables.Variable@3cd1a2f1)
-ASSIGN	?v23 (backend.variables.Variable@61bbe9ba) backend.variables.Variable@3cd1a2f1
-NOTHING	?v22 (backend.variables.Variable@3cd1a2f1)
-ASSIGN	?v24 (backend.variables.Variable@610455d6) backend.variables.Variable@3cd1a2f1
-ADD	backend.variables.Variable@61bbe9ba backend.variables.Variable@610455d6
+NOTHING	?v22 (backend.variables.Variable@60e53b93)
+ASSIGN	?v23 (backend.variables.Variable@74a14482) backend.variables.Variable@60e53b93
+NOTHING	?v22 (backend.variables.Variable@60e53b93)
+ASSIGN	?v24 (backend.variables.Variable@1540e19d) backend.variables.Variable@60e53b93
+ADD	backend.variables.Variable@74a14482 backend.variables.Variable@1540e19d
 
 ******** label6 *********
-NOTHING	?v26 (backend.variables.Variable@2f0e140b)
-ASSIGN	?v27 (backend.variables.Variable@511d50c0) backend.variables.Variable@2f0e140b
-NOTHING	tmpVar1 (backend.variables.VInteger@7440e464)
-ASSIGN	?v28 (backend.variables.VInteger@60e53b93) 1
-ADD	backend.variables.Variable@511d50c0 backend.variables.VInteger@60e53b93
+NOTHING	?v26 (backend.variables.Variable@5e2de80c)
+ASSIGN	?v27 (backend.variables.Variable@677327b6) backend.variables.Variable@5e2de80c
+NOTHING	tmpVar1 (backend.variables.VInteger@1d44bcfa)
+ASSIGN	?v28 (backend.variables.VInteger@14ae5a5) 1
+ADD	backend.variables.Variable@677327b6 backend.variables.VInteger@14ae5a5
 
 ******** label7 *********
-NOTHING	?v30 (backend.variables.Variable@49476842)
-ASSIGN	?v31 (backend.variables.Variable@5e2de80c) backend.variables.Variable@49476842
-NOTHING	tmpVar2 (backend.variables.VInteger@78308db1)
-ASSIGN	?v32 (backend.variables.VInteger@1d44bcfa) 1
-SUB	backend.variables.Variable@5e2de80c backend.variables.VInteger@1d44bcfa
+NOTHING	?v30 (backend.variables.Variable@266474c2)
+ASSIGN	?v31 (backend.variables.Variable@7f31245a) backend.variables.Variable@266474c2
+NOTHING	tmpVar2 (backend.variables.VInteger@6f94fa3e)
+ASSIGN	?v32 (backend.variables.VInteger@6d6f6e28) 1
+SUB	backend.variables.Variable@7f31245a backend.variables.VInteger@6d6f6e28
 
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v37 (backend.variables.Variable@5e481248)  : r6/r3
-Var/Arg ?v35 (backend.variables.Variable@66d3c617)  : r7/r3
-Var/Arg ?v39 (backend.variables.VInteger@2b193f2d)  : r9/r2
-Var/Arg ?v34 (backend.variables.Variable@266474c2)  : r4/r2
-Var/Arg ?v38 (backend.variables.Variable@355da254)  : r10/r2
-Var/Arg ?v36 (backend.variables.Variable@6f94fa3e)  : r5/r2
-Var/Arg ?v33 (backend.variables.Variable@63947c6b)  : r8/-
+Var/Arg ?v35 (backend.variables.Variable@2503dbd3)  : r7/r3
+Var/Arg ?v38 (backend.variables.Variable@12a3a380)  : r10/r3
+Var/Arg ?v39 (backend.variables.VInteger@7ea987ac)  : r9/r2
+Var/Arg ?v36 (backend.variables.Variable@45ee12a7)  : r5/r2
+Var/Arg ?v33 (backend.variables.Variable@4b67cf4d)  : r8/-
+Var/Arg ?v34 (backend.variables.Variable@135fbaa4)  : r4/r2
+Var/Arg ?v37 (backend.variables.Variable@330bedb4)  : r6/r3
 ***main : Arguments state***
 
 ***label2 : Variables state***
-Var/Arg ?v19 (backend.variables.Variable@6e0be858)  : r5/r2
-Var/Arg ?v20 (backend.variables.Variable@5cad8086)  : r4/r2
+Var/Arg ?v19 (backend.variables.Variable@4554617c)  : r5/r3
+Var/Arg ?v20 (backend.variables.Variable@1b6d3586)  : r4/r2
 ***label2 : Arguments state***
-Var/Arg ?v18 (backend.variables.Variable@4b1210ee)  : -/r2
+Var/Arg ?v18 (backend.variables.Variable@610455d6)  : -/r2
 
 ***label1 : Variables state***
 ***label1 : Arguments state***
-Var/Arg ?v15 (backend.variables.Variable@27c170f0)  : -/r2
-Var/Arg ?v16 (backend.variables.Variable@5451c3a8)  : -/r3
+Var/Arg ?v15 (backend.variables.Variable@5e481248)  : -/r2
+Var/Arg ?v16 (backend.variables.Variable@66d3c617)  : -/r3
 
 ***label5 : Variables state***
-Var/Arg ?v23 (backend.variables.Variable@61bbe9ba)  : r4/-
-Var/Arg ?v24 (backend.variables.Variable@610455d6)  : r5/-
+Var/Arg ?v23 (backend.variables.Variable@74a14482)  : r4/-
+Var/Arg ?v24 (backend.variables.Variable@1540e19d)  : r5/-
 ***label5 : Arguments state***
-Var/Arg ?v22 (backend.variables.Variable@3cd1a2f1)  : -/r2
+Var/Arg ?v22 (backend.variables.Variable@60e53b93)  : -/r2
 
 ***label6 : Variables state***
-Var/Arg ?v28 (backend.variables.VInteger@60e53b93)  : r5/-
-Var/Arg ?v27 (backend.variables.Variable@511d50c0)  : r4/-
+Var/Arg ?v27 (backend.variables.Variable@677327b6)  : r4/-
+Var/Arg ?v28 (backend.variables.VInteger@14ae5a5)  : r5/-
 ***label6 : Arguments state***
-Var/Arg ?v26 (backend.variables.Variable@2f0e140b)  : -/r2
+Var/Arg ?v26 (backend.variables.Variable@5e2de80c)  : -/r2
 
 ***label7 : Variables state***
-Var/Arg ?v31 (backend.variables.Variable@5e2de80c)  : r4/-
-Var/Arg ?v32 (backend.variables.VInteger@1d44bcfa)  : r5/-
+Var/Arg ?v32 (backend.variables.VInteger@6d6f6e28)  : r5/-
+Var/Arg ?v31 (backend.variables.Variable@7f31245a)  : r4/-
 ***label7 : Arguments state***
-Var/Arg ?v30 (backend.variables.Variable@49476842)  : -/r2
+Var/Arg ?v30 (backend.variables.Variable@266474c2)  : -/r2
 
 
 ------ ARM code generation ------
@@ -210,24 +206,7 @@ _main:
 	STR fp, [sp]
 	MOV fp, sp
 
-	STMFD sp!,{r2-r12}
-	MOV r2, r5
-	MOV r3, r6
-	BL _label1
-	LDMFD sp!, {r2-r12}
-	MOV r7, r0
-	STMFD sp!,{r2-r12}
-	MOV r2, r4
-	MOV r3, r7
-	BL _label1
-	LDMFD sp!, {r2-r12}
-	MOV r8, r0
 	LDR r9, =123
-	STMFD sp!,{r2-r12}
-	MOV r2, r9
-	BL _label8
-	LDMFD sp!, {r2-r12}
-	MOV r10, r0
 	MOV r0, r10
 	BL min_caml_print_int
 	BL min_caml_print_newline
@@ -246,15 +225,10 @@ _label2:
 	ADD fp, sp, #4
 
 	MOV r4, r2
-	STMFD sp!,{r2-r12}
-	MOV r2, r4
-	BL _label3
-	LDMFD sp!, {r2-r12}
-	MOV r5, r0
-	STMFD sp!,{r2-r12}
-	MOV r2, r5
+	STMFD sp!,{r4-r12}
+	MOV r3, r5
 	BL _label4
-	LDMFD sp!, {r2-r12}
+	LDMFD sp!, {r4-r12}
 
 	@FUNCTION EPILOGUE
 	SUB sp, fp, #4

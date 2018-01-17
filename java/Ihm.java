@@ -10,7 +10,7 @@ public Ihm(String options[]){
         if (options.length == 0) {
                 print_help();
         }
-        input_file = options[options.length-1];
+        input_file =
         output_file = "";
         given_output =
           typecheck_only =
@@ -84,7 +84,7 @@ public Ihm(String options[]){
                 case "--translation":
                         translation = true;
                 default:
-                        break;
+                        input_file = options[i];
                 }
         }
 }

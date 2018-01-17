@@ -1,2 +1,2 @@
 ------ AlphaConversion ------
-(if (x <= y) then x else y)
+(let ?v0 = 1 in (let ?v1 = 2 in (if (?v0 <= ?v1) then ?v0 else ?v1)))

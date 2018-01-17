@@ -25,8 +25,6 @@ static public void main(String argv[]) {
                 // }
                 Parser p = new Parser(new Lexer(new FileReader(ihm.input_file)));
                 Exp expression = (Exp) p.parse().value;
-                //System.out.println(expression);
-                // assert (expression != null);
 
                 if (ihm.given_output) {
                         new Outgesture(ihm.output_file);
@@ -41,12 +39,6 @@ static public void main(String argv[]) {
                         }
                 }
 
-
-                /* For evaluation :
-                   System.out.println("------ Evaluation ------");
-                   System.out.println("Ceci est le résultat : " + expression.accept(new EvaluationVisitor()));
-                 */
-
                 // For TypeChecking :
 
                  else if (ihm.typecheck_only) {
@@ -54,13 +46,12 @@ static public void main(String argv[]) {
                       env.add(new EnvElem(new Id("print_string"), new TFun(new TString(), new TUnit())));
                       env.add(new EnvElem(new Id("print_int"), new TFun(new TInt(), new TUnit())));
                       Env predef = new Env(env);
-                      System.out.println(predef);
                       GenEquation expression_typechecked = new GenEquation();
-                      expression_typechecked.generate(predef, expression, new TUnit()); // A CHANGER
-                      System.out.println("initial eqt list : \n" + expression_typechecked.eqt_list);
+                      expression_typechecked.generate(predef, expression, new TUnit());
+                      // System.out.println("initial eqt list : " + expression_typechecked.eqt_list);
                       EquationSolver solved = new EquationSolver();
-                      System.out.println(solved.reduce(expression_typechecked));
-                      System.out.println(expression_typechecked.eqt_list);
+                      solved.reduce(expression_typechecked);
+                      // System.out.println("transformed eq list : " + expression_typechecked.eqt_list);
                       solved.solve(expression_typechecked);
                  }
 

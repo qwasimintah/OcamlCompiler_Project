@@ -23,17 +23,16 @@ closure numbers: 1
 ------ Translation to Jerry ------
 ******** main *********
 NOTHING	null
-ASSIGN	?v12 (backend.variables.Variable@2f0e140b) backend.instructions.InstructionCALL@7440e464
->CALL	label4 null 
-NOTHING	?v12 (backend.variables.Variable@2f0e140b)
-CALL	print_int backend.variables.Variable@2f0e140b 
+ASSIGN	?v12 (backend.variables.Variable@5e2de80c) backend.instructions.InstructionCALL@1d44bcfa
+NOTHING	?v12 (backend.variables.Variable@5e2de80c)
+CALL	print_int backend.variables.Variable@5e2de80c 
 
 ******** label1 *********
-NOTHING	tmpVar1 (backend.variables.VInteger@49476842)
-ASSIGN	?v8 (backend.variables.VInteger@4d7e1886) 0
-NOTHING	?v7 (backend.variables.Variable@78308db1)
-ASSIGN	?v9 (backend.variables.Variable@3cd1a2f1) backend.variables.Variable@78308db1
-IF	backend.variables.VBoolean@27c170f0 THEN label2 ELSE label3
+NOTHING	tmpVar1 (backend.variables.VInteger@266474c2)
+ASSIGN	?v8 (backend.variables.VInteger@511d50c0) 0
+NOTHING	?v7 (backend.variables.Variable@6f94fa3e)
+ASSIGN	?v9 (backend.variables.Variable@60e53b93) backend.variables.Variable@6f94fa3e
+IF	backend.variables.VBoolean@5e481248 THEN label2 ELSE label3
 
 ******** label2 *********
 
@@ -43,16 +42,16 @@ IF	backend.variables.VBoolean@27c170f0 THEN label2 ELSE label3
 
 ------ Register Allocation ------
 ***main : Variables state***
-Var/Arg ?v12 (backend.variables.Variable@2f0e140b)  : r4/r2
+Var/Arg ?v12 (backend.variables.Variable@5e2de80c)  : r4/r2
 ***main : Arguments state***
 
 ***label1 : Variables state***
-Var/Arg ?v9 (backend.variables.Variable@3cd1a2f1)  : r5/-
-Var/Arg ?v8 (backend.variables.VInteger@4d7e1886)  : r4/-
+Var/Arg ?v9 (backend.variables.Variable@60e53b93)  : r5/-
+Var/Arg ?v8 (backend.variables.VInteger@511d50c0)  : r4/-
 ***label1 : Arguments state***
-Var/Arg ?v5 (backend.variables.Variable@5451c3a8)  : -/r2
-Var/Arg ?v6 (backend.variables.Variable@2626b418)  : -/r3
-Var/Arg ?v7 (backend.variables.Variable@78308db1)  : -/[fp + 4]
+Var/Arg ?v5 (backend.variables.Variable@66d3c617)  : -/r2
+Var/Arg ?v6 (backend.variables.Variable@63947c6b)  : -/r3
+Var/Arg ?v7 (backend.variables.Variable@6f94fa3e)  : -/[fp + 4]
 
 
 ------ ARM code generation ------

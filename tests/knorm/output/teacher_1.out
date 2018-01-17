@@ -1,2 +1,2 @@
 ------ K-Normalization ------
-(print_int 42)
+(let ?v0 = 42 in (print_int ?v0))
