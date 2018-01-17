@@ -55,8 +55,8 @@ public String getLabel(String var) {
 }
 
 public Object visit(Exp e, Function func) {
-        System.out.print(e.getClass());
-        System.out.println("\twith lastResult = " + lastResult);
+        // System.out.print(e.getClass());
+        // System.out.println("\twith lastResult = " + lastResult);
         if (e instanceof Add) {
                 lastResult = (InstructionADD)visit((Add)e, func);
                 return lastResult;
@@ -252,9 +252,6 @@ public Instruction visit(Let e, Function func){
         }
         else if (e.e1 instanceof App) {
                 InstructionCALL value = (InstructionCALL) visit(e.e1, func);
-                // if (func.getInstructions().contains(value)) {
-                //         func.getInstructions().remove(value);
-                // }
                 Variable var = new Variable(e.id.id, func);
                 inst = new InstructionASSIGN(func, var, value);
                 func.getVariables().add(var);
