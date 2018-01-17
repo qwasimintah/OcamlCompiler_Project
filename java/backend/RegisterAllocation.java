@@ -13,11 +13,8 @@ import backend.translation.*;
 
 public class RegisterAllocation {
 
-// private static LinkedHashMap<Register, Variable> registers = new LinkedHashMap<Register, Variable>(9);
-// private static LinkedHashMap<Register, Variable> parametersRegisters = new LinkedHashMap<Register, Variable>(4);
 private static ArrayList<Register> registers = new ArrayList<Register>(9);
 private static ArrayList<Register> parametersRegisters = new ArrayList<Register>(4);
-
 
 public static void VBA(Function func) {
         for (Variable var : func.getVariables()) {
@@ -59,29 +56,19 @@ public static void LinearScan(Function func) {
                 v.allocParametersRegister();
         }
 
-        for (Instruction inst : func.getInstructions()) {
-                try {
-                        for (Object op : inst.getOperands()) {
-                                Variable var = (Variable) op;
-                                if (!variables.contains(var)) {
-                                        var.getInterval().setStartingPoint(i);
-                                        var.getInterval().setEndingPoint(i);
-                                        variables.add(var);
-                                        intervals.add(var.getInterval());
-                                } else {
-                                        var.getInterval().setEndingPoint(i);
-                                }
-
-                        }
-                } catch (Exception e) {;}
+        for (Variable var : func.getVariables()) {
+                if (!variables.contains(var)) {
+                        var.getInterval().setStartingPoint(i);
+                        var.getInterval().setEndingPoint(i);
+                        variables.add(var);
+                        intervals.add(var.getInterval());
+                } else {
+                        var.getInterval().setEndingPoint(i);
+                }
                 i++;
         }
 
         Collections.sort(intervals);
-        // for (Interval interval : intervals) {
-        //         System.out.println(interval.getDescription());
-        // }
-
 
         for (Integer j = 0; j < i; j++) {
                 for (Interval interval : intervals) {
@@ -97,5 +84,10 @@ public static void LinearScan(Function func) {
                         }
                 }
         }
+        // for (Interval interval : intervals) {
+        //         System.out.println(interval.getDescription());
+        //         interval.getVariable().getSaveState();
+        // }
+
 }
 }

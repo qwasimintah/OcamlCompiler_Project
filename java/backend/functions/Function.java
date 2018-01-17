@@ -13,7 +13,6 @@ private List<Variable> arguments;
 private Integer spillOffset = 4;
 private Integer spillOffsetParameters = 4;
 private HashSet<Variable> variables = new HashSet<Variable>();
-// private ArrayList<Object> parameters = new ArrayList<Object>();
 public ArrayList<Register> registers;
 public ArrayList<Register> parametersRegisters;
 public ArrayList<Function> flist;
@@ -89,10 +88,6 @@ public void addVariable(Variable var) {
 public void setVariables (HashSet<Variable> locals){
         variables = locals;
 }
-
-// public void setParameters(ArrayList<Object> params){
-//         parameters = params;
-// }
 
 public void show() {
         System.out.println("******** " + this.getName() + " *********");

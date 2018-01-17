@@ -1,2 +1,0 @@
------- AlphaConversion ------
-(if (y <= x) then x else y)

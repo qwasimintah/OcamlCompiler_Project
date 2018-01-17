@@ -1,5 +1,0 @@
------- AST ------
-(let y = (let z = (let y = 3 in y) in (z + 3)) in y)
------- Height of the AST ------
-using Height.computeHeight: 3
-using HeightVisitor: 3

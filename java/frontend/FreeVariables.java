@@ -5,8 +5,6 @@ import ast.*;
 import java.util.*;
 
 public class FreeVariables implements ObjVisitor<Exp>{
-  private static HashSet<String> known = new HashSet<String> ();
-
   private HashMap<String, HashSet<String> > current_variables =  new HashMap<String, HashSet<String> > ();
 
   private static HashMap<String, HashSet<String> > free_variables = new HashMap<String, HashSet<String> > ();
@@ -27,10 +25,6 @@ public class FreeVariables implements ObjVisitor<Exp>{
     external_functions.add("int_of_float");
     external_functions.add("float_of_int");
   }}
-
-  public static HashSet<String> getKnown(){
-    return known;
-  }
 
   public static HashMap<String, HashSet<String> > getFree_variables(){
     return free_variables;
@@ -167,7 +161,6 @@ public class FreeVariables implements ObjVisitor<Exp>{
   public Exp visit(LetRec let_rec){
     set_of_functions.add(let_rec.fd.id.toString());
     current_functions.push(let_rec);
-    known.add(let_rec.fd.id.toString());
     HashSet set = current_variables.get(let_rec.fd.id.toString());
     if (set == null){
       set = new HashSet();
@@ -182,11 +175,7 @@ public class FreeVariables implements ObjVisitor<Exp>{
         tmp_set.add(arg.toString());
       }
     }
-    //System.out.println("let_rec: " + let_rec.fd.id.toString());
-    //System.out.println("free_variables av: " + free_variables.get(let_rec.fd.id.toString()));
     Exp new_exp_fd = let_rec.fd.e.accept(this);
-    //System.out.println("let_rec: " + let_rec.fd.id.toString());
-    //System.out.println("free_variables ap: " + free_variables.get(let_rec.fd.id.toString()));
     HashSet set_free_variables = free_variables.get(let_rec.fd.id.toString());
     if (set_free_variables == null){
       set_free_variables = new HashSet();
@@ -195,12 +184,6 @@ public class FreeVariables implements ObjVisitor<Exp>{
     current_functions.pop();
     Exp new_e = let_rec.e.accept(this);
     LetRec new_let_rec = new LetRec(new_fd, new_e);
-    if (set_free_variables.isEmpty()){
-      known.remove(let_rec.fd.id.toString());
-    }
-    //System.out.println("free_variables: " + free_variables);
-    //System.out.println("known: " + known);
-    //System.out.println("set_of_functions: " + set_of_functions);
     return new_let_rec;
   }
 

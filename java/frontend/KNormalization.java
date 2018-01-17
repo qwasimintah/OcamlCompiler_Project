@@ -5,18 +5,45 @@ import exp.*;
 import ast.*;
 import ast.type.*;
 
+/**
+  * Implementation of the K-Normalization of an expression
+  *
+  *@author balsamor
+  *
+  */
+
 public class KNormalization implements ObjVisitor<Exp> {
+
 
 private Id id_generator = new Id("id");
 
-
+/**
+  *Visit the Int in the AST
+  *
+  *@param e An int
+  *@return The int given in entry
+*/
 public Exp visit(Int e) {
         return e;
 }
 
+/**
+  *Visit the Var in the AST
+  *
+  *@param e A variable
+  *@return The variable given in entry
+*/
+
 public Exp visit(Var e) {
         return e;
 }
+
+/**
+  *Visit the addition in the AST, and K-normalizes each of its child
+  *
+  *@param e An addition
+  *@return The addition with the two children K-normalized
+*/
 
 public Exp visit(Add e) {
         Type t = new TInt();
@@ -28,6 +55,14 @@ public Exp visit(Add e) {
         return new_let1;
 }
 
+/**
+  *Visit the substraction in the AST, and K-normalizes each of its child
+  *
+  *@param e A substraction
+  *@return The substraction with the two children K-normalized
+*/
+
+
 public Exp visit(Sub e) {
         Type t = new TInt();
         Var var1 = new Var(id_generator.gen());
@@ -38,10 +73,25 @@ public Exp visit(Sub e) {
         return new_let1;
 }
 
+/**
+  *Visit the Let in the AST, and K-normalizes the expressions
+  *
+  *@param e A Let
+  *@return A let K-normalized
+*/
+
+
 public Exp visit(Let e) {
         Let new_let = (new Let(e.id, e.t, e.e1.accept(this), e.e2.accept(this)));
         return new_let;
 }
+
+/**
+  *Visit the LetRec in the AST, and K-normalizes the expressions
+  *
+  *@param e A LetRec
+  *@return A LetRec K-normalized
+*/
 
 public Exp visit(LetRec e) {
         FunDef new_fun = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e.accept(this));
@@ -49,26 +99,18 @@ public Exp visit(LetRec e) {
         return new_rec;
 }
 
+/**
+  *Visit the App in the AST, and K-normalizes the expressions
+  *
+  *@param e A LetRec
+  *@return A LetRec K-normalized
+*/
+
 public Exp visit(App e) {
   List<Let> list_let = new ArrayList<Let>();
   List<Exp> list_var = new ArrayList<Exp>();
   List<Exp> list_exp = new ArrayList<Exp>();
   Exp true_name = e.e;
-  // Var first_var = new Var(id_generator.gen());
-  // Type first_t = new TInt();
-  // System.out.println(e.es.size());
-  // System.out.println(e.e);
-  // System.out.println(e.es.get(0));
-  // if (e.e instanceof App){
-  //   App temp_app = (App) e.e;
-  //   System.out.println("ONVAYARRIVE");
-  //   System.out.println(temp_app.e);
-  //   System.out.println(temp_app.es.get(0));
-  // }
-  // if (e.es.get(0) instanceof Int){
-  //   Int var_temp = (Int) e.es.get(0);
-  //   System.out.println(var_temp.i);
-  // }
   if (e.e instanceof App){
     App temp_app = (App) e.e;
     for (int k = 0; k < temp_app.es.size(); k++){
@@ -95,15 +137,20 @@ public Exp visit(App e) {
       list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
     }
     else {
-      // App new_app = new App(first_var, list_var);
-      // list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
         App new_app = new App(true_name, list_var);
         list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_app));
     }
   }
-  // return new Let(first_var.id, first_t, e.e.accept(this), list_let.get(0));
   return list_let.get(0);
 }
+
+/**
+  *Visit the Tuple in the AST, and K-normalizes the children
+  *
+  *@param e A Tuple
+  *@return A Tuple K-normalized
+*/
+
 
 public Exp visit(Tuple e) {
   List<Exp> list_es = new ArrayList<Exp>();
@@ -113,28 +160,15 @@ public Exp visit(Tuple e) {
     list_es.add(es_temp.accept(this));
   }
   return new Tuple(list_es);
-
-  // List<Let> list_let = new ArrayList<Let>();
-  // List<Exp> list_var = new ArrayList<Exp>();
-  // for (int j = 0; j < e.es.size(); j++){
-  //   list_var.add(new Var(id_generator.gen()));
-  //   Var new_var = (Var) list_var.get(j);
-  //   list_let.add(new Let(new_var.id, new TInt(), new Int(1), new Int(1)));
-  // }
-  // for (int i = (e.es.size() - 1); i >= 0; i--){
-  //   Var new_var = (Var) list_var.get(i);
-  //   Type t = new TInt();
-  //   Exp es_temp = e.es.get(i);
-  //   if (i < e.es.size() - 1){
-  //     list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), list_let.get(i+1)));
-  //   }
-  //   else {
-  //     Tuple new_tuple = new Tuple(list_var);
-  //     list_let.set(i, new Let(new_var.id, t, es_temp.accept(this), new_tuple));
-  //   }
-  // }
-  // return list_let.get(0);
 }
+
+/**
+  *Visit the If in the AST, and K-normalizes the expressions
+  *
+  *@param e An If
+  *@return A If K-normalized
+*/
+
 
 public Exp visit(If e) {
         if (e.e1 instanceof Eq) {
@@ -180,68 +214,182 @@ public Exp visit(If e) {
         return e;
 }
 
+/**
+  *Visit the Unit in the AST
+  *
+  *@param e An Unit
+  *@return The Unit
+*/
+
 
 public Exp visit(Unit e) {
         return e;
 }
+
+/**
+  *Visit the Array in the AST
+  *
+  *@param e An Array
+  *@return The Array with its expression K-normalized
+*/
+
 
 public Exp visit(Array e) {
   Array new_array = new Array(e.e1.accept(this), e.e2);
   return new_array;
 }
 
+/**
+  *Visit the Get in the AST
+  *
+  *@param e A Get
+  *@return The Get
+*/
+
+
 public Exp visit(Get e) {
   return e;
 }
+
+/**
+  *Visit the Put in the AST
+  *
+  *@param e A Put
+  *@return A Put with the third attribute K-normalized
+*/
 
 public Exp visit(Put e) {
   Put new_put = new Put(e.e1, e.e2, e.e3.accept(this));
   return new_put;
 }
 
+/**
+  *Visit the LEtTuple in the AST
+  *
+  *@param e A LetTuple
+  *@return A LetTuple with the expressions K-normalized
+*/
+
 public Exp visit(LetTuple e) {
   return (new LetTuple(e.ids, e.ts, e.e1.accept(this), e.e2.accept(this)));
 }
+
+/**
+  *Visit the Bool in the AST
+  *
+  *@param e A Bool
+  *@return The Bool
+*/
 
 public Exp visit(exp.Bool e) {
         return e;
 }
 
+/**
+  *Visit the Float in the AST
+  *
+  *@param e A Float
+  *@return The Float
+*/
+
 public Exp visit(exp.Float e) {
         return e;
 }
+
+/**
+  *Visit the Not in the AST
+  *
+  *@param e A Not
+  *@return The Not
+*/
 
 public Exp visit(Not e) {
         return e;
 }
 
+/**
+  *Visit the Neg in the AST
+  *
+  *@param e A Neg
+  *@return The Neg
+*/
+
 public Exp visit(Neg e) {
         return e;
 }
+
+/**
+  *Visit the FNeg in the AST
+  *
+  *@param e A FNeg
+  *@return The FNeg
+*/
 
 public Exp visit(FNeg e) {
         return e;
 }
 
+/**
+  *Visit the FAdd in the AST
+  *
+  *@param e A FAdd
+  *@return The FAdd
+*/
+
 public Exp visit(FAdd e) {
         return e;
 }
+
+/**
+  *Visit the FSub in the AST
+  *
+  *@param e A FSub
+  *@return The FSub
+*/
 
 public Exp visit(FSub e) {
         return e;
 }
 
+/**
+  *Visit the FMul in the AST
+  *
+  *@param e A FMul
+  *@return The FMul
+*/
+
 public Exp visit(FMul e) {
         return e;
 }
+
+/**
+  *Visit the FDiv in the AST
+  *
+  *@param e A FDiv
+  *@return The FDiv
+*/
 
 public Exp visit(FDiv e) {
         return e;
 }
 
+/**
+  *Visit the Eq in the AST
+  *
+  *@param e A Eq
+  *@return The Eq
+*/
+
 public Exp visit(Eq e) {
         return e;
 }
+
+/**
+  *Visit the LE in the AST
+  *
+  *@param e A LE
+  *@return The LE
+*/
 
 public Exp visit(LE e) {
         return e;

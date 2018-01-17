@@ -4,6 +4,13 @@ import java.util.*;
 import exp.*;
 import ast.*;
 
+/**
+  * Implementation of the Alpha Conversion of an expression
+  *
+  *@author Florian Groguelin
+  *
+  */
+
 public class AlphaConversion implements ObjVisitor<Exp>{
   private HashMap<String, Stack> epsilon = new HashMap<String, Stack> ();
 
@@ -13,6 +20,12 @@ public class AlphaConversion implements ObjVisitor<Exp>{
 
   private HashSet<String> functions = new HashSet();
 
+  /**
+    *Visit the Add in the AST
+    *
+    *@param e an Add
+    *@return An Add
+  */
   public Exp visit(Add e){
     Add new_add = new Add(e.e1.accept(this), e.e2.accept(this));
     return new_add;
@@ -43,7 +56,7 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     }
     while (!used_vars.empty()){
       String key = (String) used_vars.pop();
-      if (!functions.contains(key)){
+      if ((stack.size() > 1 && functions.contains(key))|| !functions.contains(key)){
         Stack tmp_stack = epsilon.get(key);
         if (!tmp_stack.empty() && !set.contains(key)) {
           tmp_stack.pop();
@@ -222,9 +235,9 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     Stack stack = epsilon.get(let_rec.fd.id.toString());
     if (stack == null) {
       stack = new Stack();
+      epsilon.put(let_rec.fd.id.toString(), stack);
     }
     stack.push(new_id.toString());
-    epsilon.put(let_rec.fd.id.toString(), stack);
     List<Id> new_args = new LinkedList();
     for (Id arg: let_rec.fd.args){
       Id new_arg = arg.gen();
@@ -247,9 +260,6 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     }
     sec_exp_let = true;
     Exp let_rec_e = let_rec.e.accept(this);
-    if (!stack.empty()){
-      stack.pop();
-    }
     sec_exp_let = false;
     LetRec new_let_rec = new LetRec(new_fd, let_rec_e);
     return new_let_rec;

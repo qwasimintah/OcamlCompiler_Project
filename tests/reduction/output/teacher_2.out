@@ -1,2 +1,0 @@
------- Reduction of Nested Let-Expressions ------
-(let x = 42 in (print_int x))

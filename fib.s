@@ -16,10 +16,6 @@ _main:
 	MOV r2, r4
 	BL _label1
 	LDMFD sp!, {r4-r12}
-	STMFD sp!,{r4-r12}
-	MOV r2, r4
-	BL _label1
-	LDMFD sp!, {r4-r12}
 	MOV r5, r0
 	MOV r0, r5
 	BL min_caml_print_int
@@ -45,6 +41,7 @@ _label1:
 	BLE label2
 	B label3
 label2:
+	MOV r0, r2
 	b cont1
 label3:
 	MOV r6, r2
@@ -55,19 +52,11 @@ label3:
 	MOV r2, r8
 	BL _label1
 	LDMFD sp!, {r4-r12}
-	STMFD sp!,{r4-r12}
-	MOV r2, r8
-	BL _label1
-	LDMFD sp!, {r4-r12}
 	MOV r9, r0
 	MOV r10, r2
 	LDR r4, =2
 	SUB r0, r10, r4
 	MOV r5, r0
-	STMFD sp!,{r4-r12}
-	MOV r3, r5
-	BL _label1
-	LDMFD sp!, {r4-r12}
 	STMFD sp!,{r4-r12}
 	MOV r3, r5
 	BL _label1
