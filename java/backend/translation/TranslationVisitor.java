@@ -525,10 +525,10 @@ public TupleJerry visit(Tuple e, Function func){
         for (Exp e1 : e.es) {
                 Object value = (Object)visit(e1, func);
                 Variable var = new Variable(getTempVarName(), func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
-                func.addInstruction(inst);
+                // InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                // func.addInstruction(inst);
                 vars.add(var);
-                var.spill(func);
+                // var.spill(func);
                 // System.out.println(var.getOffset());
         }
         TupleJerry tuple = new TupleJerry(func, vars);
@@ -538,15 +538,17 @@ public TupleJerry visit(Tuple e, Function func){
 }
 
 public void visit(LetTuple e, Function func){
-        // System.out.println(e.e1.getClass());
+        System.out.println(e.getClass());
+        ArrayList<Object> elements = new ArrayList<Object>();
         // System.out.println(e.e2.getClass());
-        TupleJerry values;
-        try {
-                values = (TupleJerry)visit(e.e1, func);
-        }
-        catch (Exception exc) {
-                values = ((VTuple)visit(e.e1, func)).getValue();
-        }
+        // TupleJerry values;
+        // try {
+        //         values = (TupleJerry)visit(e.e1, func);
+        // }
+        // catch (Exception exc) {
+        //         values = ((VTuple)visit(e.e1, func)).getValue();
+        // }
+        Object values = visit(e.e1, func);
         for (Integer i = 0; i < e.ids.size(); i++) {
                 // Object value = visit(e.e2, func);
                 // if (value instanceof TupleJerry) {
@@ -554,10 +556,14 @@ public void visit(LetTuple e, Function func){
                 //         System.out.println(value);
                 // }
                 Variable var = new Variable(e.ids.get(i).id, func);
-                InstructionASSIGN inst = new InstructionASSIGN(func, var, values.getElements().get(i));
-                func.addInstruction(inst);
-                func.addVariable(var);
+                elements.add(var);
+                // InstructionASSIGN inst = new InstructionASSIGN(func, var, values.getElements().get(i));
+                // func.addInstruction(inst);
+                // func.addVariable(var);
         }
+        TupleJerry tuple = new TupleJerry(func, elements);
+        InstructionASSIGN inst = new InstructionASSIGN(func, tuple, values);
+        func.addInstruction(inst);
         visit(e.e2, func);
         // for (Id id : e.ids) {
         //         System.out.println(id.id);

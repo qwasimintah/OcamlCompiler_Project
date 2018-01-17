@@ -56,17 +56,35 @@ public static void LinearScan(Function func) {
                 v.allocParametersRegister();
         }
 
-        for (Variable var : func.getVariables()) {
-                if (!variables.contains(var)) {
-                        var.getInterval().setStartingPoint(i);
-                        var.getInterval().setEndingPoint(i);
-                        variables.add(var);
-                        intervals.add(var.getInterval());
-                } else {
-                        var.getInterval().setEndingPoint(i);
-                }
+        for (Instruction inst : func.getInstructions()) {
+                try {
+                        for (Object op : inst.getOperands()) {
+                                Variable var = (Variable) op;
+                                if (!variables.contains(var)) {
+                                        var.getInterval().setStartingPoint(i);
+                                        var.getInterval().setEndingPoint(i);
+                                        variables.add(var);
+                                        intervals.add(var.getInterval());
+                                } else {
+                                        var.getInterval().setEndingPoint(i);
+                                }
+
+                        }
+                } catch (Exception e) {;}
                 i++;
         }
+
+        // for (Variable var : func.getVariables()) {
+        //         if (!variables.contains(var)) {
+        //                 var.getInterval().setStartingPoint(i);
+        //                 var.getInterval().setEndingPoint(i);
+        //                 variables.add(var);
+        //                 intervals.add(var.getInterval());
+        //         } else {
+        //                 var.getInterval().setEndingPoint(i);
+        //         }
+        //         i++;
+        // }
 
         Collections.sort(intervals);
 
@@ -84,10 +102,10 @@ public static void LinearScan(Function func) {
                         }
                 }
         }
-        // for (Interval interval : intervals) {
-        //         System.out.println(interval.getDescription());
-        //         interval.getVariable().getSaveState();
-        // }
+        for (Interval interval : intervals) {
+                System.out.println(interval.getDescription());
+                interval.getVariable().getSaveState();
+        }
 
 }
 }
