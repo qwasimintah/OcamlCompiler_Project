@@ -1,0 +1,2 @@
+------ AlphaConversion ------
+(let ?v0 = (let ?v1 = (1 + 2) in ?v1) in (let rec ?v2 ?v3 = (?v3 + 1) in (let rec ?v4 ?v5 = (2 *. ?v5) in (print_int (?v2 (?v4 ?v0))))))

@@ -1,2 +1,2 @@
 ------ K-Normalization ------
-(let ?v0 = x in (let ?v1 = y in (if (?v0 = ?v1) then x else y)))
+(let x = 2 in (let y = 3 in (let v = (let ?v0 = x in (let ?v1 = y in (if (?v0 = ?v1) then (let ?v2 = x in (let ?v3 = 1 in (?v2 + ?v3))) else (let ?v4 = y in (let ?v5 = 1 in (?v4 + ?v5)))))) in (let ?v6 = v in (print_int ?v6)))))

@@ -1,0 +1,2 @@
+------ K-Normalization ------
+(let rec f x = (let rec g y = (let ?v0 = x in (let ?v1 = y in (?v0 + ?v1))) in (let ?v2 = 1 in (g ?v2))) in (let v1 = (let ?v3 = 3 in (f ?v3)) in (let ?v4 = v1 in (print_int ?v4))))
