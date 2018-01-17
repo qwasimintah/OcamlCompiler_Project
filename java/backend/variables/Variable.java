@@ -28,13 +28,6 @@ public String getName() {
 }
 
 public void allocRegister() {
-        // if (func.registers.isEmpty()) {
-        //         this.spill();
-        // } else {
-        //         Register reg = func.registers.get(0);
-        //         func.registers.remove(0);
-        //         this.setRegister(reg);
-        // }
         try {
                 Register reg = func.registers.get(0);
                 func.registers.remove(0);
@@ -45,8 +38,6 @@ public void allocRegister() {
                 this.spill();
                 return;
         }
-        // System.out.println("not allocated " + this.getName());
-
 }
 
 public void allocParametersRegister() {
@@ -69,6 +60,12 @@ public void spillParameter() {
         Integer spillOffset = this.func.getOffsetParameters();
         this.func.setOffsetParameters(spillOffset + 4);
         this.setParametersOffset(spillOffset);
+}
+
+public void spill(Function func) {
+        Integer spillOffset = func.getOffset();
+        func.setOffset(spillOffset + 4);
+        this.setOffset(spillOffset);
 }
 
 public void setRegister(Register reg) {

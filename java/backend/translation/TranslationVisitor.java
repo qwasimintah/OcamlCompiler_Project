@@ -125,7 +125,7 @@ public Instruction visit(Let e, Function func){
                 Integer value = (Integer) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, value, func);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -134,7 +134,7 @@ public Instruction visit(Let e, Function func){
                 InstructionMULT value = (InstructionMULT) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -146,7 +146,7 @@ public Instruction visit(Let e, Function func){
                 }
                 Variable var = new Variable(e.id.id, func);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -155,7 +155,7 @@ public Instruction visit(Let e, Function func){
                 InstructionADD value = (InstructionADD) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -164,7 +164,7 @@ public Instruction visit(Let e, Function func){
                 InstructionSUB value = (InstructionSUB) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -173,7 +173,7 @@ public Instruction visit(Let e, Function func){
                 Variable var = new Variable(e.id.id, func);
                 Variable var2 = (Variable)visit(e.e1, func);
                 inst = new InstructionASSIGN(func, var, var2);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -182,21 +182,26 @@ public Instruction visit(Let e, Function func){
                 InstructionIF instif = (InstructionIF) visit(e.e1, func);
                 VInteger var = new VInteger(e.id.id, 0, func);
                 inst = new InstructionASSIGN(func, var, instif);
-                func.getVariables().add(var);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
         }
         else if (e.e1 instanceof Let) {
-                // System.out.println(e.id.id);
-                // System.out.println(e.e1.getClass());
-                // System.out.println(e.e2.getClass());
                 Variable var = new Variable(e.id.id, func);
                 InstructionASSIGN assignment = (InstructionASSIGN) visit(e.e1, func);
                 Object value = lastResult;
-                // System.out.println(lastResult);
                 inst = new InstructionASSIGN(func, var, value);
-                func.getVariables().add(var);
+                func.addVariable(var);
+                func.addInstruction(inst);
+                visit(e.e2, func);
+                return inst;
+        }
+        else if (e.e1 instanceof Tuple) {
+                TupleJerry value = (TupleJerry) visit(e.e1, func);
+                VTuple var = new VTuple(e.id.id, value, func);
+                inst = new InstructionASSIGN(func, var, value);
+                func.addVariable(var);
                 func.addInstruction(inst);
                 visit(e.e2, func);
                 return inst;
@@ -256,8 +261,8 @@ public InstructionADD visit(Add e, Function func) {
         } catch (IndexOutOfBoundsException exception) {
                 VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
                 VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
-                func.getVariables().add(tmpX);
-                func.getVariables().add(tmpY);
+                func.addVariable(tmpX);
+                func.addVariable(tmpY);
                 InstructionADD inst = new InstructionADD(func, tmpX, tmpY);
                 func.addInstruction(inst);
                 return inst;
@@ -311,8 +316,8 @@ public InstructionSUB visit(Sub e, Function func) {
         } catch (IndexOutOfBoundsException exception) {
                 VInteger tmpX = new VInteger(getTempVarName(), (Integer)visit(e.e1, func), func);
                 VInteger tmpY = new VInteger(getTempVarName(), (Integer)visit(e.e2, func), func);
-                func.getVariables().add(tmpX);
-                func.getVariables().add(tmpY);
+                func.addVariable(tmpX);
+                func.addVariable(tmpY);
                 InstructionSUB inst = new InstructionSUB(func, tmpX, tmpY);
                 func.addInstruction(inst);
                 return inst;
@@ -389,13 +394,13 @@ public InstructionCALL visit(App e, Function func){
                 Object var = (Object) visit(e1, func);
                 if (var instanceof Integer) {
                         var = new VInteger(getTempVarName(), (Integer)var, func);
-                        // func.getVariables().add((VInteger)var);
+                        // func.addVariable((VInteger)var);
                         InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VInteger)var).getValue());
                         func.addInstruction(inst);
                 }
                 else if (var instanceof Boolean) {
                         var = new VBoolean(getTempVarName(), (boolean)var, func);
-                        // func.getVariables().add((VInteger)var);
+                        // func.addVariable((VInteger)var);
                         InstructionASSIGN inst = new InstructionASSIGN(func, var, ((VBoolean)var).getExp());
                         func.addInstruction(inst);
                 }
@@ -516,26 +521,34 @@ public void visit(LetRec e, Function func){
 }
 
 public TupleJerry visit(Tuple e, Function func){
-        ArrayList<Object> obj = new ArrayList<Object>();
+        ArrayList<Object> vars = new ArrayList<Object>();
         for (Exp e1 : e.es) {
-                Object o = (Object)visit(e1, func);
-                obj.add(o);
+                Object value = (Object)visit(e1, func);
+                Variable var = new Variable(getTempVarName(), func);
+                InstructionASSIGN inst = new InstructionASSIGN(func, var, value);
+                func.addInstruction(inst);
+                vars.add(var);
+                var.spill(func);
+                // System.out.println(var.getOffset());
         }
-        TupleJerry tuple = new TupleJerry(func, obj);
+        TupleJerry tuple = new TupleJerry(func, vars);
+
         tuple.show();
         return tuple;
 }
 
 public void visit(LetTuple e, Function func){
-        System.out.println(e.e1.getClass());
-        System.out.println(e.e2.getClass());
-        // if (e.e1 instanceof Var) {
-        //   Variable
-        // }
-        TupleJerry values = (TupleJerry)visit(e.e1, func);
+        // System.out.println(e.e1.getClass());
+        // System.out.println(e.e2.getClass());
+        TupleJerry values;
+        try {
+                values = (TupleJerry)visit(e.e1, func);
+        }
+        catch (Exception exc) {
+                values = ((VTuple)visit(e.e1, func)).getValue();
+        }
         for (Integer i = 0; i < e.ids.size(); i++) {
                 // Object value = visit(e.e2, func);
-                System.out.println(i);
                 // if (value instanceof TupleJerry) {
                 //         value = (TupleJerry)value;
                 //         System.out.println(value);
