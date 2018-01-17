@@ -533,7 +533,7 @@ public TupleJerry visit(Tuple e, Function func){
         }
         TupleJerry tuple = new TupleJerry(func, vars);
 
-        tuple.show();
+        // tuple.show();
         return tuple;
 }
 
