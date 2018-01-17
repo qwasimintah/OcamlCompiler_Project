@@ -1,0 +1,2 @@
+------ K-Normalization ------
+(let x = 1 in (let ?v0 = (let ?v1 = (let ?v3 = 7 in (let ?v4 = 8 in (caca ?v3 ?v4))) in (let ?v2 = 7 in (adder ?v1 ?v2))) in (print_int ?v0)))
