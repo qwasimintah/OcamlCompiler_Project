@@ -1,35 +1,65 @@
------- AST ------
-(let rec make_adder x = (let rec adder y = (x + y) in adder) in (print_int (make_adder ((make_adder 3) 7) 10)))
+@------ ARM code generation ------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
 
------- K-Normalization ------
-(let rec make_adder x = (let rec adder y = (let ?v0 = x in (let ?v1 = y in (?v0 + ?v1))) in adder) in (let ?v2 = (let ?v3 = (let ?v5 = 7 in ((make_adder 3) ?v5)) in (let ?v4 = 10 in (make_adder ?v3 ?v4))) in (print_int ?v2)))
+	LDR r4, =3
+	LDR r5, =7
+	STMFD sp!,{r2-r12}
+	MOV r2, r4
+	MOV r3, r5
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r6, r0
+	LDR r7, =10
+	STMFD sp!,{r2-r12}
+	MOV r2, r6
+	MOV r3, r7
+	BL _label1
+	LDMFD sp!, {r2-r12}
+	MOV r8, r0
+	MOV r0, r8
+	BL min_caml_print_int
+	BL min_caml_print_newline
 
------- AlphaConversion ------
-(let rec ?v6 ?v7 = (let rec ?v8 ?v9 = (let ?v10 = ?v7 in (let ?v11 = ?v9 in (?v10 + ?v11))) in ?v8) in (let ?v12 = (let ?v13 = (let ?v14 = 7 in ((?v6 3) ?v14)) in (let ?v15 = 10 in (?v6 ?v13 ?v15))) in (print_int ?v12)))
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
 
------- Reduction of Nested Let-Expressions ------
-(let rec ?v6 ?v7 = (let rec ?v8 ?v9 = (let ?v10 = ?v7 in (let ?v11 = ?v9 in (?v10 + ?v11))) in ?v8) in (let ?v14 = 7 in (let ?v13 = ((?v6 3) ?v14) in (let ?v15 = 10 in (let ?v12 = (?v6 ?v13 ?v15) in (print_int ?v12))))))
+	MOV r7, #1
+	swi 0
+_label2:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
 
------- ClosureConversion ------
-Closure list: 
-closure numbers: 1
-	label: _?v8
-	free_list: [?v7]
-	args: [?v9]
-	code: 
-(let ?v10 = ?v7 in (let ?v11 = ?v9 in (?v10 + ?v11)))
-Closure list: 
-closure numbers: 2
-	label: _?v8
-	free_list: [?v7]
-	args: [?v9]
-	code: 
-(let ?v10 = ?v7 in (let ?v11 = ?v9 in (?v10 + ?v11)))
-	label: _?v6
-	free_list: null
-	args: [?v7]
-	code: 
-(let ?v16 = (make_closure _?v8 ?v7) in ?v16)
-(let ?v14 = 7 in (let ?v13 = ((apply_direct _?v6 3) ?v14) in (let ?v15 = 10 in (let ?v12 = (apply_direct _?v6 ?v13 ?v15) in (print_int ?v12)))))
+	MOV r5, r2
+	ADD r0, r4, r5
 
------- Translation to Jerry ------
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+_label1:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+

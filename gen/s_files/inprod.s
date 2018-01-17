@@ -1,13 +1,78 @@
------- AST ------
-(let rec getx v = (let (x, y, z) = v in x) in (let rec gety v = (let (x, y, z) = v in y) in (let rec getz v = (let (x, y, z) = v in z) in (let rec inprod v1 v2 = ((((getx v1) *. (getx v2)) +. ((gety v1) *. (gety v2))) +. ((getz v1) *. (getz v2))) in (print_int (truncate (1000000,00 *. (inprod (1,00, 2,00, 3,00) (4,00, 5,00, 6,00)))))))))
+class exp.LetTuple
+class exp.LetTuple
+class exp.LetTuple
+@------ ARM code generation ------
+	.text
+	.global _start
+_start:
+	BL _main
+_main:
+	@MAIN PROLOGUE
+	SUB sp, #4
+	LDR lr, [sp]
+	SUB sp, #4
+	STR fp, [sp]
+	MOV fp, sp
 
------- K-Normalization ------
-(let rec getx v = (let (x, y, z) = v in x) in (let rec gety v = (let (x, y, z) = v in y) in (let rec getz v = (let (x, y, z) = v in z) in (let rec inprod v1 v2 = ((((getx v1) *. (getx v2)) +. ((gety v1) *. (gety v2))) +. ((getz v1) *. (getz v2))) in (let ?v0 = (let ?v1 = (1000000,00 *. (inprod (1,00, 2,00, 3,00) (4,00, 5,00, 6,00))) in (truncate ?v1)) in (print_int ?v0))))))
+	STMFD sp!,{r2-r12}
+	MOV r2, r0
+	BL _label5
+	LDMFD sp!, {r2-r12}
+	MOV r4, r0
+	MOV r0, r4
+	BL min_caml_print_int
+	BL min_caml_print_newline
 
------- AlphaConversion ------
-(let rec ?v2 ?v3 = (let (?v4, ?v5, ?v6) = ?v3 in ?v4) in (let rec ?v7 ?v8 = (let (?v9, ?v10, ?v11) = ?v8 in ?v10) in (let rec ?v12 ?v13 = (let (?v14, ?v15, ?v16) = ?v13 in ?v16) in (let rec ?v17 ?v18 ?v19 = ((((?v2 ?v18) *. (?v2 ?v19)) +. ((?v7 ?v18) *. (?v7 ?v19))) +. ((?v12 ?v18) *. (?v12 ?v19))) in (let ?v20 = (let ?v21 = (1000000,00 *. (?v17 (1,00, 2,00, 3,00) (4,00, 5,00, 6,00))) in (truncate ?v21)) in (print_int ?v20))))))
+	@MAIN EPILOGUE
+	ADD sp, #4
+	MOV sp, fp
+	LDR fp, [sp]
+	ADD sp, #4
 
------- Reduction of Nested Let-Expressions ------
-(let rec ?v2 ?v3 = (let (?v4, ?v5, ?v6) = ?v3 in ?v4) in (let rec ?v7 ?v8 = (let (?v9, ?v10, ?v11) = ?v8 in ?v10) in (let rec ?v12 ?v13 = (let (?v14, ?v15, ?v16) = ?v13 in ?v16) in (let rec ?v17 ?v18 ?v19 = ((((?v2 ?v18) *. (?v2 ?v19)) +. ((?v7 ?v18) *. (?v7 ?v19))) +. ((?v12 ?v18) *. (?v12 ?v19))) in (let ?v21 = (1000000,00 *. (?v17 (1,00, 2,00, 3,00) (4,00, 5,00, 6,00))) in (let ?v20 = (truncate ?v21) in (print_int ?v20)))))))
+	MOV r7, #1
+	swi 0
+_label1:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
 
------- ClosureConversion ------
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+_label2:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+_label3:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+_label4:
+	@FUNCTION PROLOGUE
+	STMFD sp!, {fp, lr}
+	ADD fp, sp, #4
+
+
+	@FUNCTION EPILOGUE
+	SUB sp, fp, #4
+	LDMFD sp!, {fp, lr}
+	BX lr
+
+
