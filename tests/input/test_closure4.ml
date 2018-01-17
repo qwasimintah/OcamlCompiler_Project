@@ -11,8 +11,8 @@ let rec succ x1 =
   let v3 = x1 in
   let v4 = 1 in
   v3 + v4 in
-  
+
 let v9 = x in
 let v8 = double v9 in
 let v7 = succ v8 in
-print_int v
+print_int v7

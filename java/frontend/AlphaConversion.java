@@ -222,9 +222,9 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     Stack stack = epsilon.get(let_rec.fd.id.toString());
     if (stack == null) {
       stack = new Stack();
+      epsilon.put(let_rec.fd.id.toString(), stack);
     }
     stack.push(new_id.toString());
-    epsilon.put(let_rec.fd.id.toString(), stack);
     List<Id> new_args = new LinkedList();
     for (Id arg: let_rec.fd.args){
       Id new_arg = arg.gen();
@@ -247,9 +247,6 @@ public class AlphaConversion implements ObjVisitor<Exp>{
     }
     sec_exp_let = true;
     Exp let_rec_e = let_rec.e.accept(this);
-    if (!stack.empty()){
-      stack.pop();
-    }
     sec_exp_let = false;
     LetRec new_let_rec = new LetRec(new_fd, let_rec_e);
     return new_let_rec;
