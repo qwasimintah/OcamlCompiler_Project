@@ -1,5 +1,5 @@
 /**
-  * Implementation of the alpha conversion of an expression
+  * Register Allocation module
   *
   *@author Fabien Tribel
   *

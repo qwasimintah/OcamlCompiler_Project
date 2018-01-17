@@ -1,3 +1,10 @@
+/**
+  * Boolean expressions upper class
+  *
+  *@author Fabien Tribel
+  *
+  */
+
 package backend.booleans;
 
 import java.util.*;
