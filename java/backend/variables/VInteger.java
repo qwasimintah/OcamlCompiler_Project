@@ -16,4 +16,8 @@ public VInteger(String name, Integer value, Function func) {
 public Integer getValue() {
         return value;
 }
+
+public void setValue(Integer newValue) {
+        value = newValue;
+}
 }

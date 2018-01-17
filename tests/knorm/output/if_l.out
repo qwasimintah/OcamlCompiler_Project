@@ -1,2 +1,0 @@
------- K-Normalization ------
-(let ?v0 = y in (let ?v1 = x in (if (?v0 <= ?v1) then y else x)))

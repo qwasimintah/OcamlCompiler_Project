@@ -1,0 +1,2 @@
+------ K-Normalization ------
+(let x = (Array.create (let z = (let ?v0 = 2 in (let ?v1 = 5 in (?v0 - ?v1))) in z) 5) in (x.(3) <- (let y = (let ?v2 = 1 in (let ?v3 = 2 in (?v2 + ?v3))) in y)))
