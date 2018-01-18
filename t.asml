@@ -1,0 +1,22 @@
+let _label1 v10  = 
+	let v11 = v10 in 
+	let v12 = 0 in
+	if v11 <= v12 then ( 
+	0
+	)
+	else (
+	let v15 = v10 in 
+	let v16 = 1 in
+ 	let temp1 = sub v15 v16 in  
+	let v14 =  sub v15 v16 in 
+	let v13 = 	call _label1 v14  in 
+	let v17 = v10 in 
+	add v13 v17 
+	)
+let _ = 
+	let v19 = 10000 in
+	let v18 = 	call _label1 v19  in 
+	call _min_caml_print_int v18
+
+
+

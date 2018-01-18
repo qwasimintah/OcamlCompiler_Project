@@ -345,7 +345,7 @@ public class AsmlConverter {
 
 					}
 					else if (instr instanceof InstructionCALL) {
-						generate_call((InstructionCALL) instr);
+						generate_call((InstructionCALL) instr, size, count);
 					}
 
 	                else if (instr instanceof InstructionIF){
@@ -652,7 +652,7 @@ public class AsmlConverter {
 
 					InstructionCALL inst = (InstructionCALL)instr;
 
-					generate_call(inst);
+					generate_call(inst,size, count);
 				}
 
 		        else if (instr instanceof InstructionIF){
@@ -788,6 +788,95 @@ public class AsmlConverter {
             }
 
 	}
+
+
+	public void generate_call (InstructionCALL instr, int size, int count){
+
+
+			InstructionCALL inst = (InstructionCALL)instr;
+
+			List<Object> params = inst.getParams();
+			String return_reg = inst.getReturn();
+			int num_params=params.size();
+
+
+
+			if(inst.getFname().equals("print_int")) {
+											//Parameter param = (Parameter)params.get(0);
+				if(count == size){
+				text.append("\tcall _min_caml_print_int ");
+				}
+				else{
+					text.append("\tlet ").append(get_temp_var()).append(" = ");
+					text.append("call _min_caml_print_int ");
+				}
+				if(params.size() != 0 ) {
+
+						if(!(params.get(0) instanceof Integer)) {
+
+							Variable param = (Variable)params.get(0);
+							if(param !=null){
+							text.append(param.getName().substring(1));
+							}
+							else{
+								text.append(get_current_var());
+							}
+							if(count != size){
+								text.append(" in ");
+							}
+							text.append("\n");
+							//assign("r0" , param.getRegister().getName());
+			               }
+						else{
+							text.append((int)params.get(0));
+							//  if(in && count < size){
+							//  text.append(" in ");
+							// }
+
+							if(count == size){
+								text.append(" in ");
+							}
+
+							text.append("\n");
+
+						}
+
+				}
+
+
+
+            }
+            else {
+
+            	  
+
+ 
+				text.append("\tcall _").append(inst.getFname()).append(" ");
+	
+
+            	  for (int i = 0; i<num_params; i++){
+            	  		Variable p = (Variable)params.get(i);
+            	  		if(p!=null){
+            	  			text.append(get_parsable_name(p.getName())).append(" ");
+            	  		}
+            	  		else{
+            	  			text.append(get_current_var());
+            	  		}
+            	  }
+
+            	  if(count != size){
+				 	 text.append(" in ");
+					}
+				  
+            	  text.append("\n");
+
+
+            
+
+            }
+
+	}
+
 
 
 
