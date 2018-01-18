@@ -81,7 +81,7 @@ public Ihm(String options[]){
                 case "--translation":
                         translation = true;
                 default:
-                    if (i > 1 && options[i-1].toString().equals("-o")){
+                    if (i >= 1 && options[i-1].toString().equals("-o")){
                         output_file = options[i];
                         given_output = true;
                     } else {
