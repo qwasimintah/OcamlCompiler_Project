@@ -76,6 +76,9 @@ public static void LinearScan(Function func) {
         for (Variable v : func.getArguments()) {
                 v.allocParametersRegister();
         }
+        for (Variable v : func.getArguments()) {
+                v.killParameter();
+        }
 
         for (Instruction inst : func.getInstructions()) {
                 try {

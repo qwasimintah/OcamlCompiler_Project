@@ -59,7 +59,7 @@ public ArmGenerator(){
 
 
   /**
-    * Function process a list of functions and generates 
+    * Function process a list of functions and generates
     * code accordingly
     *
     *@param List of Functions
@@ -149,8 +149,8 @@ public void generate_code(List<Function>  functions){
 
 
   /**
-    * Generate Code for branches (if / else) 
-    * 
+    * Generate Code for branches (if / else)
+    *
     *
     *@param Function object
     *@param String return_label : Label that the branch returns to parent
@@ -222,7 +222,7 @@ public void generate_branch(Function fun, String return_label){
 
   /**
     * Reserves space on the stack for push of variables
-    * 
+    *
     *
     *@param Integer size
     *
@@ -239,7 +239,7 @@ public void reserve_space(int size){
 
   /**
     * Reserves space on the stack for push of variables
-    * 
+    *
     *
     *@param Integer size
     *
@@ -257,7 +257,7 @@ public void pop_locals(int size){
 
   /**
     * Reserves space on the stack for push of variables
-    * 
+    *
     *
     *@param Integer size
     *
@@ -274,7 +274,7 @@ public void reserve_space_param(int size){
 
   /**
     * Reserves space on the stack for push of variables
-    * 
+    *
     *
     *@param Integer size
     *
@@ -292,7 +292,7 @@ public void pop_params(int size){
 
   /**
     * Generates code for intructionNothing
-    * 
+    *
     *
     *@param InstructionNOTHING instr
     *
@@ -309,11 +309,11 @@ public void generate_nothing(InstructionNOTHING instr) {
 
                 Variable v = (Variable)(instr.x);
 
-                if(v.getRegister() != null) {
-                        assign("r0", ((Variable)instr.x).getRegister().getName());
+                if (v.getParametersRegister() != null) {
+                  assign("r0", ((Variable)instr.x).getParametersRegister().getName());
                 }
-                else if(v.getParametersRegister()!=null) {
-                        assign("r0", ((Variable)instr.x).getParametersRegister().getName());
+                else if(v.getRegister() != null) {
+                        assign("r0", ((Variable)instr.x).getRegister().getName());
                 }
 
         }
@@ -321,9 +321,9 @@ public void generate_nothing(InstructionNOTHING instr) {
 
   /**
     * Generates code for Addition
-    * 
     *
-    *@param InstructionADD 
+    *
+    *@param InstructionADD
     *
     *@return void
   */
@@ -437,7 +437,7 @@ public void generate_addition(InstructionADD instr){
 }
   /**
     * Generates code for Multiplicaton
-    * 
+    *
     *
     *@param InstructionMULT
     *
@@ -556,9 +556,9 @@ public void generate_mult(InstructionMULT instr){
 
   /**
     * Generates code for substraction
-    * 
     *
-    *@param InstructionSUB 
+    *
+    *@param InstructionSUB
     *
     *@return void
   */
@@ -678,9 +678,9 @@ public void generate_sub(InstructionSUB instr){
 
   /**
     * Generates code for Create Array
-    * 
+    *
     *@param  size: int size of array
-    *@param  initial : intial size of array 
+    *@param  initial : intial size of array
     *
     *@return void
   */
@@ -708,7 +708,7 @@ public void generate_create_array(int size, int initial){
 
   /**
     * Generates code for Get Array
-    * 
+    *
     *@param index: index of element
     *
     *@return void
@@ -729,7 +729,7 @@ public void generate_get_array(int index){
 
   /**
     * Generates code for Put Array
-    * 
+    *
     *@param index: index of element
     *
     *@return void
@@ -752,7 +752,7 @@ public void generate_put_element(int index, int value){
 
   /**
     * Generates code for Assignment
-    * 
+    *
     *
     *@param InstructionASSIGN
     *
@@ -934,7 +934,7 @@ public void  generate_assign(InstructionASSIGN instr){
 
   /**
     * Offset with imemediate value as offset
-    * 
+    *
     *
     *@param String mnemonic
     *@param String dest
@@ -952,7 +952,7 @@ private void offset_operations(String mnemonic, String dest, String src, int off
 
   /**
     * Offset with imemediate value as offset
-    * 
+    *
     *
     *@param String mnemonic
     *@param String dest
@@ -973,7 +973,7 @@ private void offset_operations(String mnemonic, String dest, String src, String 
 
   /**
     * Assignment operation
-    * 
+    *
     *
     *@param String dest
     *@param String src
@@ -993,7 +993,7 @@ private void move_operations(String dest, String src){
 
   /**
     * Assignment operation
-    * 
+    *
     *
     *@param String dest
     *@param String src
@@ -1009,7 +1009,7 @@ public void assign(String dest, String src){
 
 /**
     * Assignment operation
-    * 
+    *
     *
     *@param String dest
     *@param String src
@@ -1093,7 +1093,7 @@ public void restore_parameters(){
 
 /**
     * Function creates code for prologue for main function
-    * 
+    *
     *@return void
   */
 
@@ -1115,7 +1115,7 @@ public void main_prologue(){
 
 /**
     * Function creates code for epilogue for main function
-    * 
+    *
     *@return void
   */
 
@@ -1132,7 +1132,7 @@ public void main_epilogue(){
 
 /**
     * Function creates code for prologue for other function
-    * 
+    *
     *@return void
   */
 public void function_prologue(int size){
@@ -1147,7 +1147,7 @@ public void function_prologue(int size){
 
 /**
     * Function creates code for epilogue for other function
-    * 
+    *
     *@return void
   */
 public void function_epilogue(){

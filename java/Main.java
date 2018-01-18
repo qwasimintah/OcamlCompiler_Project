@@ -105,18 +105,13 @@ static public void main(String argv[]) {
                         TranslationVisitor tv = new TranslationVisitor();
                         tv.visit(expression_reducted, func);
 
+                        System.out.println("------ Register Allocation ------");
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
-                                // f.show();
                                 regalloc.LinearScan(f);
+                                f.showVariablesState();
                         }
-                        //System.out.println("------ Register Allocation ------");
-                        //func.showVariablesState();
-                        //System.out.println("");
-
-                        //RegisterAllocation regalloc = new RegisterAllocation();
-                        //regalloc.VBA(func);
-
+                        System.out.println("");
 
                         System.out.println("@------ ARM------");
                         ArmGenerator arm = new ArmGenerator();
@@ -154,7 +149,9 @@ static public void main(String argv[]) {
                         Exp expression_normalized = expression.accept(new KNormalization());
                         Exp expression_converted = expression_normalized.accept(new AlphaConversion());
                         Exp expression_reducted = expression_converted.accept(new ReductionNestedExpression());
-
+                        // System.out.println("------ Reduction of Nested Let-Expressions ------");
+                        // expression_reducted.accept(new PrintVisitor());
+                        // System.out.println("");
                         ArrayList<Register> registers = new ArrayList<Register>();
                         ArrayList<Register> parametersRegisters = new ArrayList<Register>();
                         RegisterUtils.initRegisters(registers, parametersRegisters);
@@ -172,7 +169,7 @@ static public void main(String argv[]) {
                         RegisterAllocation regalloc = new RegisterAllocation();
                         for (Function f : flist) {
                                 regalloc.LinearScan(f);
-                                regalloc.VBA(f);
+                                // regalloc.VBA(f);
                                 // f.showVariablesState();
                         }
 

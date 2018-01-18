@@ -144,6 +144,6 @@ public void kill() {
 
 public void killParameter() {
         func.parametersRegisters.add(this.parametersRegister);
-        // Collections.sort(func.parametersRegisters);
+        Collections.sort(func.parametersRegisters);
 }
 }
