@@ -1,12 +1,7 @@
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
- *
+ * @des This class generates ARM Assembly code from ASML input
  * @author DJAN DENNIS MINTAH
  */
 package backend;
@@ -19,6 +14,11 @@ import backend.instructions.*;
 import backend.registers.*;
 import backend.exceptions.*;
 import backend.booleans.*;
+
+
+
+
+
 
 public class ArmGenerator {
 
@@ -58,8 +58,14 @@ public ArmGenerator(){
 
 
 
-
-
+  /**
+    * Function process a list of functions and generates
+    * code accordingly
+    *
+    *@param List of Functions
+    *
+    *@return void
+  */
 
 public void generate_code(List<Function>  functions){
         //loop through all the available functions
@@ -142,6 +148,16 @@ public void generate_code(List<Function>  functions){
 
 
 
+  /**
+    * Generate Code for branches (if / else)
+    *
+    *
+    *@param Function object
+    *@param String return_label : Label that the branch returns to parent
+    *@return void
+  */
+
+
 
 public void generate_branch(Function fun, String return_label){
         //loop through all the available functions
@@ -204,29 +220,14 @@ public void generate_branch(Function fun, String return_label){
 
 
 
-public void pushing_local_params(HashSet<Variable> locals,int size){
-
-        int num_of_args = size;
-        // System.out.println(num_of_args);
-
-        if (num_of_args>1) {
-                int off=1;
-                for (int i =available_reg; i<=num_of_args; i++) {
-
-                        for (Variable l : locals) {
-                                if(l.getOffset()!=null && l.getOffset() == off*4 ) {
-
-                                        textSection.text.append("\tSUB sp, #4\n");
-                                        assign("r0",((VInteger)l).getValue());
-                                        textSection.text.append("\tSTR r0, [sp]\n");
-                                        off++;
-                                }
-                        }
-
-                }
-
-        }
-}
+  /**
+    * Reserves space on the stack for push of variables
+    *
+    *
+    *@param Integer size
+    *
+    *@return void
+  */
 
 
 public void reserve_space(int size){
@@ -236,12 +237,32 @@ public void reserve_space(int size){
         }
 }
 
+  /**
+    * Reserves space on the stack for push of variables
+    *
+    *
+    *@param Integer size
+    *
+    *@return void
+  */
+
+
 public void pop_locals(int size){
 
         if(size > available_reg) {
                 textSection.text.append("\tADD sp, #").append((size-available_reg)*4).append("\n");
         }
 }
+
+
+  /**
+    * Reserves space on the stack for push of variables
+    *
+    *
+    *@param Integer size
+    *
+    *@return void
+  */
 
 
 public void reserve_space_param(int size){
@@ -251,12 +272,32 @@ public void reserve_space_param(int size){
         }
 }
 
+  /**
+    * Reserves space on the stack for push of variables
+    *
+    *
+    *@param Integer size
+    *
+    *@return void
+  */
+
+
 public void pop_params(int size){
 
         if(size > available_reg) {
                 textSection.text.append("\tADD sp, #").append((size-available_reg_param)*4).append("\n");
         }
 }
+
+
+  /**
+    * Generates code for intructionNothing
+    *
+    *
+    *@param InstructionNOTHING instr
+    *
+    *@return void
+  */
 
 
 
@@ -268,15 +309,25 @@ public void generate_nothing(InstructionNOTHING instr) {
 
                 Variable v = (Variable)(instr.x);
 
-                if(v.getRegister() != null) {
-                        assign("r0", ((Variable)instr.x).getRegister().getName());
+                if (v.getParametersRegister() != null) {
+                  assign("r0", ((Variable)instr.x).getParametersRegister().getName());
                 }
-                else if(v.getParametersRegister()!=null) {
-                        assign("r0", ((Variable)instr.x).getParametersRegister().getName());
+                else if(v.getRegister() != null) {
+                        assign("r0", ((Variable)instr.x).getRegister().getName());
                 }
 
         }
 }
+
+  /**
+    * Generates code for Addition
+    *
+    *
+    *@param InstructionADD
+    *
+    *@return void
+  */
+
 
 public void generate_addition(InstructionADD instr){
         Object op1= instr.operands.get(0);
@@ -284,21 +335,6 @@ public void generate_addition(InstructionADD instr){
         String rd="r0";
         String operand1="";
         String operand2="";
-        // System.out.println("begin");
-        // System.out.println(((Variable)op1).getName());
-        // System.out.println(((Variable)op1).getRegister());
-        // System.out.println(((Variable)op1).getParametersRegister());
-        //
-        // System.out.println(((Variable)op2).getName());
-        // System.out.println(((Variable)op2).getRegister());
-        // System.out.println(((Variable)op2).getParametersRegister());
-        // System.out.println("end");
-
-
-
-
-
-
 
 
 
@@ -399,6 +435,14 @@ public void generate_addition(InstructionADD instr){
 
 
 }
+  /**
+    * Generates code for Multiplicaton
+    *
+    *
+    *@param InstructionMULT
+    *
+    *@return void
+  */
 
 
 public void generate_mult(InstructionMULT instr){
@@ -509,6 +553,15 @@ public void generate_mult(InstructionMULT instr){
 }
 
 
+
+  /**
+    * Generates code for substraction
+    *
+    *
+    *@param InstructionSUB
+    *
+    *@return void
+  */
 
 
 
@@ -622,10 +675,18 @@ public void generate_sub(InstructionSUB instr){
 }
 
 
-public void generate_create_array(){
 
-        int size = 5;
-        int initial=0;
+  /**
+    * Generates code for Create Array
+    *
+    *@param  size: int size of array
+    *@param  initial : intial size of array
+    *
+    *@return void
+  */
+
+
+public void generate_create_array(int size, int initial){
 
         textSection.text.append("\tMOV r0, #0\n");
         textSection.text.append("create_array: \n");
@@ -645,9 +706,17 @@ public void generate_create_array(){
 }
 
 
-public void generate_get_array(){
+  /**
+    * Generates code for Get Array
+    *
+    *@param index: index of element
+    *
+    *@return void
+  */
 
-        int index = 2;
+
+public void generate_get_array(int index){
+
 
         textSection.text.append("get_array_element: \n");
         textSection.text.append("\tMOV r0, #").append(index).append("\n");
@@ -658,11 +727,16 @@ public void generate_get_array(){
 
 }
 
+  /**
+    * Generates code for Put Array
+    *
+    *@param index: index of element
+    *
+    *@return void
+  */
 
-public void generate_put_element(){
 
-        int index = 2;
-        int value =7;
+public void generate_put_element(int index, int value){
 
         textSection.text.append("put_array_element: \n");
         textSection.text.append("\tMOV r0, #").append(index).append("\n");
@@ -675,31 +749,18 @@ public void generate_put_element(){
 }
 
 
-public void generate_create_tuples(){
 
-
-        int index = 1;
-        int value = 2;
-
-
-        textSection.text.append("\tMOV r0, #0\n");
-        textSection.text.append("\t");
-        textSection.text.append("\tLDR r1, =heap_ptr\n");
-        textSection.text.append("\tLSL r2, r0, #2\n");
-        textSection.text.append("\tADD r2, r1, r2\n");
-        textSection.text.append("\tMOV r3, #").append(value).append("\n");
-        textSection.text.append("\tSTR r3, [r2]").append("\n");
-        textSection.text.append("\tADD r0, r0, #1").append("\n");
+  /**
+    * Generates code for Assignment
+    *
+    *
+    *@param InstructionASSIGN
+    *
+    *@return void
+  */
 
 
 
-}
-
-public void generate_get_tuples(){
-
-
-
-}
 
 
 public void  generate_assign(InstructionASSIGN instr){
@@ -871,13 +932,35 @@ public void  generate_assign(InstructionASSIGN instr){
 }
 
 
+  /**
+    * Offset with imemediate value as offset
+    *
+    *
+    *@param String mnemonic
+    *@param String dest
+    *@param String src
+    *@param int offset
+    *@return void
+  */
 
-/* Offset with imemediate value as offset*/
+
 private void offset_operations(String mnemonic, String dest, String src, int offset){
 
         textSection.text.append("\t").append(mnemonic).append(" ").append(dest).append("[")
         .append(src).append(" ,#").append(offset).append(" ]\n");
 }
+
+  /**
+    * Offset with imemediate value as offset
+    *
+    *
+    *@param String mnemonic
+    *@param String dest
+    *@param String src
+    *@param int offset
+    *@return void
+  */
+
 
 
 /*offset mode with register as offset*/
@@ -888,11 +971,34 @@ private void offset_operations(String mnemonic, String dest, String src, String 
 }
 
 
+  /**
+    * Assignment operation
+    *
+    *
+    *@param String dest
+    *@param String src
+    *@return void
+  */
+
+
+
+
 private void move_operations(String dest, String src){
 
         textSection.text.append("\t").append("MOV ").append(dest).append(", ")
         .append(src).append("\n");
 }
+
+
+
+  /**
+    * Assignment operation
+    *
+    *
+    *@param String dest
+    *@param String src
+    *@return void
+  */
 
 
 public void assign(String dest, String src){
@@ -901,6 +1007,14 @@ public void assign(String dest, String src){
 
 }
 
+/**
+    * Assignment operation
+    *
+    *
+    *@param String dest
+    *@param String src
+    *@return void
+  */
 
 
 private void assign(String dest, int src ){
@@ -910,9 +1024,9 @@ private void assign(String dest, int src ){
 
 
 /*
-   @des: This function genererates code for the arithmetic operations with register
-   as first operand and a intermediate value(INT)
-   @input: mnemonic: ADD/SUB dest: register operand1: register operand2: register
+  * @des: This function genererates code for the arithmetic operations with register
+  *as first operand and a intermediate value(INT)
+  *@param: mnemonic: ADD/SUB dest: register operand1: register operand2: register
  */
 
 public void arith_operation(String mnemonic, String dest, String operand1, String operand2){
@@ -977,6 +1091,12 @@ public void restore_parameters(){
 }
 
 
+/**
+    * Function creates code for prologue for main function
+    *
+    *@return void
+  */
+
 public void main_prologue(){
 
         textSection.text.append("\t@MAIN PROLOGUE\n");
@@ -993,6 +1113,12 @@ public void main_prologue(){
 
 }
 
+/**
+    * Function creates code for epilogue for main function
+    *
+    *@return void
+  */
+
 public void main_epilogue(){
 
         textSection.text.append("\n\t@MAIN EPILOGUE\n");
@@ -1003,6 +1129,12 @@ public void main_epilogue(){
 
 }
 
+
+/**
+    * Function creates code for prologue for other function
+    *
+    *@return void
+  */
 public void function_prologue(int size){
 
         textSection.text.append("\t@FUNCTION PROLOGUE\n");
@@ -1013,6 +1145,11 @@ public void function_prologue(int size){
 
 }
 
+/**
+    * Function creates code for epilogue for other function
+    *
+    *@return void
+  */
 public void function_epilogue(){
 
         textSection.text.append("\n\t@FUNCTION EPILOGUE\n");
@@ -1022,11 +1159,24 @@ public void function_epilogue(){
 
 }
 
+/**
+    * Generate Function lable
+    * @param fname
+    *@return void
+  */
+
 
 public void generate_function_label(String fname){
 
         textSection.text.append("_").append(fname).append(":\n");
 }
+
+/**
+    * Generate branch lable
+    * @param fname
+    *@return void
+  */
+
 
 public void generate_branch_label(String fname){
 
@@ -1052,6 +1202,13 @@ public String gen_temp_label(){
         label_counter++;
         return "cont" + String.valueOf(label_counter);
 }
+
+/**
+    * Generate code for if/else Instruction
+    * @param InstructionIF
+    *@return void
+  */
+
 
 public String generate_if(InstructionIF inst){
 
@@ -1246,6 +1403,12 @@ public String generate_if(InstructionIF inst){
 
 }
 
+/**
+    * Generate Function Call
+    * @param InstructionCall
+    *@return void
+  */
+
 
 public void generate_function_call(InstructionCALL instr) {
         List<Object> params = instr.getParams();
@@ -1303,7 +1466,7 @@ public void generate_function_call(InstructionCALL instr) {
 
                 if(par instanceof Variable) {
 
-                    push_params(params);
+                        push_params(params);
 
                 }
 
@@ -1316,8 +1479,8 @@ public void generate_function_call(InstructionCALL instr) {
 
         textSection.text.append("\tBL ").append(fname).append("\n");
         int diff = num_params - 2;
-        if(diff>=1){
-            textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
+        if(diff>=1) {
+                textSection.text.append("\tADD sp, #").append(diff*4).append("\n");
         }
         restore_locals();
         if(num_params >= available_reg_param) {
@@ -1330,81 +1493,81 @@ public void generate_function_call(InstructionCALL instr) {
 public void push_params(List<Object> params){
 
 
-    int l = params.size();
-    Variable param ;
-    int i;
+        int l = params.size();
+        Variable param;
+        int i;
 
-    if(l <= 2){
-        for(i=0; i<l; i++) {
-            param= (Variable)params.get(i);
-            // case where the local var has a register and the paramter has a register
-            if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                    // System.out.println("1");
-                assign(param.getParametersRegister().getName(), param.getRegister().getName());
-            }
+        if(l <= 2) {
+                for(i=0; i<l; i++) {
+                        param= (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
+                }
         }
-    }
-    else{
+        else{
 
-        for(i=0; i<2; i++) {
-             param = (Variable)params.get(i);
-            // case where the local var has a register and the paramter has a register
-            if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                    // System.out.println("1");
-                assign(param.getParametersRegister().getName(), param.getRegister().getName());
-            }
+                for(i=0; i<2; i++) {
+                        param = (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
+                }
+
+                int left = l-2;
+                for (i = l-1; i>=left; i--) {
+                        param = (Variable)params.get(i);
+                        // case where the local var has a register and the paramter has a register
+                        if(param.getRegister()!= null && param.getParametersRegister()!=null) {
+                                // System.out.println("1");
+                                assign(param.getParametersRegister().getName(), param.getRegister().getName());
+                        }
+                        // case where pushing the local variable has a register but the parameter must be pushed on the stack
+                        else if (param.getRegister()!= null && param.getParametersRegister()==null) {
+                                // System.out.println("2");
+                                String value =param.getRegister().getName();
+                                //reserve_space_param(4);
+                                textSection.text.append("\tSUB sp, #4\n");
+                                assign("r0", value);
+                                textSection.text.append("\tSTR r0, [sp]\n");
+                        }
+
+                        // case where local variable has an offset but the paramter has a register
+
+                        else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
+                                // System.out.println("3");
+                                // load variable from the stack
+                                String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+
+                                String value =param.getParametersRegister().getName();
+                                assign(value, "r0");
+                        }
+
+                        // case where local var has an offset and the parameter has an offset
+
+                        else if(param.getRegister()==null && param.getParametersRegister() == null) {
+                                // System.out.println("4");
+                                // load variable from the stack
+                                String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
+                                textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
+                                textSection.text.append("\tSUB sp, #4\n");
+                                textSection.text.append("\tSTR r0, [sp]\n");
+
+                        }
+
+                }
         }
 
-         int left = l-2;
-         for (i = l-1; i>=left; i--){
-                param = (Variable)params.get(i);
-                // case where the local var has a register and the paramter has a register
-                if(param.getRegister()!= null && param.getParametersRegister()!=null) {
-                        // System.out.println("1");
-                        assign(param.getParametersRegister().getName(), param.getRegister().getName());
-                }
-                // case where pushing the local variable has a register but the parameter must be pushed on the stack
-                else if (param.getRegister()!= null && param.getParametersRegister()==null) {
-                        // System.out.println("2");
-                        String value =param.getRegister().getName();
-                        //reserve_space_param(4);
-                        textSection.text.append("\tSUB sp, #4\n");
-                        assign("r0", value);
-                        textSection.text.append("\tSTR r0, [sp]\n");
-                }
-
-                // case where local variable has an offset but the paramter has a register
-
-                else if(param.getRegister()==null && param.getParametersRegister()!=null ) {
-                        // System.out.println("3");
-                        // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-
-                        String value =param.getParametersRegister().getName();
-                        assign(value, "r0");
-                }
-
-                // case where local var has an offset and the parameter has an offset
-
-                else if(param.getRegister()==null && param.getParametersRegister()==null) {
-                        // System.out.println("4");
-                        // load variable from the stack
-                        String localoffset="[fp ,#" + ((Variable)param).getOffset().toString()+"]";
-                        textSection.text.append("\tLDR r0 , ").append(localoffset).append("\n");
-                        textSection.text.append("\tSUB sp, #4\n");
-                        textSection.text.append("\tSTR r0, [sp]\n");
-
-                }
-
-
-
-    }
 
 }
 
 
-}
+
 
 
 
